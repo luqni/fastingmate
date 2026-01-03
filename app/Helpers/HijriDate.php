@@ -23,7 +23,7 @@ class HijriDate
         return $res['day'] . ' ' . $months[$res['month']] . ' ' . $res['year'];
     }
 
-    private static function gregorianToHijri($d, $m, $y)
+    public static function gregorianToHijri($d, $m, $y)
     {
         if (($y > 1582) || (($y == 1582) && ($m > 10)) || (($y == 1582) && ($m == 10) && ($d > 14))) {
             $jd = floor((1461 * ($y + 4800 + floor(($m - 14) / 12))) / 4) +

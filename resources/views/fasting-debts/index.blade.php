@@ -115,15 +115,17 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                 Bayar
                             </button>
-                            <div x-show="open" @click.away="open = false" class="absolute right-0 bottom-full mb-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-20" style="display: none;">
-                                <form action="{{ route('fasting-debts.update-progress', $debt) }}" method="POST">
-                                    @csrf
-                                    <h4 class="text-sm font-bold text-gray-900 mb-3">Input Pembayaran</h4>
-                                    <div class="mb-3">
-                                        <input name="paid_days_add" type="number" min="1" max="{{ $debt->total_days - $debt->paid_days }}" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-teal-500 focus:border-teal-500" placeholder="Jumlah hari" required />
-                                    </div>
-                                    <button type="submit" class="w-full px-4 py-2 bg-teal-600 text-white text-sm font-bold rounded-xl hover:bg-teal-700">Simpan</button>
-                                </form>
+                            <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm md:absolute md:inset-auto md:right-0 md:bottom-full md:mb-2 md:w-64 md:p-0 md:bg-transparent md:backdrop-blur-none" style="display: none;">
+                                <div @click.away="open = false" class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 w-full max-w-xs md:w-full">
+                                    <form action="{{ route('fasting-debts.update-progress', $debt) }}" method="POST">
+                                        @csrf
+                                        <h4 class="text-sm font-bold text-gray-900 mb-3">Input Pembayaran</h4>
+                                        <div class="mb-3">
+                                            <input name="paid_days_add" type="number" min="1" max="{{ $debt->total_days - $debt->paid_days }}" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-teal-500 focus:border-teal-500" placeholder="Jumlah hari" required />
+                                        </div>
+                                        <button type="submit" class="w-full px-4 py-2 bg-teal-600 text-white text-sm font-bold rounded-xl hover:bg-teal-700">Simpan</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 

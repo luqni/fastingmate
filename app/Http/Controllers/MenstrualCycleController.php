@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\MenstrualCycle;
+use App\Models\FastingDebt;
+use App\Helpers\HijriDate;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +51,47 @@ class MenstrualCycleController extends Controller
             'end_date' => $request->end_date
         ]);
 
-        return back()->with('success', 'Haid selesai. Hutang puasa telah ditambahkan.');
+        // Calculate missed days in Ramadan
+        $startDate = Carbon::parse($menstrualCycle->start_date);
+        $endDate = Carbon::parse($request->end_date);
+        
+        $ramadanDaysMissed = 0;
+        $period = CarbonPeriod::create($startDate, $endDate);
+
+        foreach ($period as $date) {
+            $hijri = HijriDate::gregorianToHijri($date->day, $date->month, $date->year);
+            // Ramadan is month 9
+            if ($hijri['month'] == 9) {
+                $ramadanDaysMissed++;
+            }
+        }
+
+        if ($ramadanDaysMissed > 0) {
+            $currentYear = now()->year;
+            
+            // Find or create FastingDebt for current year
+            $debt = FastingDebt::firstOrCreate(
+                [
+                    'user_id' => Auth::id(),
+                    'year' => $currentYear
+                ],
+                [
+                    'total_days' => 0,
+                    'paid_days' => 0,
+                    'is_paid_off' => false
+                ]
+            );
+
+            // Add missed days
+            $debt->increment('total_days', $ramadanDaysMissed);
+
+            // Mark cycle as converted
+            $menstrualCycle->update(['converted_to_debt' => true]);
+
+            return back()->with('success', "Haid selesai. $ramadanDaysMissed hari hutang puasa Ramadhan telah ditambahkan otomatis.");
+        }
+
+        return back()->with('success', 'Haid selesai.');
     }
     public function destroy(MenstrualCycle $menstrualCycle)
     {
