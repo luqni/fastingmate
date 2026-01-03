@@ -40,14 +40,14 @@
         <main class="min-h-screen transition-all bg-gray-50/50">
             <!-- Header -->
             <header class="sticky top-0 z-30 glass border-b border-gray-100/50 h-20 flex justify-center shadow-sm">
-                <div class="w-full max-w-md px-6 flex items-center justify-between">
+                <div class="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <h1 class="text-2xl font-extrabold text-primary-600 tracking-tight">FastingMate</h1>
                     </div>
                 </div>
             </header>
 
-            <div class="w-full max-w-md mx-auto p-6 space-y-8">
+            <div class="w-full max-w-7xl mx-auto p-6 space-y-8">
                  @if (isset($header))
                     <div class="mb-8">
                         <h2 class="text-2xl font-extrabold tracking-tight">{{ $header }}</h2>
@@ -60,7 +60,7 @@
 
         <!-- Bottom Navigation (Visible on ALL screens) -->
         <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-40 flex justify-center items-center h-24 px-6 shadow-[0_-4px_30px_-4px_rgba(0,0,0,0.1)]">
-            <div class="w-full max-w-md flex justify-around items-center">
+            <div class="w-full max-w-md md:max-w-3xl flex justify-around items-center">
                  <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
                     <div class="relative p-2 rounded-xl transition-all duration-300 {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600' : 'text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-700' }}">
                         <svg class="w-7 h-7" fill="{{ request()->routeIs('dashboard') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
