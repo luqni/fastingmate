@@ -11,10 +11,11 @@ FROM php:8.2-fpm
 
 # Install dependencies (tambahkan libpng dan gd)
 RUN apt-get update && apt-get install -y \
-    git unzip curl libzip-dev zip libpng-dev libjpeg-dev libfreetype6-dev \
-    default-libmysqlclient-dev \
+    git unzip curl libzip-dev zip zlib1g-dev \
+    libpng-dev libjpeg-dev libfreetype6-dev \
+    libpq-dev supervisor \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip pdo_mysql gd
+    && docker-php-ext-install zip pdo_pgsql gd pcntl
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php && \
