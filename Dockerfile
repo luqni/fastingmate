@@ -38,5 +38,7 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Laravel permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 
-# Jalankan Laravel server
-CMD php artisan serve --host=0.0.0.0 --port=80
+# Jalankan perintah: Clear Cache -> Migrate DB -> Start Server
+CMD php artisan optimize:clear && \
+    php artisan migrate --force && \
+    php artisan serve --host=0.0.0.0 --port=80
