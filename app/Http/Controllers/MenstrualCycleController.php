@@ -89,9 +89,11 @@ class MenstrualCycleController extends Controller
             $menstrualCycle->update(['converted_to_debt' => true]);
 
             return back()->with('success', "Haid selesai. $ramadanDaysMissed hari hutang puasa Ramadhan telah ditambahkan otomatis.");
+        } else {
+             // If not in Ramadan, still mark as processed so we don't prompt to add debt
+             $menstrualCycle->update(['converted_to_debt' => true]);
+             return back()->with('success', 'Haid selesai. Tidak ada hari Ramadhan yang terlewat.');
         }
-
-        return back()->with('success', 'Haid selesai.');
     }
     public function destroy(MenstrualCycle $menstrualCycle)
     {
