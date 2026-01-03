@@ -78,6 +78,9 @@ class HijriDate
 
         // Ayyamul Bidh (13, 14, 15 except in Tasyrik)
         if (in_array($hijriDay, [13, 14, 15])) return 'ayyamul_bidh';
+
+        // Ramadhan
+        if ($hijriMonth == 9) return 'ramadhan';
         
         // Senin
         if ($date->dayOfWeek == Carbon::MONDAY) return 'senin';

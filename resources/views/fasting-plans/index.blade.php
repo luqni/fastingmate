@@ -22,6 +22,7 @@
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-blue-100 border border-blue-200"></div> <span>Senin/Kamis</span></div>
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-purple-100 border border-purple-200"></div> <span>Ayyamul Bidh</span></div>
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-amber-100 border border-amber-200"></div> <span>Khusus (Arafah/Ashura)</span></div>
+            <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-teal-100 border border-teal-200"></div> <span>Wajib (Ramadhan)</span></div>
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-red-100 border border-red-200"></div> <span>Dilarang</span></div>
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-green-500"></div> <span>Direncanakan</span></div>
             <div class="flex items-center gap-1"><div class="w-3 h-3 rounded bg-green-700"></div> <span>Selesai</span></div>
@@ -33,6 +34,14 @@
                     <div class="py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wide">{{ $day }}</div>
                 @endforeach
             </div>
+            
+            @php
+                $hijriMonths = [
+                    1 => 'Muharram', 2 => 'Safar', 3 => 'Rabiul Awal', 4 => 'Rabiul Akhir',
+                    5 => 'Jumadil Awal', 6 => 'Jumadil Akhir', 7 => 'Rajab', 8 => 'Syaban',
+                    9 => 'Ramadhan', 10 => 'Syawal', 11 => 'Dzulkaidah', 12 => 'Dzulhijjah'
+                ];
+            @endphp
             
             <div class="grid grid-cols-7 auto-rows-fr">
                 @foreach($calendar as $day)
@@ -47,6 +56,9 @@
                             if ($day['sunnah_type'] == 'haram') {
                                 $bgColor = 'bg-red-50';
                                 $textColor = 'text-red-400';
+                            } elseif ($day['sunnah_type'] == 'ramadhan') {
+                                $bgColor = 'bg-teal-50';
+                                $borderColor = 'border-teal-200';
                             } elseif (in_array($day['sunnah_type'], ['arafah', 'ashura', 'tasua'])) {
                                 $bgColor = 'bg-amber-50';
                                 $borderColor = 'border-amber-200';
@@ -65,22 +77,22 @@
                         <div class="min-h-[100px] relative border border-gray-50 p-2 {{ $bgColor }} transition hover:bg-gray-50 flex flex-col justify-between group">
                             <!-- Date Info -->
                             <div class="flex justify-between items-start">
-                                    <span class="text-[9px] text-gray-500 uppercase tracking-tighter">Masehi</span>
+                                <div>
+                                    <span class="text-[9px] text-gray-500 uppercase tracking-tighter">{{ $day['date']->translatedFormat('M') }}</span>
                                     <span class="block text-sm font-bold {{ $isToday ? 'bg-primary-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : $textColor }}">
                                         {{ $day['date']->day }}
                                     </span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-[9px] text-gray-400 uppercase tracking-tighter">Hijriyah</span>
+                                    <span class="text-[9px] text-gray-400 uppercase tracking-tighter">{{ Str::limit($hijriMonths[$day['hijri']['month']] ?? '', 3, '') }}</span>
                                     <span class="block text-[10px] text-gray-400 font-medium leading-tight">
-                                        {{ $day['hijri']['day'] }}<br>
-                                        {{ Str::limit(config('hijri.months')[$day['hijri']['month']] ?? $day['hijri']['month'], 3, '') }}
+                                        {{ $day['hijri']['day'] }}
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Sunnah Badge -->
-                            @if($day['sunnah_type'] && $day['sunnah_type'] !== 'haram' && !in_array($day['sunnah_type'], ['senin', 'kamis']))
+                            @if($day['sunnah_type'] && $day['sunnah_type'] !== 'haram')
                                 <div class="mt-1">
                                     <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-white/70 border border-gray-200 text-gray-600 font-medium inline-block truncate w-full">
                                         {{ ucfirst(str_replace('_', ' ', $day['sunnah_type'])) }}
