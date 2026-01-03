@@ -24,6 +24,15 @@ class MenstrualCycleController extends Controller
             'start_date' => 'required|date|before_or_equal:today',
         ]);
 
+        // Check if the start date is in Ramadan
+        $startDate = Carbon::parse($request->start_date);
+        $hijri = HijriDate::gregorianToHijri($startDate->day, $startDate->month, $startDate->year);
+        
+        // Ramadan is month 9
+        // if ($hijri['month'] != 9) {
+        //     return back()->with('error', 'Hanya bisa mencatat siklus haid di bulan Ramadhan.');
+        // }
+
         // Check if there is an active cycle
         $activeCheck = Auth::user()->menstrualCycles()->whereNull('end_date')->exists();
         if ($activeCheck) {

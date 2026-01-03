@@ -5,6 +5,56 @@ import Alpine from 'alpinejs';
 window.Alpine = Alpine;
 
 import Swal from 'sweetalert2';
+window.Swal = Swal;
+
+// Handle Flash Messages
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Flash Messages:', window.flashMessages);
+    if (window.flashMessages) {
+        if (window.flashMessages.success) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: window.flashMessages.success,
+                confirmButtonColor: '#0ca678',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
+
+        if (window.flashMessages.error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: window.flashMessages.error,
+                confirmButtonColor: '#e03131',
+            });
+        }
+    }
+
+    // Global Delete Confirmation
+    document.body.addEventListener('submit', (e) => {
+        if (e.target.classList.contains('delete-confirm-form')) {
+            e.preventDefault();
+            const form = e.target;
+
+            Swal.fire({
+                title: 'Apakah yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    });
+});
 import { registerSW } from 'virtual:pwa-register';
 
 // Register Service Worker

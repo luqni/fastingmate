@@ -27,7 +27,8 @@
                         <span>Dimulai pada {{ $activeCycle->start_date->format('d M Y') }}</span>
                     </div>
                     
-                    <form action="{{ route('menstrual-cycles.update', $activeCycle) }}" method="POST" class="w-full max-w-sm mx-auto">
+                <div class="flex flex-col gap-3 w-full max-w-sm mx-auto">
+                    <form action="{{ route('menstrual-cycles.update', $activeCycle) }}" method="POST" class="w-full">
                         @csrf
                         @method('PUT')
                         <div class="mb-6 text-left">
@@ -38,6 +39,15 @@
                             {{ __('Haid Selesai 🌸') }}
                         </button>
                     </form>
+                    
+                    <form action="{{ route('menstrual-cycles.destroy', $activeCycle) }}" method="POST" class="delete-confirm-form w-full">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="w-full py-3 text-red-500 font-bold hover:bg-red-50 rounded-xl transition-colors text-sm">
+                            Batalkan / Hapus
+                        </button>
+                    </form>
+                </div>
                 </div>
             @else
                     <div class="mb-6 flex items-center justify-center">
@@ -85,10 +95,10 @@
                             </div>
                          </div>
                          
-                         <form action="{{ route('menstrual-cycles.destroy', $cycle) }}" method="POST" onsubmit="return confirm('Hapus riwayat ini?');">
+                         <form action="{{ route('menstrual-cycles.destroy', $cycle) }}" method="POST" class="delete-confirm-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="p-2 text-gray-300 hover:text-red-500 transition-colors">
+                            <button type="submit" class="p-2 text-gray-400 hover:text-red-500 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </form>
