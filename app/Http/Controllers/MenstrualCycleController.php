@@ -29,9 +29,9 @@ class MenstrualCycleController extends Controller
         $hijri = HijriDate::gregorianToHijri($startDate->day, $startDate->month, $startDate->year);
         
         // Ramadan is month 9
-        // if ($hijri['month'] != 9) {
-        //     return back()->with('error', 'Hanya bisa mencatat siklus haid di bulan Ramadhan.');
-        // }
+        if ($hijri['month'] != 9) {
+            return back()->with('error', 'Hanya bisa mencatat siklus haid di bulan Ramadhan.');
+        }
 
         // Check if there is an active cycle
         $activeCheck = Auth::user()->menstrualCycles()->whereNull('end_date')->exists();
