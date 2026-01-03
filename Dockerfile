@@ -1,15 +1,6 @@
-# Stage 1: Build Assets (Memastikan CSS/JS tersedia)
-FROM node:20 AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
-
-# Stage 2: Run App (Sesuai request user)
 FROM php:8.2-fpm
 
-# Install dependencies (tambahkan libpng dan gd)
+# Install dependencies (GD, zip, zlib, PostgreSQL)
 RUN apt-get update && apt-get install -y \
     git unzip curl libzip-dev zip zlib1g-dev \
     libpng-dev libjpeg-dev libfreetype6-dev \
@@ -17,18 +8,18 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install zip pdo_pgsql gd pcntl
 
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
+RUN pecl install redis \
+    && docker-php-ext-enable redis
+
+# Copy Composer from the composer image
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+
 
 # Set working directory
 WORKDIR /var/www
 
 # Copy project files
 COPY . .
-
-# Copy built assets from Stage 1
-COPY --from=build /app/public/build public/build
 
 # Pastikan folder penting ada
 RUN mkdir -p storage bootstrap/cache
@@ -39,12 +30,14 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Laravel permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 
-# Copy Entrypoint
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Supervisor config
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+COPY docker/laravel.conf /etc/supervisor/conf.d/laravel.conf
 
-# Entrypoint script handles migrations & cache
-ENTRYPOINT ["entrypoint.sh"]
+# Entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Jalankan Laravel server (passed to ENTRYPOINT)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+EXPOSE 80
+
+ENTRYPOINT ["docker-entrypoint.sh"]
