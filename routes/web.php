@@ -6,6 +6,7 @@ use App\Http\Controllers\FastingPlanController;
 use App\Http\Controllers\FidyahController;
 use App\Http\Controllers\MenstrualCycleController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PushSubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Fasting Plans
     Route::resource('fasting-plans', FastingPlanController::class);
+
+    // Push Notifications
+    Route::post('/push-subscribe', [PushSubscriptionController::class, 'store']);
+    Route::post('/push-unsubscribe', [PushSubscriptionController::class, 'destroy']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

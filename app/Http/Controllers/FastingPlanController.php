@@ -71,7 +71,9 @@ class FastingPlanController extends Controller
 
     public function update(Request $request, FastingPlan $fastingPlan)
     {
-        $this->authorize('update', $fastingPlan);
+        if ($fastingPlan->user_id !== Auth::id()) {
+            abort(403);
+        }
         
         $fastingPlan->update([
             'status' => $request->status // 'completed' or 'planned'
@@ -82,7 +84,10 @@ class FastingPlanController extends Controller
 
     public function destroy(FastingPlan $fastingPlan)
     {
-        $this->authorize('delete', $fastingPlan);
+        if ($fastingPlan->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $fastingPlan->delete();
         
         return back()->with('success', 'Rencana puasa dihapus.');

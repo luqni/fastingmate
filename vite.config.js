@@ -9,16 +9,13 @@ export default defineConfig({
             refresh: true,
         }),
         VitePWA({
+            strategies: 'injectManifest',
+            srcDir: 'resources/js',
+            filename: 'sw.js',
             registerType: 'autoUpdate',
             outDir: 'public',
             buildBase: '/',
             scope: '/',
-            workbox: {
-                globPatterns: ['**/*.{js,css,html,svg,png,ico,txt,woff2}'],
-                cleanupOutdatedCaches: true,
-                directoryIndex: 'index.php',
-                navigateFallback: null,
-            },
             manifest: {
                 name: 'FastingMate',
                 short_name: 'FastingMate',
