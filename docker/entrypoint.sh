@@ -1,24 +1,21 @@
-#!/bin/bash
+#!/bin/sh
+
 set -e
 
-echo "🚀 Starting FastingMate Application..."
+echo ">>> Running Composer install..."
+composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Check if we can connect to the database
-echo "🔍 Checking database connection..."
-# We use 'php artisan model:show' on a simple model (User) as a crude connection check, 
-# or just attempt migrate:status which is safer.
-php artisan migrate:status > /dev/null 2>&1 || {
-    echo "⚠️  Database connection failed or migrations table missing."
-}
+echo ">>> Running Laravel setup..."
+php artisan storage:link || true
 
-echo "📦 Running Migrations (Safe Mode)..."
-# --force is required for production
-# This command automatically checks the 'migrations' table and only runs pending migrations.
+# Optional: Cache optimizations (bisa diaktifkan untuk production)
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Jalankan migrasi jika perlu
 php artisan migrate --force
 
-echo "🧹 Clearing Caches..."
-php artisan optimize:clear
-
-echo "✅ App Ready! Starting Server..."
-# Execute the passed command (CMD from Dockerfile)
-exec "$@"
+echo ">>> Starting Supervisor..."
+# -n supaya supervisor jadi PID 1 di container (bukan background)
+exec supervisord -n -c /etc/supervisor/supervisord.conf
