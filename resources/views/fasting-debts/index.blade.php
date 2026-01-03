@@ -133,16 +133,18 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 Jadwal
                             </button>
-                             <div x-show="open" @click.away="open = false" class="absolute right-0 bottom-full mb-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 p-4 z-20" style="display: none;">
-                                <form action="{{ route('fasting-debts.generate-schedule', $debt) }}" method="POST">
-                                    @csrf
-                                    <h4 class="text-sm font-bold text-gray-900 mb-3">Auto Schedule</h4>
-                                    <div class="mb-3">
-                                        <label class="text-xs font-bold text-gray-400 uppercase mb-1 block">Target Lunas</label>
-                                        <input type="date" name="target_date" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-indigo-500 focus:border-indigo-500" min="{{ date('Y-m-d') }}" />
-                                    </div>
-                                    <button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-sm font-bold rounded-xl hover:bg-indigo-700">Generate</button>
-                                </form>
+                             <div x-show="open" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm md:absolute md:inset-auto md:right-0 md:bottom-full md:mb-2 md:w-72 md:p-0 md:bg-transparent md:backdrop-blur-none" style="display: none;">
+                                <div @click.away="open = false" class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 w-full max-w-xs md:w-full">
+                                    <form action="{{ route('fasting-debts.generate-schedule', $debt) }}" method="POST">
+                                        @csrf
+                                        <h4 class="text-sm font-bold text-gray-900 mb-3">Auto Schedule</h4>
+                                        <div class="mb-3">
+                                            <label class="text-xs font-bold text-gray-400 uppercase mb-1 block">Target Lunas</label>
+                                            <input type="date" name="target_date" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-indigo-500 focus:border-indigo-500" min="{{ date('Y-m-d') }}" />
+                                        </div>
+                                        <button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700">Generate</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 
