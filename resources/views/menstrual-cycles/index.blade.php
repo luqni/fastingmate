@@ -28,7 +28,7 @@
                     </div>
                     
                 <div class="flex flex-col gap-3 w-full max-w-sm mx-auto">
-                    <form action="{{ route('menstrual-cycles.update', $activeCycle) }}" method="POST" class="w-full">
+                    <form action="{{ route('menstrual-cycles.update', $activeCycle) }}" method="POST" class="w-full action-confirm-form" data-confirm-title="Selesaikan Haid?" data-confirm-text="Pastikan tanggal selesai sudah benar." data-confirm-icon="question" data-confirm-btn="Ya, Selesai">
                         @csrf
                         @method('PUT')
                         <div class="mb-6 text-left">
@@ -56,7 +56,7 @@
 
                     <h3 class="text-2xl font-extrabold mb-8 text-gray-900">Catat Siklus Baru</h3>
                     
-                    <form action="{{ route('menstrual-cycles.store') }}" method="POST" class="w-full max-w-sm mx-auto">
+                    <form action="{{ route('menstrual-cycles.store') }}" method="POST" class="w-full max-w-sm mx-auto action-confirm-form" data-confirm-title="Mulai Haid Baru?" data-confirm-text="Pastikan tanggal mulai sudah benar." data-confirm-icon="question" data-confirm-btn="Ya, Mulai">
                         @csrf
                         <div class="mb-6 text-left">
                             <x-input-label for="start_date" :value="__('Tanggal Mulai')" />

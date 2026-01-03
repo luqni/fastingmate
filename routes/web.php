@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FastingDebtController;
+use App\Http\Controllers\FastingPlanController;
 use App\Http\Controllers\FidyahController;
 use App\Http\Controllers\MenstrualCycleController;
 use App\Http\Controllers\ProfileController;
@@ -29,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Fidyah
     Route::get('/fidyah', [FidyahController::class, 'index'])->name('fidyah.index');
+
+    // Fasting Plans
+    Route::resource('fasting-plans', FastingPlanController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -54,6 +54,10 @@
                     <div class="flex items-center gap-3">
                         <h1 class="text-2xl font-extrabold text-primary-600 tracking-tight">FastingMate</h1>
                     </div>
+                    
+                    <a href="{{ route('profile.edit') }}" class="p-2 rounded-xl text-gray-400 hover:text-primary-600 hover:bg-primary-50 transition-all">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </a>
                 </div>
             </header>
 
@@ -70,7 +74,7 @@
 
         <!-- Bottom Navigation (Visible on ALL screens) -->
         <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-40 flex justify-center items-center h-24 px-6 shadow-[0_-4px_30px_-4px_rgba(0,0,0,0.1)]">
-            <div class="w-full max-w-md md:max-w-3xl flex justify-around items-center">
+            <div class="w-full max-w-md md:max-w-4xl flex justify-around items-center">
                  <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
                     <div class="relative p-2 rounded-xl transition-all duration-300 {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600' : 'text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-700' }}">
                         <svg class="w-7 h-7" fill="{{ request()->routeIs('dashboard') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -92,6 +96,13 @@
                     <span class="text-[11px] font-bold {{ request()->routeIs('fidyah.*') ? 'text-primary-600' : 'text-gray-500 group-hover:text-gray-700' }}">Fidyah</span>
                 </a>
 
+                <a href="{{ route('fasting-plans.index') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
+                     <div class="relative p-2 rounded-xl transition-all duration-300 {{ request()->routeIs('fasting-plans.*') ? 'bg-primary-50 text-primary-600' : 'text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-700' }}">
+                        <svg class="w-7 h-7" fill="{{ request()->routeIs('fasting-plans.*') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                     </div>
+                    <span class="text-[11px] font-bold {{ request()->routeIs('fasting-plans.*') ? 'text-primary-600' : 'text-gray-500 group-hover:text-gray-700' }}">Kalender</span>
+                </a>
+
                 @if(Auth::user()->gender === 'female')
                 <a href="{{ route('menstrual-cycles.index') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
                      <div class="relative p-2 rounded-xl transition-all duration-300 {{ request()->routeIs('menstrual-cycles.*') ? 'bg-pink-50 text-pink-600' : 'text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-700' }}">
@@ -101,12 +112,6 @@
                 </a>
                 @endif
 
-                <a href="{{ route('profile.edit') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
-                     <div class="relative p-2 rounded-xl transition-all duration-300 {{ request()->routeIs('profile.edit') ? 'bg-primary-50 text-primary-600' : 'text-gray-500 group-hover:bg-gray-50 group-hover:text-gray-700' }}">
-                        <svg class="w-7 h-7" fill="{{ request()->routeIs('profile.edit') ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                     </div>
-                    <span class="text-[11px] font-bold {{ request()->routeIs('profile.edit') ? 'text-primary-600' : 'text-gray-500 group-hover:text-gray-700' }}">User</span>
-                </a>
             </div>
         </nav>
     </div>

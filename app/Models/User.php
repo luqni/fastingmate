@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MenstrualCycle::class);
     }
+
+    public function fastingPlans()
+    {
+        return $this->hasMany(FastingPlan::class);
+    }
 }

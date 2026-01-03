@@ -47,4 +47,44 @@ class HijriDate
 
         return ['day' => $day, 'month' => $month, 'year' => $year];
     }
+
+    public static function getSunnahType($gregorianDate)
+    {
+        $date = Carbon::parse($gregorianDate);
+        $hijri = self::gregorianToHijri($date->day, $date->month, $date->year);
+        $hijriDay = $hijri['day'];
+        $hijriMonth = $hijri['month'];
+
+        // Haram for fasting
+        if (
+            ($hijriMonth == 10 && $hijriDay == 1) || // Idul Fitri
+            ($hijriMonth == 12 && $hijriDay == 10) || // Idul Adha
+            ($hijriMonth == 12 && in_array($hijriDay, [11, 12, 13])) // Tasyrik
+        ) {
+            return 'haram';
+        }
+
+        // Arafah (9 Dzulhijjah)
+        if ($hijriMonth == 12 && $hijriDay == 9) return 'arafah';
+
+        // Tarwiyah (8 Dzulhijjah)
+        if ($hijriMonth == 12 && $hijriDay == 8) return 'tarwiyah';
+        
+        // Tasu'a (9 Muharram)
+        if ($hijriMonth == 1 && $hijriDay == 9) return 'tasua';
+
+        // Ashura (10 Muharram)
+        if ($hijriMonth == 1 && $hijriDay == 10) return 'ashura';
+
+        // Ayyamul Bidh (13, 14, 15 except in Tasyrik)
+        if (in_array($hijriDay, [13, 14, 15])) return 'ayyamul_bidh';
+        
+        // Senin
+        if ($date->dayOfWeek == Carbon::MONDAY) return 'senin';
+
+        // Kamis
+        if ($date->dayOfWeek == Carbon::THURSDAY) return 'kamis';
+
+        return null;
+    }
 }

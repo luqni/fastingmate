@@ -53,6 +53,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+
+        // Generic Action Confirmation
+        if (e.target.classList.contains('action-confirm-form')) {
+            e.preventDefault();
+            const form = e.target;
+            const title = form.dataset.confirmTitle || 'Apakah yakin?';
+            const text = form.dataset.confirmText || 'Lanjutkan proses ini?';
+            const icon = form.dataset.confirmIcon || 'question';
+            const confirmBtnText = form.dataset.confirmBtn || 'Ya, Lanjutkan';
+
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: '#0ca678',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: confirmBtnText,
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
     });
 });
 import { registerSW } from 'virtual:pwa-register';
