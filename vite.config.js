@@ -23,6 +23,7 @@ export default defineConfig({
                 name: 'FastingMate',
                 short_name: 'FastingMate',
                 description: 'Lunasi Hutang Puasa dengan Tenang',
+                start_url: '/',
                 theme_color: '#0ca678',
                 background_color: '#ffffff',
                 display: 'standalone',

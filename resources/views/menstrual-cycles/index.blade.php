@@ -52,7 +52,7 @@
                             <x-input-label for="start_date" :value="__('Tanggal Mulai')" />
                             <x-text-input id="start_date" name="start_date" type="date" :value="date('Y-m-d')" required />
                         </div>
-                        <button class="w-full justify-center px-6 py-4 bg-gray-900 hover:bg-black font-bold rounded-2xl shadow-lg transition-all">
+                        <button class="w-full justify-center px-6 py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-2xl shadow-lg transition-all">
                             {{ __('Mulai Haid') }}
                         </button>
                     </form>
