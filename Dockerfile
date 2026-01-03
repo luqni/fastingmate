@@ -1,3 +1,13 @@
+# Build Frontend Assets
+FROM node:20-alpine as build
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Build PHP App
 FROM php:8.2-fpm
 
 # Install dependencies (GD, zip, zlib, PostgreSQL)
@@ -26,6 +36,9 @@ RUN mkdir -p storage bootstrap/cache
 
 # Install PHP dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Copy frontend assets
+COPY --from=build /app/public/build /var/www/public/build
 
 # Laravel permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
