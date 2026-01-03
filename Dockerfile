@@ -38,7 +38,12 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # Laravel permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 
-# Jalankan perintah: Clear Cache -> Migrate DB -> Start Server
-CMD php artisan optimize:clear && \
-    php artisan migrate --force && \
-    php artisan serve --host=0.0.0.0 --port=80
+# Copy Entrypoint
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Entrypoint script handles migrations & cache
+ENTRYPOINT ["entrypoint.sh"]
+
+# Jalankan Laravel server (passed to ENTRYPOINT)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
