@@ -65,13 +65,18 @@
                         <div class="min-h-[100px] relative border border-gray-50 p-2 {{ $bgColor }} transition hover:bg-gray-50 flex flex-col justify-between group">
                             <!-- Date Info -->
                             <div class="flex justify-between items-start">
-                                <span class="text-sm font-bold {{ $isToday ? 'bg-primary-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : $textColor }}">
-                                    {{ $day['date']->day }}
-                                </span>
-                                <span class="text-[10px] text-gray-400 font-medium text-right leading-tight">
-                                    {{ $day['hijri']['day'] }}<br>
-                                    {{ Str::limit(config('hijri.months')[$day['hijri']['month']] ?? $day['hijri']['month'], 3, '') }}
-                                </span>
+                                    <span class="text-[9px] text-gray-500 uppercase tracking-tighter">Masehi</span>
+                                    <span class="block text-sm font-bold {{ $isToday ? 'bg-primary-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : $textColor }}">
+                                        {{ $day['date']->day }}
+                                    </span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[9px] text-gray-400 uppercase tracking-tighter">Hijriyah</span>
+                                    <span class="block text-[10px] text-gray-400 font-medium leading-tight">
+                                        {{ $day['hijri']['day'] }}<br>
+                                        {{ Str::limit(config('hijri.months')[$day['hijri']['month']] ?? $day['hijri']['month'], 3, '') }}
+                                    </span>
+                                </div>
                             </div>
 
                             <!-- Sunnah Badge -->
@@ -86,14 +91,23 @@
                             <!-- Interaction Area -->
                             <div class="mt-2 flex justify-end">
                                 @if($planStatus)
-                                    <form action="{{ route('fasting-plans.update', $day['plan']->id) }}" method="POST" class="w-full">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="status" value="{{ $planStatus == 'planned' ? 'completed' : 'planned' }}">
-                                        <button class="w-full py-1 rounded text-[10px] font-bold text-white transition {{ $planStatus == 'completed' ? 'bg-green-600 hover:bg-green-700' : 'bg-green-400 hover:bg-green-500' }}">
-                                            {{ $planStatus == 'completed' ? 'Selesai' : 'Terjadwal' }}
-                                        </button>
-                                    </form>
+                                    <div class="w-full flex gap-1">
+                                        <form action="{{ route('fasting-plans.update', $day['plan']->id) }}" method="POST" class="flex-1">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="status" value="{{ $planStatus == 'planned' ? 'completed' : 'planned' }}">
+                                            <button class="w-full py-1 rounded text-[10px] font-bold text-white transition {{ $planStatus == 'completed' ? 'bg-green-600 hover:bg-green-700' : 'bg-green-400 hover:bg-green-500' }}">
+                                                {{ $planStatus == 'completed' ? 'Selesai' : 'Terjadwal' }}
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('fasting-plans.destroy', $day['plan']->id) }}" method="POST" class="action-confirm-form" data-confirm-title="Hapus Rencana?" data-confirm-text="Rencana puasa ini akan dihapus." data-confirm-icon="warning" data-confirm-btn="Ya, Hapus">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="px-2 py-1 rounded bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-500 transition">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            </button>
+                                        </form>
+                                    </div>
                                 @elseif($day['sunnah_type'] !== 'haram')
                                     <form action="{{ route('fasting-plans.store') }}" method="POST" class="w-full opacity-0 group-hover:opacity-100 transition focus-within:opacity-100">
                                         @csrf
