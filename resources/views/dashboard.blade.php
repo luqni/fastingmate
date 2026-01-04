@@ -71,6 +71,37 @@
         </div>
         @endif
 
+        <!-- Ramadan Countdown Card -->
+        <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-[2rem] p-8 shadow-lg shadow-emerald-500/20 text-white relative overflow-hidden flex flex-col justify-between min-h-[160px] group">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-white/20"></div>
+            <div class="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full blur-xl -ml-6 -mb-6"></div>
+            
+            <div class="relative z-10 flex justify-between items-start">
+                <div>
+                     <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Menuju Ramadhan {{ $nextRamadan['hijri_year'] }}</p>
+                    <h3 class="text-4xl font-extrabold tracking-tight">
+                        @if($daysToRamadan > 0)
+                            {{ $daysToRamadan }} <span class="text-2xl font-bold text-emerald-100">Hari</span>
+                        @elseif($daysToRamadan == 0)
+                            Hari Ini!
+                        @else
+                            -
+                        @endif
+                    </h3>
+                </div>
+                <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
+                    <svg class="w-8 h-8 text-emerald-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </div>
+            </div>
+
+            <div class="relative z-10 mt-4">
+               <p class="text-emerald-100 font-medium text-sm flex items-center gap-2">
+                    <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Estimasi: {{ $nextRamadan['date']->translatedFormat('d F Y') }}
+               </p>
+            </div>
+        </div>
+
     </div>
 
     <!-- Calendar Section -->

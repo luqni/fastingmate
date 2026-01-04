@@ -36,6 +36,61 @@ class DashboardController extends Controller
             ->latest('start_date')
             ->first();
 
-        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle'));
+        $nextRamadan = $this->getNextRamadanDate();
+        $daysToRamadan = ceil(Carbon::now()->floatDiffInDays($nextRamadan['date'], false));
+
+        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan'));
+    }
+
+    private function getNextRamadanDate()
+    {
+        $now = Carbon::now();
+        $hijriNow = \App\Helpers\HijriDate::gregorianToHijri($now->day, $now->month, $now->year);
+        
+        // Determine target Hijri year for next Ramadan
+        // If current month is before Ramadan (9), use current hijri year
+        // If current month is Ramadan (9) or later, use next hijri year
+        $targetHijriYear = $hijriNow['month'] < 9 ? $hijriNow['year'] : $hijriNow['year'] + 1;
+        
+        // Rough estimation: 1 Hijri year = 354 days
+        // We want Month 9, Day 1
+        // Calculate months difference roughly
+        $monthDiff = (9 - $hijriNow['month']);
+        if ($monthDiff <= 0) $monthDiff += 12; // Wrap around if target is next year
+        
+        $daysToAdd = ($monthDiff * 29.5) + (1 - $hijriNow['day']);
+        $estimatedDate = $now->copy()->addDays($daysToAdd);
+        
+        // Refine search - scan around estimated date
+        // Search range: -5 to +5 days from estimate
+        $found = null;
+        for ($i = -5; $i <= 5; $i++) {
+            $checkDate = $estimatedDate->copy()->addDays($i);
+            $h = \App\Helpers\HijriDate::gregorianToHijri($checkDate->day, $checkDate->month, $checkDate->year);
+            
+            if ($h['month'] == 9 && $h['day'] == 1 && $h['year'] == $targetHijriYear) {
+                $found = $checkDate;
+                break;
+            }
+        }
+        
+        // Fallback if exact day 1 not found (should rarely happen with broad range, but logic safety)
+        // Try larger range if needed, or just pick the first date that is month 9
+        if (!$found) {
+             for ($i = -10; $i <= 10; $i++) {
+                $checkDate = $estimatedDate->copy()->addDays($i);
+                $h = \App\Helpers\HijriDate::gregorianToHijri($checkDate->day, $checkDate->month, $checkDate->year);
+                if ($h['month'] == 9 && $h['year'] == $targetHijriYear) {
+                     // Found a ramadan day, backtrack to find day 1
+                     $found = $checkDate->subDays($h['day'] - 1);
+                     break;
+                }
+            }
+        }
+
+        return [
+            'date' => $found ?? $estimatedDate, // Fallback to estimate if simple search fails
+            'hijri_year' => $targetHijriYear
+        ];
     }
 }
