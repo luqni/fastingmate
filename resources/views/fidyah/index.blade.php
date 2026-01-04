@@ -8,7 +8,7 @@
         <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100" x-data="{ 
             days: {{ $totalDays }},
             rate: {{ $defaultRate }}, 
-            customRate: false,
+            customRate: {{ Auth::user()->fidyah_cost ? 'true' : 'false' }},
             formatCurrency(value) {
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
             }
@@ -58,24 +58,32 @@
                     <div>
                         <x-input-label value="Nominal Fidyah Per Hari" class="mb-3"/>
                         
-                        <div class="flex flex-col gap-3 mb-4">
-                            <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="!customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
-                                <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = false; rate = {{ $defaultRate }}" checked>
-                                <span class="ml-3 font-bold text-gray-700">Standar ({{ number_format($defaultRate, 0, ',', '.') }})</span>
-                            </label>
-                            
-                            <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
-                                <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = true">
-                                <span class="ml-3 font-bold text-gray-700">Kustom</span>
-                            </label>
-                        </div>
-
-                        <div x-show="customRate" x-transition class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <span class="text-gray-400 font-bold">Rp</span>
+                        <form action="{{ route('fidyah.update-rate') }}" method="POST">
+                            @csrf
+                            <div class="flex flex-col gap-3 mb-4">
+                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="!customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
+                                    <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = false; rate = {{ \App\Models\FidyahRate::first()?->price_per_day ?? 15000 }}" {{ !Auth::user()->fidyah_cost ? 'checked' : '' }}>
+                                    <span class="ml-3 font-bold text-gray-700">Standar ({{ number_format(\App\Models\FidyahRate::first()?->price_per_day ?? 15000, 0, ',', '.') }})</span>
+                                </label>
+                                
+                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
+                                    <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = true" {{ Auth::user()->fidyah_cost ? 'checked' : '' }}>
+                                    <span class="ml-3 font-bold text-gray-700">Kustom</span>
+                                </label>
                             </div>
-                            <x-text-input type="number" x-model="rate" class="w-full pl-12 py-4 text-xl font-bold" min="0"/>
-                        </div>
+
+                            <div x-show="customRate" x-transition class="space-y-3">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <span class="text-gray-400 font-bold">Rp</span>
+                                    </div>
+                                    <x-text-input type="number" name="rate" x-model="rate" class="w-full pl-12 py-3 text-lg font-bold" min="0"/>
+                                </div>
+                                <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition shadow-lg shadow-emerald-200">
+                                    Simpan Tarif
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 

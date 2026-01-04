@@ -17,7 +17,7 @@ class FidyahController extends Controller
         $totalFidyahCost = 0;
         
         // Default Rate
-        $defaultRate = FidyahRate::first()?->price_per_day ?? 15000;
+        $defaultRate = $user->fidyah_cost ?? (FidyahRate::first()?->price_per_day ?? 15000);
         $currentYear = date('Y');
 
         $breakdown = [];
@@ -46,5 +46,16 @@ class FidyahController extends Controller
         }
         
         return view('fidyah.index', compact('totalDays', 'totalFidyahCost', 'defaultRate', 'breakdown'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate(['rate' => 'required|numeric|min:0']);
+        
+        $user = Auth::user();
+        $user->fidyah_cost = $request->rate;
+        $user->save(); // This will trigger the mutator to save into preferences
+
+        return back()->with('success', 'Biaya Fidyah berhasil disimpan.');
     }
 }

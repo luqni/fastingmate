@@ -11,13 +11,27 @@ use NotificationChannels\WebPush\HasPushSubscriptions;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasPushSubscriptions;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'preferences' => 'array',
+    ];
+
+    // Accessor for fidyah_cost from preferences
+    public function getFidyahCostAttribute()
+    {
+        return $this->preferences['fidyah_cost'] ?? null;
+    }
+
+    public function setFidyahCostAttribute($value)
+    {
+        $prefs = $this->preferences ?? [];
+        $prefs['fidyah_cost'] = $value;
+        $this->preferences = $prefs;
+    }
     protected $fillable = [
         'name',
         'email',

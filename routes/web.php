@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Fidyah
     Route::get('/fidyah', [FidyahController::class, 'index'])->name('fidyah.index');
+    Route::post('/fidyah/update-rate', [FidyahController::class, 'store'])->name('fidyah.update-rate');
 
     // Fasting Plans
     Route::resource('fasting-plans', FastingPlanController::class);
