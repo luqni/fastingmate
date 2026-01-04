@@ -24,5 +24,10 @@ class AppServiceProvider extends ServiceProvider
         }
 
         \App\Models\MenstrualCycle::observe(\App\Observers\MenstrualCycleObserver::class);
+        
+        \Illuminate\Support\Facades\Event::listen(
+            \Illuminate\Auth\Events\Login::class,
+            \App\Listeners\SendHadithOnLogin::class
+        );
     }
 }
