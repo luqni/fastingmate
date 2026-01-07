@@ -94,38 +94,57 @@ registerSW({
 });
 
 // PWA Install Prompt
+let deferredPrompt;
+
 window.addEventListener('beforeinstallprompt', (e) => {
     // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
     // Stash the event so it can be triggered later.
-    const deferredPrompt = e;
+    deferredPrompt = e;
 
-    // Check if user has already declined recently (optional logic could go here)
+    // Check if user has already seen the prompt
+    const hasSeenPrompt = localStorage.getItem('pwa-prompt-shown');
 
-    // Show the install prompt
-    Swal.fire({
-        title: 'Install FastingMate',
-        text: 'Install aplikasi ini untuk pengalaman yang lebih baik dan akses offline!',
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Install',
-        cancelButtonText: 'Nanti Saja',
-        confirmButtonColor: '#0ca678',
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Show the install prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-            });
-        }
-    });
+    if (!hasSeenPrompt) {
+        window.showInstallPrompt();
+    }
 });
+
+window.showInstallPrompt = () => {
+    if (deferredPrompt) {
+        Swal.fire({
+            title: 'Install FastingMate',
+            text: 'Install aplikasi ini untuk pengalaman yang lebih baik dan akses offline!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Install',
+            cancelButtonText: 'Nanti Saja',
+            confirmButtonColor: '#0ca678',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+            // Mark as shown regardless of choice to prevent auto-popup again
+            localStorage.setItem('pwa-prompt-shown', 'true');
+        });
+    } else {
+        // If app is already installed or not installable
+        Swal.fire({
+            title: 'Info',
+            text: 'Aplikasi mungkin sudah terinstall atau browser tidak mendukung installasi otomatis.',
+            icon: 'info',
+            confirmButtonColor: '#0ca678',
+        });
+    }
+};
 
 window.addEventListener('appinstalled', () => {
     console.log('PWA was installed');
