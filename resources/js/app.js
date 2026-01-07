@@ -150,4 +150,7 @@ window.addEventListener('appinstalled', () => {
     // Track install
     axios.post('/track-install').catch(e => console.error('Failed to track install:', e));
 });
-Alpine.start();
+if (!window.Alpine) {
+    window.Alpine = Alpine;
+    Alpine.start();
+}

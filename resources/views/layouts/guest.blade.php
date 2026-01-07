@@ -13,29 +13,58 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+        <script>
+            window.flashMessages = {
+                success: @json(session('success')),
+                error: @json(session('error'))
+            };
+        </script>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
              body { font-family: 'Plus Jakarta Sans', sans-serif; }
-             .bg-pattern {
-                 background-color: #f0f9ff;
-                 background-image: radial-gradient(#bae6fd 0.5px, transparent 0.5px), radial-gradient(#bae6fd 0.5px, #f0f9ff 0.5px);
-                 background-size: 20px 20px;
-                 background-position: 0 0, 10px 10px;
+             .bg-gradient-premium {
+                 background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                 position: relative;
+                 overflow-x: hidden;
+             }
+             .bg-gradient-premium::before {
+                 content: '';
+                 position: absolute;
+                 top: -50%;
+                 left: -50%;
+                 width: 200%;
+                 height: 200%;
+                 background: radial-gradient(circle at center, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+                 animation: rotate 60s linear infinite;
+                 z-index: 0;
+             }
+             @keyframes rotate {
+                 from { transform: rotate(0deg); }
+                 to { transform: rotate(360deg); }
+             }
+             .glass-card {
+                 background: rgba(255, 255, 255, 0.9);
+                 backdrop-filter: blur(20px);
+                 -webkit-backdrop-filter: blur(20px);
+                 border: 1px solid rgba(255, 255, 255, 0.5);
+                 box-shadow: 0 20px 40px -15px rgba(14, 165, 233, 0.1);
              }
         </style>
     </head>
-    <body class="font-sans antialiased text-gray-900 bg-pattern min-h-screen flex items-center justify-center p-6">
-        <div class="w-full max-w-md">
-            <div class="flex justify-center mb-8">
-                <a href="/" class="text-4xl font-extrabold text-primary-600 tracking-tighter">
-                   FastingMate
-                </a>
-            </div>
+    <body class="font-sans antialiased text-gray-900 bg-gradient-premium min-h-screen flex flex-col items-center justify-center p-6 sm:pt-0">
+        <div class="relative w-full max-w-md z-10">
 
-            <div class="w-full bg-white/70 backdrop-blur-xl rounded-[2rem] shadow-soft border border-white/50 p-8">
+
+            <div class="w-full glass-card rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600"></div>
                 {{ $slot }}
+            </div>
+            
+            <div class="mt-8 text-center text-sm text-gray-400">
+                &copy; {{ date('Y') }} FastingMate. All rights reserved.
             </div>
         </div>
     </body>
