@@ -127,4 +127,9 @@ window.addEventListener('beforeinstallprompt', (e) => {
     });
 });
 
+window.addEventListener('appinstalled', () => {
+    console.log('PWA was installed');
+    // Track install
+    axios.post('/track-install').catch(e => console.error('Failed to track install:', e));
+});
 Alpine.start();

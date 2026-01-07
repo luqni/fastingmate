@@ -17,10 +17,20 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Track visits globally or on dashboard
+Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Fasting Debts
+        // Admin Routes
+        // Admin Routes
+        Route::middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->prefix('admin')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.dashboard');
+        });
+        
+        Route::post('/track-install', [\App\Http\Controllers\Admin\AdminController::class, 'trackInstall'])->name('track.install');
+
+        // Fasting Debts
     Route::resource('fasting-debts', FastingDebtController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::post('/fasting-debts/{fastingDebt}/generate-schedule', [FastingDebtController::class, 'generateSchedule'])->name('fasting-debts.generate-schedule');
     Route::post('/fasting-debts/{fastingDebt}/update-progress', [FastingDebtController::class, 'updateProgress'])->name('fasting-debts.update-progress');
@@ -43,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 });
 
 require __DIR__.'/auth.php';
