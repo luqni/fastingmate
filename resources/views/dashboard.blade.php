@@ -102,6 +102,30 @@
             </div>
         </div>
 
+        <!-- Blog Card -->
+        <a href="{{ route('posts.index') }}" class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100 relative overflow-hidden flex flex-col justify-between min-h-[160px] group transition-all hover:shadow-lg hover:-translate-y-1">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-indigo-50 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-indigo-100"></div>
+            
+            <div class="relative z-10 flex justify-between items-start">
+                <div>
+                     <p class="text-indigo-600 font-bold text-sm tracking-wide uppercase mb-1">Artikel & Blog</p>
+                    <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight">
+                        Wawasan Islami
+                    </h3>
+                </div>
+                <div class="bg-indigo-50 p-3 rounded-2xl group-hover:scale-110 transition-transform">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                </div>
+            </div>
+
+            <div class="relative z-10 mt-4">
+               <p class="text-gray-500 font-medium text-sm flex items-center gap-2 group-hover:text-indigo-600 transition-colors">
+                    Baca Artikel Terbaru
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+               </p>
+            </div>
+        </a>
+
     </div>
 
     <!-- Calendar Section -->

@@ -1,11 +1,10 @@
 import './bootstrap';
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
-
-import Swal from 'sweetalert2';
-window.Swal = Swal;
 
 // Handle Flash Messages
 document.addEventListener('DOMContentLoaded', () => {
@@ -114,7 +113,7 @@ window.showInstallPrompt = () => {
     if (deferredPrompt) {
         Swal.fire({
             title: 'Install FastingMate',
-            text: 'Install aplikasi ini untuk pengalaman yang lebih baik dan akses offline!',
+            text: 'Install aplikasi ini untuk pengalaman yang lebih baik!',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Install',

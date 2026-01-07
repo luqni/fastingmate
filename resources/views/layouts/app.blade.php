@@ -27,6 +27,9 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
+    <!-- SweetAlert2 CDN Fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass {
@@ -60,9 +63,21 @@
                         <button onclick="window.showInstallPrompt()" class="p-2 rounded-xl text-gray-400 hover:text-primary-600 hover:bg-primary-50 transition-all" title="Install App">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
+                        
+                        @auth
                         <a href="{{ route('profile.edit') }}" class="p-2 rounded-xl text-gray-400 hover:text-primary-600 hover:bg-primary-50 transition-all">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </a>
+                        @else
+                        <div class="flex items-center gap-2">
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-bold text-gray-700 hover:text-primary-600 transition-colors">
+                                Masuk
+                            </a>
+                            <a href="{{ route('register') }}" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-primary-600/20">
+                                Daftar Gratis
+                            </a>
+                        </div>
+                        @endauth
                     </div>
                 </div>
             </header>
@@ -79,6 +94,7 @@
         </main>
 
         <!-- Bottom Navigation (Visible on ALL screens) -->
+        @auth
         <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-40 flex justify-center items-center h-24 px-6 shadow-[0_-4px_30px_-4px_rgba(0,0,0,0.1)]">
             <div class="w-full max-w-md md:max-w-4xl flex justify-around items-center">
                  <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
@@ -117,11 +133,9 @@
                     <span class="text-[11px] font-bold {{ request()->routeIs('menstrual-cycles.*') ? 'text-pink-600' : 'text-gray-500 group-hover:text-gray-700' }}">Siklus</span>
                 </a>
                 @endif
-
-                
-
             </div>
         </nav>
+        @endauth
     </div>
     <!-- Flash Messages -->
 

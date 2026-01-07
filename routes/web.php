@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Blog (Public)
+Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->name('posts.index');
+Route::get('/blog/{post:slug}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
+
 // Track visits globally or on dashboard
 Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
@@ -24,14 +28,15 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
 
         // Admin Routes
         // Admin Routes
-        Route::middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->prefix('admin')->group(function () {
-            Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.dashboard');
+        Route::middleware(\App\Http\Middleware\EnsureUserIsAdmin::class)->prefix('admin')->name('admin.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
+            Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
         });
         
         Route::post('/track-install', [\App\Http\Controllers\Admin\AdminController::class, 'trackInstall'])->name('track.install');
 
         // Fasting Debts
-    Route::resource('fasting-debts', FastingDebtController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('fasting-debts', \App\Http\Controllers\FastingDebtController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::post('/fasting-debts/{fastingDebt}/generate-schedule', [FastingDebtController::class, 'generateSchedule'])->name('fasting-debts.generate-schedule');
     Route::post('/fasting-debts/{fastingDebt}/update-progress', [FastingDebtController::class, 'updateProgress'])->name('fasting-debts.update-progress');
     Route::get('/fasting-debts/{fastingDebt}/history', [FastingDebtController::class, 'history'])->name('fasting-debts.history');
