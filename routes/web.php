@@ -53,8 +53,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::resource('fasting-plans', FastingPlanController::class);
 
     // Push Notifications
-    Route::post('/push-subscribe', [PushSubscriptionController::class, 'store']);
-    Route::post('/push-unsubscribe', [PushSubscriptionController::class, 'destroy']);
+    Route::post('/push/subscribe', [\App\Http\Controllers\PushController::class, 'store'])->name('push.subscribe');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

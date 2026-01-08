@@ -150,6 +150,65 @@ window.addEventListener('appinstalled', () => {
     // Track install
     axios.post('/track-install').catch(e => console.error('Failed to track install:', e));
 });
+
+// Push Notification Logic
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+window.enableNotifications = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        Swal.fire('Error', 'Push messaging is not supported in this browser.', 'error');
+        return;
+    }
+
+    try {
+        const registration = await navigator.serviceWorker.ready;
+
+        // Request permission
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            throw new Error('Notification permission denied');
+        }
+
+        // Subscribe
+        const subscribeOptions = {
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(import.meta.env.VITE_VAPID_PUBLIC_KEY)
+        };
+
+        const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
+
+        // Send to backend
+        await axios.post('/push/subscribe', pushSubscription);
+
+        Swal.fire({
+            title: 'Berhasil',
+            text: 'Notifikasi berhasil diaktifkan!',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+    } catch (error) {
+        console.error('Error enabling notifications:', error);
+        Swal.fire('Error', 'Gagal mengaktifkan notifikasi: ' + error.message, 'error');
+    }
+};
+
+window.subscribeUser = window.enableNotifications; // Alias for user request
+
 if (!window.Alpine) {
     window.Alpine = Alpine;
     Alpine.start();
