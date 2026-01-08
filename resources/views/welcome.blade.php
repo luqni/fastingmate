@@ -66,7 +66,7 @@
                             <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-full bg-gray-50 text-gray-900 font-semibold hover:bg-gray-100 transition-all text-sm border border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700">Dashboard</a>
                         @else
                             <a href="{{ url('/login') }}" class="px-6 py-2.5 rounded-full bg-gray-900 hover:bg-black text-white font-medium transition-all shadow-lg shadow-gray-900/20 text-sm hover:-translate-y-0.5 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
-                                Musuk
+                                Masuk
                             </a>
                         @endauth
                     @endif

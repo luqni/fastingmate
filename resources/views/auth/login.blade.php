@@ -19,8 +19,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                     </svg>
                 </div>
-                <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" 
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out" 
+                    <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" 
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out" 
                     placeholder="Enter your email">
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -36,7 +36,7 @@
                     </svg>
                 </div>
                 <input id="password" type="password" name="password" required autocomplete="current-password"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out"
                     placeholder="••••••••">
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />

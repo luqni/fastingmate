@@ -17,7 +17,7 @@
                     </svg>
                 </div>
                 <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out"
                     placeholder="Nama Anda">
             </div>
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -33,7 +33,7 @@
                     </svg>
                 </div>
                 <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out"
                     placeholder="email@example.com">
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -72,7 +72,7 @@
                     </svg>
                 </div>
                 <input id="password" type="password" name="password" required autocomplete="new-password"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out"
                     placeholder="Min. 8 karakter">
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -88,7 +88,7 @@
                     </svg>
                 </div>
                 <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
-                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 sm:text-sm transition duration-150 ease-in-out"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base sm:text-sm transition duration-150 ease-in-out"
                     placeholder="Ulangi password">
             </div>
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />

@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ArticleUnlocked;
 
 class PostController extends Controller
 {
@@ -38,6 +41,7 @@ class PostController extends Controller
             'content' => 'required',
             'thumbnail' => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'is_locked' => 'boolean',
         ]);
 
         $slug = Str::slug($validated['title']);
@@ -54,6 +58,8 @@ class PostController extends Controller
         }
 
         $validated['is_published'] = $request->has('is_published');
+        $validated['is_locked'] = $request->has('is_locked'); // Default check for checkbox
+        
         if ($validated['is_published']) {
             $validated['published_at'] = now();
         }
@@ -88,7 +94,9 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|max:2048',
             'is_published' => 'boolean',
+            'is_locked' => 'boolean',
         ]);
         
         // Only update slug if title changed, or keep it? Use title for now if changed.
@@ -112,6 +120,8 @@ class PostController extends Controller
         }
 
         $validated['is_published'] = $request->has('is_published');
+        $validated['is_locked'] = $request->has('is_locked');
+
         if ($validated['is_published'] && !$post->is_published) {
             $validated['published_at'] = now();
         }
@@ -119,6 +129,20 @@ class PostController extends Controller
         $post->update($validated);
 
         return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully.');
+    }
+
+    public function unlock(Post $post)
+    {
+        if (!$post->is_locked) {
+            return back()->with('info', 'Post is already unlocked.');
+        }
+
+        $post->update(['is_locked' => false]);
+        
+        // Notify all users
+        Notification::send(User::all(), new ArticleUnlocked($post));
+
+        return back()->with('success', 'Post unlocked and notification sent to all users!');
     }
 
     /**

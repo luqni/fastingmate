@@ -27,11 +27,8 @@
              body { font-family: 'Plus Jakarta Sans', sans-serif; }
              .bg-gradient-premium {
                  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-                 position: relative;
-                 overflow-x: hidden;
              }
-             .bg-gradient-premium::before {
-                 content: '';
+             .bg-gradient-premium-animation {
                  position: absolute;
                  top: -50%;
                  left: -50%;
@@ -39,7 +36,6 @@
                  height: 200%;
                  background: radial-gradient(circle at center, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
                  animation: rotate 60s linear infinite;
-                 z-index: 0;
              }
              @keyframes rotate {
                  from { transform: rotate(0deg); }
@@ -54,11 +50,16 @@
              }
         </style>
     </head>
-    <body class="font-sans antialiased text-gray-900 bg-gradient-premium min-h-screen flex flex-col items-center justify-center p-6 sm:pt-0">
+    <body class="font-sans antialiased text-gray-900 min-h-screen flex flex-col items-center justify-center p-4 sm:pt-0 relative">
+        <!-- Fixed Background -->
+        <div class="fixed inset-0 -z-10 overflow-hidden bg-gradient-premium">
+            <div class="absolute inset-0 bg-gradient-premium-animation"></div>
+        </div>
+
         <div class="relative w-full max-w-md z-10">
 
 
-            <div class="w-full glass-card rounded-[2.5rem] p-8 sm:p-10 relative overflow-hidden">
+            <div class="w-full glass-card rounded-[2.5rem] p-6 sm:p-10 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600"></div>
                 {{ $slot }}
             </div>

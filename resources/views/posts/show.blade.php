@@ -20,22 +20,36 @@
         },
         
         share(platform) {
-            const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('{{ $post->title }}');
+            const url = window.location.href;
+            const text = '{{ $post->title }}';
+            
+            if (platform === 'native') {
+                if (navigator.share) {
+                    navigator.share({
+                        title: text,
+                        text: text,
+                        url: url
+                    }).catch((error) => console.log('Error sharing', error));
+                    return;
+                }
+                // Fallback to copy if native share not supported
+                platform = 'copy';
+            }
+
             let shareUrl = '';
             
             switch(platform) {
                 case 'whatsapp':
-                    shareUrl = `https://wa.me/?text=${text}%20${url}`;
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text)}%20${encodeURIComponent(url)}`;
                     break;
                 case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
                     break;
                 case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
                     break;
                 case 'copy':
-                    navigator.clipboard.writeText(window.location.href);
+                    navigator.clipboard.writeText(url);
                     window.Swal.fire({
                         icon: 'success',
                         title: 'Link Disalin!',
@@ -90,27 +104,39 @@
                     
                     <div class="p-8 lg:p-12">
                          <!-- Control Bar (Mobile) -->
-                        <div class="lg:hidden flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-8 border border-gray-100">
+                        <div class="lg:hidden flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-8 border border-gray-100 sticky top-4 z-10 shadow-sm">
                              <div class="flex items-center gap-2">
-                                <button @click="decreaseFont()" class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-white rounded-lg transition-all" title="Perkecil Text">
+                                <button @click="decreaseFont()" class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-white rounded-lg transition-all active:scale-95" title="Perkecil Text">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
                                 </button>
-                                <span class="text-xs font-mono font-medium text-gray-400" x-text="fontSize + '%'"></span>
-                                <button @click="increaseFont()" class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-white rounded-lg transition-all" title="Perbesar Text">
+                                <span class="text-xs font-mono font-medium text-gray-400 w-10 text-center" x-text="fontSize + '%'"></span>
+                                <button @click="increaseFont()" class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-white rounded-lg transition-all active:scale-95" title="Perbesar Text">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 </button>
                             </div>
-                            <button @click="share('copy')" class="text-sm font-medium text-indigo-600 flex items-center gap-1">
+                            <button @click="share('native')" class="text-sm font-medium text-indigo-600 flex items-center gap-1 active:text-indigo-800 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
                                 Share
                             </button>
                         </div>
 
                         <!-- Content with Dynamic Font Size -->
-                        <div class="prose prose-lg prose-indigo max-w-none text-gray-700 leading-relaxed transition-all duration-300"
-                             :style="`font-size: ${fontSize}%`">
-                            {!! $post->content !!}
-                        </div>
+                        @if(!$post->is_locked)
+                            <div class="prose prose-lg prose-indigo max-w-none text-gray-700 leading-relaxed transition-all duration-300"
+                                 :style="`font-size: ${fontSize}%`">
+                                {!! $post->content !!}
+                            </div>
+                        @else
+                            <div class="flex flex-col items-center justify-center py-16 px-4 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 text-center">
+                                <div class="bg-indigo-50 p-4 rounded-full mb-4">
+                                     <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Konten Terkunci</h3>
+                                <p class="text-gray-500 max-w-md mx-auto">
+                                    Artikel ini saat ini sedang terkunci. Tunggu notifikasi dari admin saat artikel ini dibuka.
+                                </p>
+                            </div>
+                        @endif
                     </div>
                     
                     <!-- Footer -->

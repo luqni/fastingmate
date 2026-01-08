@@ -16,11 +16,13 @@ class Post extends Model
         'content',
         'thumbnail',
         'is_published',
+        'is_locked',
         'published_at',
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
+        'is_locked' => 'boolean',
         'published_at' => 'datetime',
     ];
 }

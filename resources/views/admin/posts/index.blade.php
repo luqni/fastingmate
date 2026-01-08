@@ -46,6 +46,12 @@
                                     {{ $post->published_at ? $post->published_at->format('d M Y') : '-' }}
                                 </td>
                                 <td class="px-6 py-4 text-right">
+                                    @if($post->is_locked)
+                                        <form action="{{ route('admin.posts.unlock', $post) }}" method="POST" class="inline-block mr-3">
+                                            @csrf
+                                            <button type="submit" class="font-medium text-orange-600 hover:underline">Unlock</button>
+                                        </form>
+                                    @endif
                                     <a href="{{ route('admin.posts.edit', $post) }}" class="font-medium text-blue-600 hover:underline mr-3">Edit</a>
                                     <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="inline-block delete-confirm-form">
                                         @csrf

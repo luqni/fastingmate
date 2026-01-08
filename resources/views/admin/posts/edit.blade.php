@@ -69,6 +69,11 @@
                         <label for="is_published" class="ml-2 block text-sm text-gray-900">Publish immediately</label>
                     </div>
 
+                    <div class="mb-6 flex items-center">
+                        <input type="checkbox" name="is_locked" id="is_locked" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" value="1" {{ old('is_locked', $post->is_locked) ? 'checked' : '' }}>
+                        <label for="is_locked" class="ml-2 block text-sm text-gray-900">Lock Content (Unlock later to notify users)</label>
+                    </div>
+
                     <div class="flex justify-end gap-3">
                         <a href="{{ route('admin.posts.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</a>
                         <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700">Update Post</button>
