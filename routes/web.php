@@ -50,6 +50,9 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::get('/fidyah', [FidyahController::class, 'index'])->name('fidyah.index');
     Route::post('/fidyah/update-rate', [FidyahController::class, 'store'])->name('fidyah.update-rate');
 
+    // Daily Tadabbur
+    Route::post('/daily-tadabbur/{dailyTadabbur}', [\App\Http\Controllers\TadabburController::class, 'store'])->name('daily-tadabbur.store');
+
     // Fasting Plans
     Route::resource('fasting-plans', FastingPlanController::class);
 

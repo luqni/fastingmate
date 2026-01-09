@@ -151,5 +151,300 @@
     </div>
     <!-- Flash Messages -->
 
+    <!-- True Dynamic Island (Draggable) -->
+    <script>
+        console.log('Tadabbur Variable:', @json($tadabbur ?? null));
+    </script>
+    @if(isset($tadabbur) && $tadabbur)
+    <div id="di-container" 
+         class="fixed z-50 flex flex-col items-center transition-all duration-300 ease-out w-auto touch-none"
+         style="bottom: 8rem; right: 1.5rem;">
+        
+        <!-- Island Container -->
+        <div id="di-wrapper" 
+             class="bg-gray-950 text-white shadow-2xl shadow-indigo-900/30 overflow-hidden border border-white/10 rounded-full px-4 py-3 cursor-grab active:cursor-grabbing hover:scale-105 active:scale-95 ring-1 ring-white/10 backdrop-blur-3xl transition-all duration-300">
+            
+            <!-- Collapsed State Content -->
+            <div id="di-collapsed" class="flex items-center gap-3 select-none pointer-events-none">
+                 <div class="flex items-center justify-center w-8 h-8 rounded-full {{ $tadabbur->status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-indigo-500/20 text-indigo-400' }}">
+                    @if($tadabbur->status === 'completed')
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    @else
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    @endif
+                </div>
+                <div class="flex flex-col pr-1">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Tadabbur</span>
+                    <span class="text-xs font-bold text-white leading-none whitespace-nowrap">
+                        {{ $tadabbur->status === 'completed' ? 'Selesai' : 'Buka Ayat' }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Expanded State Content -->
+            <div id="di-expanded" class="hidden opacity-0 translate-y-4 transition-all duration-300 ease-out flex-col w-full">
+                
+                <!-- Header (Close Button) -->
+                <div class="flex justify-between items-start mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-sm">
+                            <span class="text-xl">📖</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg leading-tight">Daily Tadabbur</h3>
+                            <p class="text-xs text-gray-400">Renungkan ayat pilihan ini.</p>
+                        </div>
+                    </div>
+                    <button id="di-close" type="button" class="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Quran Content -->
+                <div class="bg-white/5 rounded-3xl p-6 mb-6 border border-white/5 relative overflow-hidden group">
+                     <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+                    
+                    <div class="text-right mb-4 relative z-10 block">
+                        <h3 class="text-2xl font-amiri leading-loose text-emerald-100" dir="rtl">
+                            {{ $tadabbur->quranSource->ayah_text_arabic }}
+                        </h3>
+                    </div>
+                    <div class="text-gray-300 italic text-sm mb-4 leading-relaxed relative z-10 block">
+                        "{{ $tadabbur->quranSource->ayah_translation }}"
+                    </div>
+                    <div class="flex justify-start items-center gap-2 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+                        <span>{{ $tadabbur->quranSource->surah_name }}</span>
+                        <span class="w-1 h-1 bg-emerald-500 rounded-full"></span>
+                        <span>Ayat {{ $tadabbur->quranSource->ayah_number }}</span>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <form action="{{ route('daily-tadabbur.store', $tadabbur) }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div class="relative">
+                        <textarea id="reflection" name="reflection" rows="4" 
+                                  class="block w-full rounded-2xl bg-white/5 border-transparent text-white placeholder-gray-500 shadow-inner focus:border-emerald-500 focus:bg-white/10 focus:ring-0 sm:text-sm transition-all resize-none p-4"
+                                  placeholder="Apa yang Anda rasakan setelah membaca ayat ini?"
+                                  required>{{ $tadabbur->reflection }}</textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r {{ $tadabbur->status === 'completed' ? 'from-indigo-600 to-blue-600 shadow-indigo-900/50' : 'from-emerald-600 to-teal-600 shadow-emerald-900/50' }} text-white font-bold text-sm shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                        <span>{{ $tadabbur->status === 'completed' ? 'Update Refleksi' : 'Simpan Refleksi' }}</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </button>
+                    
+                    @if($tadabbur->status === 'completed')
+                    <div class="text-center">
+                        <p class="text-[10px] text-emerald-400 font-medium">✨ Anda sudah menyelesaikan tadabbur hari ini</p>
+                    </div>
+                    @endif
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('di-container');
+            const wrapper = document.getElementById('di-wrapper');
+            const collapsed = document.getElementById('di-collapsed');
+            const expanded = document.getElementById('di-expanded');
+            const closeBtn = document.getElementById('di-close');
+            
+            let isExpanded = false;
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+            
+            // Initial Position Ref
+            let lastPosition = {
+                bottom: container.style.bottom,
+                right: container.style.right,
+                top: 'auto',
+                left: 'auto'
+            };
+
+            function setupDrag() {
+                const handleStart = (e) => {
+                    if (isExpanded) return; // Disable drag when expanded
+                    
+                    isDragging = false;
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    startX = clientX;
+                    startY = clientY;
+                    
+                    const rect = container.getBoundingClientRect();
+                    initialLeft = rect.left;
+                    initialTop = rect.top;
+                    
+                    // Switch to fixed left/top for dragging calculation
+                    container.style.bottom = 'auto';
+                    container.style.right = 'auto';
+                    container.style.left = initialLeft + 'px';
+                    container.style.top = initialTop + 'px';
+
+                    document.addEventListener('mousemove', handleMove);
+                    document.addEventListener('touchmove', handleMove);
+                    document.addEventListener('mouseup', handleEnd);
+                    document.addEventListener('touchend', handleEnd);
+                };
+
+                const handleMove = (e) => {
+                    if (isExpanded) return;
+
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    
+                    // Threshold to detect drag vs click
+                    if (!isDragging && Math.hypot(clientX - startX, clientY - startY) > 5) {
+                        isDragging = true;
+                        wrapper.classList.add('cursor-grabbing');
+                        wrapper.classList.remove('cursor-grab');
+                    }
+
+                    if (isDragging) {
+                        e.preventDefault();
+                        const dx = clientX - startX;
+                        const dy = clientY - startY;
+                        
+                        let newLeft = initialLeft + dx;
+                        let newTop = initialTop + dy;
+                        
+                        // Boundary Checks
+                        const maxLeft = window.innerWidth - container.offsetWidth;
+                        const maxTop = window.innerHeight - container.offsetHeight;
+                        
+                        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+                        newTop = Math.max(0, Math.min(newTop, maxTop));
+
+                        container.style.left = newLeft + 'px';
+                        container.style.top = newTop + 'px';
+                    }
+                };
+
+                const handleEnd = () => {
+                    document.removeEventListener('mousemove', handleMove);
+                    document.removeEventListener('touchmove', handleMove);
+                    document.removeEventListener('mouseup', handleEnd);
+                    document.removeEventListener('touchend', handleEnd);
+                    
+                    wrapper.classList.remove('cursor-grabbing');
+                    wrapper.classList.add('cursor-grab');
+
+                    // Save position for collapse return
+                    if (isDragging) {
+                        lastPosition.left = container.style.left;
+                        lastPosition.top = container.style.top;
+                        lastPosition.bottom = 'auto';
+                        lastPosition.right = 'auto';
+                    }
+                    
+                    // Small timeout to prevent click trigger immediately after drag
+                    setTimeout(() => {
+                        isDragging = false;
+                    }, 50);
+                };
+
+                wrapper.addEventListener('mousedown', handleStart);
+                wrapper.addEventListener('touchstart', handleStart);
+            }
+
+            function expandIsland() {
+                if (isDragging || isExpanded) return;
+                isExpanded = true;
+
+                // Save current position before animating
+                lastPosition.left = container.style.left;
+                lastPosition.top = container.style.top;
+                if (!container.style.left) { // If using bottom/right
+                    const rect = container.getBoundingClientRect();
+                    lastPosition.left = rect.left + 'px';
+                    lastPosition.top = rect.top + 'px';
+                }
+
+                // 1. Move to Center Screen
+                container.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                container.style.left = '50%';
+                container.style.top = '50%';
+                container.style.bottom = 'auto';
+                container.style.right = 'auto';
+                container.style.transform = 'translate(-50%, -50%)';
+                
+                // 2. Expand Size
+                container.classList.remove('w-auto');
+                container.classList.add('w-[92%]', 'max-w-md');
+
+                wrapper.classList.remove('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95');
+                wrapper.classList.add('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default');
+
+                // 3. Show Content
+                collapsed.style.display = 'none';
+                expanded.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    expanded.classList.remove('opacity-0', 'translate-y-4');
+                }, 50);
+            }
+
+            function collapseIsland(e) {
+                if(e) e.stopPropagation();
+                if (!isExpanded) return;
+                isExpanded = false;
+
+                // 1. Hide Content
+                expanded.classList.add('opacity-0', 'translate-y-4');
+
+                setTimeout(() => {
+                    expanded.classList.add('hidden');
+                    collapsed.style.display = 'flex';
+
+                    // 2. Revert Wrapper
+                    wrapper.classList.remove('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default');
+                    wrapper.classList.add('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95');
+                    
+                    // 3. Revert Container Properties
+                    container.classList.remove('w-[92%]', 'max-w-md');
+                    container.classList.add('w-auto');
+
+                    // 4. Move back to last position
+                    container.style.transform = 'translate(0, 0)';
+                    
+                    if (lastPosition.bottom !== 'auto') {
+                         // Reset to initial CSS classes if never dragged
+                        container.style.left = 'auto';
+                        container.style.top = 'auto';
+                        container.style.right = '1.5rem';
+                        container.style.bottom = '8rem';
+                    } else {
+                        container.style.left = lastPosition.left;
+                        container.style.top = lastPosition.top;
+                        container.style.bottom = 'auto';
+                        container.style.right = 'auto';
+                    }
+
+                }, 300);
+            }
+
+            setupDrag();
+            
+            // Click Handler (only if not dragged)
+            wrapper.addEventListener('click', (e) => {
+                if (!isDragging) expandIsland();
+            });
+            
+            closeBtn.addEventListener('click', collapseIsland);
+
+            // Click Outside
+            document.addEventListener('click', function(event) {
+                if (isExpanded && !container.contains(event.target)) {
+                    collapseIsland();
+                }
+            });
+        });
+    </script>
+    @endif
 </body>
 </html>

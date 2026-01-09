@@ -39,7 +39,11 @@ class DashboardController extends Controller
         $nextRamadan = $this->getNextRamadanDate();
         $daysToRamadan = ceil(Carbon::now()->floatDiffInDays($nextRamadan['date'], false));
 
-        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan'));
+        $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
+
+        $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
+
+        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'tadabbur'));
     }
 
     private function getNextRamadanDate()
