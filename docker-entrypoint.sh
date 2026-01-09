@@ -16,6 +16,10 @@ php artisan view:cache
 # Jalankan migrasi jika perlu
 php artisan migrate --force
 
+# Seed Quran Source
+echo ">>> Seeding Quran Source..."
+php artisan db:seed --class=QuranSourceSeeder --force
+
 echo ">>> Starting Supervisor..."
 # -n supaya supervisor jadi PID 1 di container (bukan background)
 exec supervisord -n -c /etc/supervisor/supervisord.conf
