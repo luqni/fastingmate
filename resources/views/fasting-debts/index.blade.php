@@ -38,43 +38,47 @@
         </div>
 
         <!-- Add New Debt Form -->
-        <div  x-data="{ expanded: false }" class="bg-white rounded-[2rem] shadow-soft border border-gray-100 overflow-hidden transition-all duration-300" :class="expanded ? 'p-8' : 'p-6 cursor-pointer hover:bg-gray-50'" @click="expanded = true">
-            <div class="flex items-center justify-between">
+        <div id="add-debt-card" class="bg-transparent rounded-[2rem] shadow-none border border-transparent overflow-hidden transition-all duration-300 p-0 cursor-pointer hover:bg-gray-50">
+            <div class="flex items-center justify-between" id="add-debt-header">
                 <div class="flex items-center gap-5">
                     <div class="w-14 h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center shrink-0">
                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900">Tambah Hutang Puasa</h3>
                 </div>
-                <button x-show="expanded" @click.stop="expanded = false" class="text-gray-400 hover:text-gray-600">
+                <button type="button" id="close-debt-form" class="text-gray-400 hover:text-gray-600 hidden">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
             </div>
 
-            <div x-show="expanded" x-collapse class="mt-8">
-                <form action="{{ route('fasting-debts.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
-                    @csrf
-                    <div>
-                        <x-input-label for="year" :value="__('Tahun')" />
-                        <x-text-input id="year" name="year" type="number" :value="old('year', date('Y')-1)" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('year')" />
+            <div id="add-debt-form-container" class="hidden max-h-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out">
+                <div class="overflow-hidden">
+                    <div class="pt-8"> <!-- Padding top moved here to be part of the transition -->
+                        <form action="{{ route('fasting-debts.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-8 items-end">
+                            @csrf
+                            <div>
+                                <x-input-label for="year" :value="__('Tahun')" />
+                                <x-text-input id="year" name="year" type="number" :value="old('year', date('Y')-1)" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('year')" />
+                            </div>
+                            <div>
+                                <x-input-label for="total_days" :value="__('Jumlah Hari')" />
+                                <x-text-input id="total_days" name="total_days" type="number" required />
+                                <x-input-error class="mt-2" :messages="$errors->get('total_days')" />
+                            </div>
+                            <div>
+                                <x-input-label for="target_finish_date" :value="__('Target Lunas')" />
+                                <x-text-input id="target_finish_date" name="target_finish_date" type="date" />
+                                <x-input-error class="mt-2" :messages="$errors->get('target_finish_date')" />
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full inline-flex justify-center items-center px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-lg shadow-teal-500/30 transition-all transform hover:-translate-y-0.5">
+                                    {{ __('Simpan Data') }}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div>
-                        <x-input-label for="total_days" :value="__('Jumlah Hari')" />
-                        <x-text-input id="total_days" name="total_days" type="number" required />
-                        <x-input-error class="mt-2" :messages="$errors->get('total_days')" />
-                    </div>
-                    <div>
-                        <x-input-label for="target_finish_date" :value="__('Target Lunas')" />
-                        <x-text-input id="target_finish_date" name="target_finish_date" type="date" />
-                        <x-input-error class="mt-2" :messages="$errors->get('target_finish_date')" />
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full inline-flex justify-center items-center px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-2xl shadow-lg shadow-teal-500/30 transition-all transform hover:-translate-y-0.5">
-                            {{ __('Simpan Data') }}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -111,7 +115,7 @@
                          
                          <!-- Pay Action -->
                          <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-100 font-bold text-sm transition-colors ring-1 ring-teal-100">
+                            <button @click="open = !open" class="inline-flex items-center gap-1 px-4 py-2.5 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-100 font-bold text-sm transition-colors ring-1 ring-teal-100">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                                 Bayar
                             </button>
@@ -176,3 +180,55 @@
 
     </div>
 </x-app-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add Debt Form Toggle
+        const card = document.getElementById('add-debt-card');
+        const closeBtn = document.getElementById('close-debt-form');
+        const formContainer = document.getElementById('add-debt-form-container');
+        
+        let isExpanded = false;
+
+        function expand() {
+            if (isExpanded) return;
+            isExpanded = true;
+            
+            // UI updates for expanded state
+            card.classList.remove('bg-transparent', 'border-transparent', 'shadow-none', 'p-0', 'cursor-pointer', 'hover:bg-gray-50');
+            card.classList.add('bg-white', 'border-gray-100', 'shadow-soft', 'p-8');
+            
+            closeBtn.classList.remove('hidden');
+            
+            formContainer.classList.remove('hidden');
+            // Small delay to allow display:block to apply before transition starts
+            requestAnimationFrame(() => {
+                formContainer.classList.remove('max-h-0', 'opacity-0');
+                formContainer.classList.add('max-h-[500px]', 'opacity-100');
+            });
+        }
+
+        function collapse(e) {
+            e.stopPropagation(); // Prevent triggering card click
+            if (!isExpanded) return;
+            isExpanded = false;
+
+            // UI updates for collapsed state
+            card.classList.add('bg-transparent', 'border-transparent', 'shadow-none', 'p-0', 'cursor-pointer', 'hover:bg-gray-50');
+            card.classList.remove('bg-white', 'border-gray-100', 'shadow-soft', 'p-8');
+            
+            closeBtn.classList.add('hidden');
+            
+            formContainer.classList.add('max-h-0', 'opacity-0');
+            formContainer.classList.remove('max-h-[500px]', 'opacity-100');
+            
+            // Wait for transition to finish before hiding
+            setTimeout(() => {
+                if(!isExpanded) formContainer.classList.add('hidden');
+            }, 500); // Matches duration-500
+        }
+
+        card.addEventListener('click', expand);
+        closeBtn.addEventListener('click', collapse);
+    });
+</script>

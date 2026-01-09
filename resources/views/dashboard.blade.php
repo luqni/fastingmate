@@ -31,8 +31,8 @@
 
         <!-- Next Schedule Card -->
         <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100 relative overflow-hidden flex flex-col justify-between min-h-[160px] group">
-            <div class="absolute top-0 right-0 p-8 opacity-5 transform scale-150 translate-x-4 -translate-y-4 transition-transform group-hover:scale-125">
-                <svg class="w-32 h-32 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+            <div class="absolute top-0 right-0 p-8 opacity-5 transform scale-125 translate-x-4 -translate-y-4 transition-transform group-hover:scale-110">
+                <svg class="w-24 h-24 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
             </div>
             <p class="text-gray-500 font-bold text-sm tracking-wide uppercase mb-2">Jadwal Berikutnya</p>
             <div>
