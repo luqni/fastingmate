@@ -209,7 +209,4 @@ window.enableNotifications = async () => {
 
 window.subscribeUser = window.enableNotifications; // Alias for user request
 
-if (!window.Alpine) {
-    window.Alpine = Alpine;
-    Alpine.start();
-}
+Alpine.start();
