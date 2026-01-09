@@ -5,14 +5,7 @@
 
     <div class="space-y-6">
         
-        <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100" x-data="{ 
-            days: {{ $totalDays }},
-            rate: {{ $defaultRate }}, 
-            customRate: {{ Auth::user()->fidyah_cost ? 'true' : 'false' }},
-            formatCurrency(value) {
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
-            }
-        }">
+        <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100">
             
             <div class="flex items-center gap-4 mb-8">
                 <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl shadow-sm">
@@ -31,7 +24,9 @@
                         <h4 class="text-lg font-bold text-gray-900 mb-4">Rincian Hutang</h4>
                         <div class="space-y-3">
                             @foreach($breakdown as $item)
-                                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                <div class="flex justify-between items-center p-4 bg-gray-50 rounded-2xl border border-gray-100 fidyah-item"
+                                     data-days="{{ $item['days'] }}"
+                                     data-multiplier="{{ $item['multiplier'] }}">
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center font-bold text-gray-700 shadow-sm border border-gray-100">
                                             {{ $item['year'] }}
@@ -46,9 +41,15 @@
                                             <span class="inline-block px-2 py-1 rounded-md bg-red-50 text-red-600 text-[10px] font-bold uppercase mb-1">
                                                 Denda x{{ $item['multiplier'] }}
                                             </span>
+                                        @elseif($item['multiplier'] == 0)
+                                            <span class="inline-block px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase mb-1">
+                                                Qadha Only
+                                            </span>
                                         @endif
-                                        <div class="font-mono font-bold text-gray-700" 
-                                              x-text="formatCurrency({{ $item['days'] }} * rate * {{ $item['multiplier'] }})"></div>
+                                        
+                                        <div class="font-mono font-bold text-gray-700 fidyah-cost-display">
+                                            Rp {{ number_format($item['days'] * $defaultRate * $item['multiplier'], 0, ',', '.') }}
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -61,23 +62,28 @@
                         <form action="{{ route('fidyah.update-rate') }}" method="POST">
                             @csrf
                             <div class="flex flex-col gap-3 mb-4">
-                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="!customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
-                                    <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = false; rate = {{ \App\Models\FidyahRate::first()?->price_per_day ?? 15000 }}" {{ !Auth::user()->fidyah_cost ? 'checked' : '' }}>
+                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" id="label-standard">
+                                    <input type="radio" name="rate_type" value="standard" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" 
+                                           id="radio-standard"
+                                           {{ !Auth::user()->fidyah_cost ? 'checked' : '' }}>
                                     <span class="ml-3 font-bold text-gray-700">Standar ({{ number_format(\App\Models\FidyahRate::first()?->price_per_day ?? 15000, 0, ',', '.') }})</span>
                                 </label>
                                 
-                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" :class="customRate ? 'border-emerald-500 bg-emerald-50/50' : 'border-gray-100 hover:border-gray-200'">
-                                    <input type="radio" name="rate_type" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" @click="customRate = true" {{ Auth::user()->fidyah_cost ? 'checked' : '' }}>
+                                <label class="flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all" id="label-custom">
+                                    <input type="radio" name="rate_type" value="custom" class="text-emerald-600 focus:ring-emerald-500 w-5 h-5" 
+                                           id="radio-custom"
+                                           {{ Auth::user()->fidyah_cost ? 'checked' : '' }}>
                                     <span class="ml-3 font-bold text-gray-700">Kustom</span>
                                 </label>
                             </div>
 
-                            <div x-show="customRate" x-transition class="space-y-3">
+                            <div id="custom-rate-container" class="space-y-3 transition-all duration-300 {{ !Auth::user()->fidyah_cost ? 'hidden' : '' }}">
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                         <span class="text-gray-400 font-bold">Rp</span>
                                     </div>
-                                    <x-text-input type="number" name="rate" x-model="rate" class="w-full pl-12 py-3 text-lg font-bold" min="0"/>
+                                    <x-text-input type="number" name="rate" id="rate-input" class="w-full pl-12 py-3 text-lg font-bold" min="0" 
+                                                  value="{{ Auth::user()->fidyah_cost ?? (\App\Models\FidyahRate::first()?->price_per_day ?? 15000) }}"/>
                                 </div>
                                 <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition shadow-lg shadow-emerald-200">
                                     Simpan Tarif
@@ -95,9 +101,9 @@
                         
                         <div class="relative z-10">
                             <div class="text-emerald-100 font-bold uppercase tracking-wider mb-4 text-sm">Total Estimasi</div>
-                            <div class="text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight" x-text="formatCurrency(
-                                 {{ json_encode($breakdown) }}.reduce((acc, item) => acc + (item.days * rate * item.multiplier), 0)
-                            )"></div>
+                            <div class="text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight" id="total-estimasi-display">
+                                Rp {{ number_format($totalFidyahCost, 0, ',', '.') }}
+                            </div>
                              <div class="text-emerald-100 text-sm font-medium px-8 leading-relaxed">
                                 Nominal ini mencakup total hari hutang dikalikan dengan tarif fidyah, termasuk denda pelipatgandaan jika ada tahun yang terlewat.
                              </div>
@@ -121,4 +127,75 @@
         </div>
 
     </div>
+
+    <!-- Vanilla JS Implementation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioStandard = document.getElementById('radio-standard');
+            const radioCustom = document.getElementById('radio-custom');
+            const labelStandard = document.getElementById('label-standard');
+            const labelCustom = document.getElementById('label-custom');
+            const customRateContainer = document.getElementById('custom-rate-container');
+            const rateInput = document.getElementById('rate-input');
+            const totalDisplay = document.getElementById('total-estimasi-display');
+            const items = document.querySelectorAll('.fidyah-item');
+
+            const standardRate = {{ \App\Models\FidyahRate::first()?->price_per_day ?? 15000 }};
+            
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+            }
+
+            function updateCalculations() {
+                let currentRate = standardRate;
+                if (radioCustom.checked) {
+                    currentRate = parseInt(rateInput.value) || 0;
+                }
+                
+                let total = 0;
+
+                items.forEach(item => {
+                    const days = parseInt(item.dataset.days);
+                    const multiplier = parseInt(item.dataset.multiplier);
+                    const cost = days * currentRate * multiplier;
+                    total += cost;
+
+                    const costDisplay = item.querySelector('.fidyah-cost-display');
+                    if (costDisplay) {
+                        costDisplay.textContent = formatCurrency(cost);
+                    }
+                });
+
+                totalDisplay.textContent = formatCurrency(total);
+            }
+
+            function updateUI() {
+                if (radioStandard.checked) {
+                    labelStandard.classList.add('border-emerald-500', 'bg-emerald-50/50');
+                    labelStandard.classList.remove('border-gray-100');
+                    
+                    labelCustom.classList.remove('border-emerald-500', 'bg-emerald-50/50');
+                    labelCustom.classList.add('border-gray-100');
+
+                    customRateContainer.classList.add('hidden');
+                } else {
+                    labelCustom.classList.add('border-emerald-500', 'bg-emerald-50/50');
+                    labelCustom.classList.remove('border-gray-100');
+                    
+                    labelStandard.classList.remove('border-emerald-500', 'bg-emerald-50/50');
+                    labelStandard.classList.add('border-gray-100');
+
+                    customRateContainer.classList.remove('hidden');
+                }
+                updateCalculations();
+            }
+
+            radioStandard.addEventListener('change', updateUI);
+            radioCustom.addEventListener('change', updateUI);
+            rateInput.addEventListener('input', updateCalculations);
+
+            // Initial UI update to set correct state
+            updateUI();
+        });
+    </script>
 </x-app-layout>

@@ -30,7 +30,7 @@ class FidyahController extends Controller
             // Simplified rule for app feature: Multiplier = (Current Year - Debt Year). 
             // If Debt Year == Current Year, Multiplier = 1.
             
-            $multiplier = max(1, $currentYear - $debt->year);
+            $multiplier = max(0, $currentYear - $debt->year);
             
             $cost = $remaining * $defaultRate * $multiplier;
             
