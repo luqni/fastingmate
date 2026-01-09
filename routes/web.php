@@ -32,6 +32,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('dashboard');
             Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
             Route::post('/posts/{post}/unlock', [\App\Http\Controllers\Admin\PostController::class, 'unlock'])->name('posts.unlock');
+            Route::post('/posts/upload-image', [\App\Http\Controllers\Admin\PostImageController::class, 'store'])->name('posts.upload.image');
         });
         
         Route::post('/track-install', [\App\Http\Controllers\Admin\AdminController::class, 'trackInstall'])->name('track.install');

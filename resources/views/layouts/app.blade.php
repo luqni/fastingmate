@@ -82,15 +82,27 @@
                 </div>
             </header>
 
-            <div class="w-full max-w-7xl mx-auto p-6 space-y-8">
+            @if (isset($noContainer) && $noContainer)
                  @if (isset($header))
-                    <div class="mb-8">
-                        <h2 class="text-2xl font-extrabold tracking-tight">{{ $header }}</h2>
+                    <div class="w-full max-w-7xl mx-auto px-6 pt-6">
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-extrabold tracking-tight">{{ $header }}</h2>
+                        </div>
                     </div>
                 @endif
                 
                 {{ $slot }}
-            </div>
+            @else
+                <div class="w-full max-w-7xl mx-auto p-6 space-y-8">
+                     @if (isset($header))
+                        <div class="mb-8">
+                            <h2 class="text-2xl font-extrabold tracking-tight">{{ $header }}</h2>
+                        </div>
+                    @endif
+                    
+                    {{ $slot }}
+                </div>
+            @endif
         </main>
 
         <!-- Bottom Navigation (Visible on ALL screens) -->

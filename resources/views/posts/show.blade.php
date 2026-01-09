@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout :no-container="true">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Artikel & Blog') }}
@@ -19,17 +19,21 @@
             this.fontSize = 100;
         },
         
-        share(platform) {
+        async share(platform) {
             const url = window.location.href;
-            const text = '{{ $post->title }}';
+            const text = {{ json_encode($post->title) }};
             
             if (platform === 'native') {
                 if (navigator.share) {
-                    navigator.share({
-                        title: text,
-                        text: text,
-                        url: url
-                    }).catch((error) => console.log('Error sharing', error));
+                    try {
+                        await navigator.share({
+                            title: text,
+                            text: text,
+                            url: url
+                        });
+                    } catch (error) {
+                        console.log('Error sharing', error);
+                    }
                     return;
                 }
                 // Fallback to copy if native share not supported
@@ -49,22 +53,67 @@
                     shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
                     break;
                 case 'copy':
-                    navigator.clipboard.writeText(url);
-                    window.Swal.fire({
-                        icon: 'success',
-                        title: 'Link Disalin!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    this.copyToClipboard(url);
                     return;
             }
             
             if(shareUrl) window.open(shareUrl, '_blank');
+        },
+
+        copyToClipboard(text) {
+            // Try modern API first
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    this.showSuccessAlert();
+                }).catch(() => {
+                    this.fallbackCopy(text);
+                });
+            } else {
+                this.fallbackCopy(text);
+            }
+        },
+
+        fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '0';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                this.showSuccessAlert();
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                window.Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Menyalin',
+                    text: 'Browser anda tidak mendukung fitur ini.',
+                    timer: 2000
+                });
+            }
+            
+            document.body.removeChild(textArea);
+        },
+
+        showSuccessAlert() {
+            window.Swal.fire({
+                icon: 'success',
+                title: 'Link Disalin!',
+                showConfirmButton: false,
+                toast: true,
+                position: 'top-end',
+                timer: 2000
+            });
         }
+
     }">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Breadcrumb -->
-            <nav class="flex mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
+            <nav class="flex mb-6 text-sm text-gray-500 p-6" aria-label="Breadcrumb">
                 <a href="{{ route('dashboard') }}" class="hover:text-indigo-600 transition-colors">Home</a>
                 <span class="mx-2">/</span>
                 <a href="{{ route('posts.index') }}" class="hover:text-indigo-600 transition-colors">Blog</a>
@@ -122,7 +171,7 @@
 
                         <!-- Content with Dynamic Font Size -->
                         @if(!$post->is_locked)
-                            <div class="prose prose-lg prose-indigo max-w-none text-gray-700 leading-relaxed transition-all duration-300"
+                            <div class="prose prose-lg prose-indigo max-w-none text-gray-700 leading-relaxed text-justify transition-all duration-300"
                                  :style="`font-size: ${fontSize}%`">
                                 {!! $post->content !!}
                             </div>
