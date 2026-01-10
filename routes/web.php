@@ -69,5 +69,13 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 });
-
+// Auth Routes
 require __DIR__.'/auth.php';
+
+// Social Auth
+Route::controller(App\Http\Controllers\Support\SocialAuthController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+    Route::get('auth/social/complete', 'showCompleteForm')->name('auth.social.complete');
+    Route::post('auth/social/complete', 'storeComplete')->name('auth.social.store');
+});

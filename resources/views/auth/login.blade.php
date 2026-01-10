@@ -4,6 +4,19 @@
         <p class="text-sm text-gray-500 mt-2">Masuk untuk melanjutkan perjalanan puasamu.</p>
     </div>
 
+        <div class="mb-4">
+             <div class="flex items-center gap-4 mb-4">
+                <hr class="flex-1 border-gray-200">
+                <span class="text-xs text-gray-400 font-medium">ATAU</span>
+                <hr class="flex-1 border-gray-200">
+            </div>
+
+            <a href="{{ route('auth.google') }}" class="flex items-center justify-center gap-2 w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 transition bg-white shadow-sm">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+                Lanjutkan dengan Google
+            </a>
+        </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

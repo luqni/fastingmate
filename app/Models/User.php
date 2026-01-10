@@ -40,6 +40,8 @@ class User extends Authenticatable
         'role',
         'preferences',
         'installed_at',
+        'google_id',
+        'avatar',
     ];
 
     /**
