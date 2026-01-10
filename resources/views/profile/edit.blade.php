@@ -109,10 +109,15 @@
                     throw new Error('Izin notifikasi ditolak.');
                 }
 
-                if (statusEl) statusEl.innerText = 'Mendaftarkan...';
+                if (statusEl) statusEl.innerText = 'Mendaftarkan Service Worker...';
 
-                // 2. Register SW
-                const registration = await navigator.serviceWorker.register('/sw.js');
+                // 2. Register SW & Wait for Ready
+                const reg = await navigator.serviceWorker.register('/sw.js');
+                
+                // Wait until the SW is active and ready
+                const registration = await navigator.serviceWorker.ready;
+
+                if (statusEl) statusEl.innerText = 'Memproses subscription...';
                 
                 // 3. Subscribe
                 const vapidKey = document.querySelector('meta[name="vapid-key"]').content;
