@@ -81,7 +81,7 @@
                                  x-transition:leave="transition ease-in duration-150"
                                  x-transition:leave-start="opacity-100 translate-y-0"
                                  x-transition:leave-end="opacity-0 translate-y-2"
-                                 class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden" 
+                                 class="fixed left-1/2 top-24 -translate-x-1/2 w-[92%] max-w-sm bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 md:w-80 md:translate-x-0" 
                                  style="display: none;">
                                 
                                 <div class="px-4 py-3 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
