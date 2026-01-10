@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-gray-50 min-h-screen" x-data="{ 
+    <div class="bg-gray-50 min-h-screen" x-data="{ 
         fontSize: 100,
         shareOpen: false,
         
@@ -127,7 +127,7 @@
                     @if($post->thumbnail)
                         <div class="w-full aspect-video relative">
                              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                            <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                            <img src="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                             <div class="absolute bottom-0 left-0 p-8 text-white">
                                 <div class="flex items-center gap-3 mb-2">
                                      <span class="bg-indigo-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Article</span>

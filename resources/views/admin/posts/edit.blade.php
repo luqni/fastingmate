@@ -20,30 +20,70 @@
 
                     <div class="mb-4">
                         <label for="thumbnail" class="block text-sm font-medium text-gray-700">Thumbnail (Optional)</label>
-                        <div class="mt-2 flex items-center gap-4">
-                            <!-- Current or New Preview -->
-                            <div id="image-preview" class="{{ $post->thumbnail ? '' : 'hidden' }} w-32 h-32 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden relative">
-                                <img src="{{ $post->thumbnail ? asset('storage/' . $post->thumbnail) : '' }}" alt="Preview" class="w-full h-full object-cover">
+                        <div class="mt-2 flex flex-col gap-4">
+                            <div class="flex items-center gap-4">
+                                <!-- Current or New Preview -->
+                                <div id="image-preview" class="{{ $post->thumbnail ? '' : 'hidden' }} w-32 h-32 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden relative flex-shrink-0">
+                                    <img src="{{ $post->thumbnail ? (Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail)) : '' }}" alt="Preview" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-grow space-y-3">
+                                    <div>
+                                        <label for="thumbnail" class="block text-xs font-medium text-gray-500 mb-1">Upload File</label>
+                                        <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors">
+                                    </div>
+                                    <div class="relative">
+                                        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                            <div class="w-full border-t border-gray-300"></div>
+                                        </div>
+                                        <div class="relative flex justify-center">
+                                            <span class="bg-white px-2 text-xs text-gray-500">OR</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="thumbnail_url" class="block text-xs font-medium text-gray-500 mb-1">Image URL</label>
+                                        <input type="url" name="thumbnail_url" id="thumbnail_url" placeholder="https://example.com/image.jpg" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" value="{{ old('thumbnail_url', Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : '') }}">
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-colors">
                         </div>
                         @error('thumbnail') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
+                        @error('thumbnail_url') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <script>
-                        document.getElementById('thumbnail').addEventListener('change', function(e) {
-                            const file = e.target.files[0];
-                            const preview = document.getElementById('image-preview');
-                            const img = preview.querySelector('img');
+                        const thumbnailInput = document.getElementById('thumbnail');
+                        const thumbnailUrlInput = document.getElementById('thumbnail_url');
+                        const preview = document.getElementById('image-preview');
+                        const img = preview.querySelector('img');
 
+                        function updatePreview(src) {
+                            if (src) {
+                                img.src = src;
+                                preview.classList.remove('hidden');
+                            } else {
+                                preview.classList.add('hidden');
+                                img.src = '';
+                            }
+                        }
+
+                        thumbnailInput.addEventListener('change', function(e) {
+                            const file = e.target.files[0];
                             if (file) {
                                 const reader = new FileReader();
                                 reader.onload = function(e) {
-                                    img.src = e.target.result;
-                                    preview.classList.remove('hidden');
+                                    updatePreview(e.target.result);
+                                    thumbnailUrlInput.value = ''; // Clear URL if file is selected
                                 }
                                 reader.readAsDataURL(file);
+                            } else {
+                                // If file unselected, check if URL exists
+                                updatePreview(thumbnailUrlInput.value);
+                            }
+                        });
+
+                        thumbnailUrlInput.addEventListener('input', function(e) {
+                            if (!thumbnailInput.files.length) {
+                                updatePreview(e.target.value);
                             }
                         });
                     </script>

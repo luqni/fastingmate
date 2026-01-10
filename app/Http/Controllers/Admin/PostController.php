@@ -40,6 +40,7 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail_url' => 'nullable|url',
             'is_published' => 'boolean',
             'is_locked' => 'boolean',
         ]);
@@ -55,6 +56,8 @@ class PostController extends Controller
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('thumbnails', 'public');
             $validated['thumbnail'] = $path;
+        } elseif ($request->filled('thumbnail_url')) {
+            $validated['thumbnail'] = $request->input('thumbnail_url');
         }
 
         $validated['is_published'] = $request->has('is_published');
@@ -94,7 +97,7 @@ class PostController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'thumbnail' => 'nullable|image|max:2048',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail_url' => 'nullable|url',
             'is_published' => 'boolean',
             'is_locked' => 'boolean',
         ]);
@@ -111,12 +114,20 @@ class PostController extends Controller
         }
 
         if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail
-            if ($post->thumbnail) {
+            // Delete old thumbnail if it was a file
+            if ($post->thumbnail && !Str::startsWith($post->thumbnail, ['http', 'https'])) {
                 Storage::disk('public')->delete($post->thumbnail);
             }
             $path = $request->file('thumbnail')->store('thumbnails', 'public');
             $validated['thumbnail'] = $path;
+        } elseif ($request->filled('thumbnail_url')) {
+             // If manual URL is provided (and no new file uploaded), update it
+             // If previously it was a file, we might want to delete it?
+             // Yes, if switch from local file to URL, delete local file
+            if ($post->thumbnail && !Str::startsWith($post->thumbnail, ['http', 'https'])) {
+                 Storage::disk('public')->delete($post->thumbnail);
+            }
+            $validated['thumbnail'] = $request->input('thumbnail_url');
         }
 
         $validated['is_published'] = $request->has('is_published');
