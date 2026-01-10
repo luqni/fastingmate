@@ -454,8 +454,8 @@
                 container.classList.remove('w-auto');
                 container.classList.add('w-[92%]', 'max-w-md');
 
-                wrapper.classList.remove('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95');
-                wrapper.classList.add('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default');
+                wrapper.classList.remove('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95', 'overflow-hidden');
+                wrapper.classList.add('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default', 'max-h-[85vh]', 'overflow-y-auto');
 
                 // 3. Show Content
                 collapsed.style.display = 'none';
@@ -479,8 +479,8 @@
                     collapsed.style.display = 'flex';
 
                     // 2. Revert Wrapper
-                    wrapper.classList.remove('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default');
-                    wrapper.classList.add('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95');
+                    wrapper.classList.remove('rounded-[2rem]', 'p-6', 'w-full', 'cursor-default', 'max-h-[85vh]', 'overflow-y-auto');
+                    wrapper.classList.add('rounded-full', 'px-4', 'py-3', 'cursor-grab', 'hover:scale-105', 'active:scale-95', 'overflow-hidden');
                     
                     // 3. Revert Container Properties
                     container.classList.remove('w-[92%]', 'max-w-md');
