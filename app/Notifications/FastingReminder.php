@@ -21,7 +21,18 @@ class FastingReminder extends Notification
 
     public function via(object $notifiable): array
     {
-        return [WebPushChannel::class];
+        return ['database', WebPushChannel::class];
+    }
+
+    public function toArray($notifiable): array
+    {
+        return [
+            'title' => 'Pengingat Puasa',
+            'message' => $this->message,
+            'action_url' => route('fasting-plans.index'),
+            'type' => 'reminder',
+            'icon' => 'calendar'
+        ];
     }
 
     public function toWebPush($notifiable, $notification)

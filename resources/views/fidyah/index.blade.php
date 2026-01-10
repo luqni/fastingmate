@@ -57,7 +57,12 @@
                     </div>
 
                     <div>
-                        <x-input-label value="Nominal Fidyah Per Hari" class="mb-3"/>
+                        <div class="flex items-center gap-2 mb-3">
+                            <x-input-label value="Nominal Fidyah Per Hari" class="mb-0"/>
+                            <button type="button" onclick="showFidyahSourceInfo()" class="text-gray-400 hover:text-emerald-600 transition-colors">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </button>
+                        </div>
                         
                         <form action="{{ route('fidyah.update-rate') }}" method="POST">
                             @csrf
@@ -197,5 +202,53 @@
             // Initial UI update to set correct state
             updateUI();
         });
+
+        function showFidyahSourceInfo() {
+            const tableHtml = `
+                <div class="text-left text-sm">
+                    <p class="mb-3 text-gray-600">Berikut adalah pedoman nominal fidyah berdasarkan SK Ketua BAZNAS No. 10 Tahun 2024:</p>
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="py-3 px-4 font-bold text-gray-700">Wilayah / Lembaga</th>
+                                    <th class="py-3 px-4 font-bold text-gray-700 text-right">Nominal / Hari</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="py-3 px-4 text-gray-600">Baznas Pusat (Jabodetabek)</td>
+                                    <td class="py-3 px-4 text-gray-900 font-bold text-right">Rp 60.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-gray-600">Baznas Jawa Barat</td>
+                                    <td class="py-3 px-4 text-gray-900 font-bold text-right">Rp 45.000</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-gray-600">Baznas Jawa Timur</td>
+                                    <td class="py-3 px-4 text-gray-900 font-bold text-right">Rp 50.000</td>
+                                </tr>
+                                <tr class="bg-emerald-50">
+                                    <td class="py-3 px-4 text-gray-800 font-medium">Baznas Kab. Sleman (2025)</td>
+                                    <td class="py-3 px-4 text-emerald-700 font-bold text-right">Rp 10.500</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="mt-3 text-xs text-gray-500 italic">
+                        *Nominal dapat berbeda di setiap daerah sesuai kebijakan BAZNAS setempat (SK Ketua BAZNAS Daerah).
+                    </p>
+                </div>
+            `;
+
+            Swal.fire({
+                title: 'Informasi Sumber Data',
+                html: tableHtml,
+                icon: 'info',
+                width: '600px',
+                confirmButtonColor: '#10b981', // emerald-500
+                confirmButtonText: 'Mengerti'
+            });
+        }
     </script>
 </x-app-layout>
