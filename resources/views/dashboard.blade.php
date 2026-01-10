@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Hello, ' . Auth::user()->name . ' 👋') }}
+        {!! __('Assalamualaikum, <br/>' . e(Auth::user()->name) . ' 👋') !!}
     </x-slot>
 
     <!-- Stats Grid -->
