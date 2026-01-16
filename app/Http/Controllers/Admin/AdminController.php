@@ -54,13 +54,37 @@ class AdminController extends Controller
 
         $totalInstalls = \App\Models\User::whereNotNull('installed_at')->count();
         $totalUsers = \App\Models\User::count();
+        
+        $enableRamadanSummary = \App\Models\Setting::where('key', 'enable_ramadan_summary')->value('value');
 
-        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers'));
+        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'enableRamadanSummary'));
     }
 
     public function trackInstall(Request $request)
     {
         $request->user()->update(['installed_at' => now()]);
         return response()->json(['status' => 'success']);
+    }
+
+    public function settings()
+    {
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        return view('admin.settings', compact('settings'));
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $validated = $request->validate([
+            'enable_ramadan_summary' => 'nullable|in:on,off,1,0',
+        ]);
+
+        $value = $request->has('enable_ramadan_summary') ? '1' : '0';
+        
+        \App\Models\Setting::updateOrCreate(
+            ['key' => 'enable_ramadan_summary'],
+            ['value' => $value]
+        );
+
+        return back()->with('success', 'Pengaturan berhasil diperbarui.');
     }
 }

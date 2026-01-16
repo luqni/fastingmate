@@ -33,6 +33,10 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
             Route::resource('posts', \App\Http\Controllers\Admin\PostController::class);
             Route::post('/posts/{post}/unlock', [\App\Http\Controllers\Admin\PostController::class, 'unlock'])->name('posts.unlock');
             Route::post('/posts/upload-image', [\App\Http\Controllers\Admin\PostImageController::class, 'store'])->name('posts.upload.image');
+            
+            // Settings
+            Route::get('/settings', [\App\Http\Controllers\Admin\AdminController::class, 'settings'])->name('settings.index');
+            Route::post('/settings', [\App\Http\Controllers\Admin\AdminController::class, 'updateSettings'])->name('settings.update');
         });
         
         Route::post('/track-install', [\App\Http\Controllers\Admin\AdminController::class, 'trackInstall'])->name('track.install');
@@ -52,6 +56,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
 
     // Daily Tadabbur
     Route::get('/tadabbur-history', [\App\Http\Controllers\TadabburController::class, 'index'])->name('tadabbur.index');
+    Route::post('/daily-tadabbur/generate-summary', [\App\Http\Controllers\TadabburController::class, 'generateSummary'])->name('daily-tadabbur.generate-summary');
     Route::post('/daily-tadabbur/{dailyTadabbur}', [\App\Http\Controllers\TadabburController::class, 'store'])->name('daily-tadabbur.store');
 
     // Fasting Plans

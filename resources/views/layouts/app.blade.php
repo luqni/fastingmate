@@ -7,7 +7,7 @@
     <meta name="vapid-key" content="{{ config('webpush.vapid.public_key') }}">
 
     <title>{{ config('app.name', 'FastingMate') }}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="manifest" href="/build/manifest.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="/pwa-192x192.png">

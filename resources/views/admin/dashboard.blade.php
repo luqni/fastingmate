@@ -7,6 +7,23 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 p-6">
+                <form action="{{ route('admin.settings.update') }}" method="POST" class="flex items-center justify-between">
+                    @csrf
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">Fitur Rangkuman Tadabbur</h3>
+                        <p class="text-sm text-gray-500">Aktifkan agar user bisa membuat rangkuman perjalanan Ramadhan mereka.</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" name="enable_ramadan_summary" class="sr-only peer" onchange="this.form.submit()" {{ isset($enableRamadanSummary) && $enableRamadanSummary == '1' ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                        <span class="text-sm font-medium text-gray-700">{{ isset($enableRamadanSummary) && $enableRamadanSummary == '1' ? 'Aktif' : 'Non-aktif' }}</span>
+                    </div>
+                </form>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <div class="text-gray-900 text-xl font-bold mb-2">Total Users</div>
