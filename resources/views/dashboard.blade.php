@@ -43,13 +43,27 @@
                         Selesai!
                     @endif
                 </h3>
-                <p class="mt-2 text-primary-600 font-bold text-lg">
-                     @if($nextFasting)
-                        {{ $nextFasting->scheduled_date->format('l') }}
-                    @else
-                        Tidak ada jadwal
+                <div class="mt-2 flex items-center justify-between">
+                    <p class="text-primary-600 font-bold text-lg">
+                         @if($nextFasting)
+                            {{ $nextFasting->scheduled_date->format('l') }}
+                        @else
+                            Tidak ada jadwal
+                        @endif
+                    </p>
+                    
+                    @if($nextFasting && $nextFasting->scheduled_date->isToday())
+                        <form action="{{ route('smart-schedules.update', $nextFasting->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="completed">
+                            <button class="px-3 py-1.5 rounded-lg bg-primary-600 text-white text-xs font-bold shadow-md shadow-primary-500/20 hover:bg-primary-700 hover:shadow-lg transition flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                Selesai
+                            </button>
+                        </form>
                     @endif
-                </p>
+                </div>
             </div>
         </div>
 
@@ -113,6 +127,8 @@
                         Wawasan Islami
                     </h3>
                 </div>
+    
+
                 <div class="bg-indigo-50 p-3 rounded-2xl group-hover:scale-110 transition-transform">
                     <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
                 </div>
@@ -128,6 +144,47 @@
 
     </div>
 
+    <!-- Tadabbur History Section -->
+    <div class="mt-10">
+        <div class="flex items-center justify-between mb-6 px-2">
+            <h3 class="text-2xl font-bold text-gray-900">Catatan Hatimu</h3>
+            <a href="{{ route('tadabbur.index') }}" class="text-sm font-bold text-primary-600 hover:text-primary-700">Lihat Semua</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @if($todayTadabbur && $todayTadabbur->status === 'completed')
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100 relative overflow-hidden group hover:shadow-lg transition-all">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-primary-50 rounded-full blur-2xl -mr-8 -mt-8 transition-all group-hover:bg-primary-100"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{{ $todayTadabbur->date->translatedFormat('d M Y') }}</span>
+                            <span class="px-2 py-1 bg-primary-50 text-primary-600 text-[10px] font-bold rounded-lg">{{ $todayTadabbur->quranSource->surah_name }}:{{ $todayTadabbur->quranSource->ayah_number }}</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2 italic">
+                            "{{ $todayTadabbur->quranSource->ayah_translation }}"
+                        </p>
+                        
+                        <div class="pl-3 border-l-2 border-primary-200">
+                             <p class="text-gray-800 font-medium text-sm line-clamp-3">
+                                {{ $todayTadabbur->reflection }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="col-span-full bg-white rounded-2xl p-8 text-center border dashed border-gray-300">
+                    <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <p class="text-gray-500 font-medium text-sm">Belum ada catatan tadabbur hari ini.</p>
+                    <button class="mt-2 text-primary-600 font-bold text-sm hover:underline">Mulai Tadabbur Sekarang</button>
+                </div>
+            @endif
+        </div>
+    </div>
+
     <!-- Calendar Section -->
     <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-soft border border-gray-100 mt-10">
         <div class="flex items-center justify-between mb-8">
@@ -137,22 +194,50 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-7 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-7 gap-3 md:gap-4">
              @forelse($schedules as $schedule)
-                <div class="rounded-3xl p-4 text-center border-2 transition-all duration-300 {{ $schedule->status === 'completed' ? 'border-transparent bg-gradient-to-b from-emerald-50 to-white' : 'border-gray-50 bg-white hover:border-primary-100 hover:shadow-lg hover:shadow-primary-500/10' }}">
-                    <div class="text-xs font-bold text-gray-400 uppercase mb-2">{{ $schedule->scheduled_date->format('D') }}</div>
-                    <div class="text-2xl font-extrabold text-gray-900 mb-3">{{ $schedule->scheduled_date->format('d') }}</div>
+                <div class="rounded-2xl md:rounded-3xl p-4 md:p-4 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center border md:border-2 transition-all duration-300 {{ $schedule->status === 'completed' ? 'border-transparent bg-gradient-to-r md:bg-gradient-to-b from-emerald-50 to-white' : 'border-gray-100 md:border-gray-50 bg-white hover:border-primary-100 hover:shadow-lg hover:shadow-primary-500/10' }} shadow-sm md:shadow-none">
+                    <div>
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-0.5 md:mb-2">{{ $schedule->scheduled_date->translatedFormat('l') }}</div>
+                        <div class="text-xl md:text-2xl font-extrabold text-gray-900 mb-0 md:mb-3">{{ $schedule->scheduled_date->translatedFormat('d F') }}</div>
+                    </div>
                     
-                    @if($schedule->status === 'completed')
-                        <div class="mx-auto w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
+                    <div class="shrink-0 ml-4">
+                    @if(isset($schedule->type) && $schedule->type === 'plan')
+                         @if($schedule->status === 'completed')
+                            <div class="w-10 h-10 md:w-8 md:h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center" title="Rencana Selesai">
+                                <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        @else
+                            <div class="w-10 h-10 md:w-8 md:h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center" title="Rencana Puasa">
+                                 <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                        @endif
                     @else
-                         <div class="mx-auto w-8 h-8 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center">
-                             <!-- Clock or Status -->
-                             <span class="w-2.5 h-2.5 bg-yellow-400 rounded-full"></span>
-                        </div>
+                        <!-- Debt Schedule (SmartSchedule) -->
+                        <form action="{{ route('smart-schedules.update', $schedule->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            
+                            @if($schedule->status === 'completed')
+                                <input type="hidden" name="status" value="pending">
+                                <button class="w-10 h-10 md:w-8 md:h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center hover:bg-emerald-200 transition" 
+                                    title="Qadha Selesai (Klik untuk batalkan)"
+                                    aria-label="Batalkan Selesai">
+                                    <svg class="w-5 h-5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </button>
+                            @else
+                                <input type="hidden" name="status" value="completed">
+                                <button class="h-10 px-4 md:px-0 md:w-8 md:h-8 rounded-xl md:rounded-full bg-yellow-50 text-yellow-700 md:text-yellow-600 flex items-center justify-center border border-yellow-200 md:border-2 md:border-yellow-100 hover:bg-yellow-100 hover:border-yellow-300 transition group gap-2 md:gap-0" 
+                                    title="Tandai Selesai"
+                                    aria-label="Tandai Selesai">
+                                     <span class="md:hidden text-xs font-bold">Selesai?</span>
+                                     <span class="w-2 h-2 md:w-2.5 md:h-2.5 bg-yellow-400 rounded-full group-hover:scale-125 transition-transform"></span>
+                                </button>
+                            @endif
+                        </form>
                     @endif
+                    </div>
                 </div>
             @empty
                 <div class="col-span-full py-10 flex flex-col items-center justify-center text-center">

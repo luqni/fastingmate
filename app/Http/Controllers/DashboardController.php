@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SmartSchedule;
+use App\Models\FastingPlan;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -29,7 +30,26 @@ class DashboardController extends Controller
         $schedules = SmartSchedule::where('user_id', $user->id)
             ->whereMonth('scheduled_date', Carbon::now()->month)
             ->whereYear('scheduled_date', Carbon::now()->year)
-            ->get();
+            ->orderBy('scheduled_date', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'debt';
+                return $item;
+            });
+
+        // Get manual fasting plans
+        $plans = FastingPlan::where('user_id', $user->id)
+            ->whereMonth('date', Carbon::now()->month)
+            ->whereYear('date', Carbon::now()->year)
+            ->get()
+            ->map(function ($item) {
+                $item->type = 'plan';
+                $item->scheduled_date = Carbon::parse($item->date); // Map date to scheduled_date for consistency
+                return $item;
+            });
+
+        // Merge and sort
+        $schedules = $schedules->concat($plans)->sortBy('scheduled_date');
 
         $activeCycle = $user->menstrualCycles()
             ->whereNull('end_date')
@@ -41,9 +61,9 @@ class DashboardController extends Controller
 
         $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
 
-        $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
+        $todayTadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
 
-        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'tadabbur'));
+        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'todayTadabbur'));
     }
 
     private function getNextRamadanDate()

@@ -32,7 +32,8 @@
                 </div>
             @else
                 <div class="w-full md:w-auto px-6 py-4 rounded-2xl bg-gray-50 border border-gray-100 text-gray-500 font-medium text-sm text-center md:text-left">
-                    Tidak ada jadwal puasa hari ini
+                    <p>Tidak ada jadwal <span class="font-bold text-gray-700">Hutang (Qadha)</span> hari ini.</p>
+                    <p class="text-xs text-gray-400 mt-0.5">Cek Dashboard untuk jadwal puasa Sunnah.</p>
                 </div>
             @endif
         </div>

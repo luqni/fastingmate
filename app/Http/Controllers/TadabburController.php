@@ -8,6 +8,20 @@ use Illuminate\Http\Request;
 class TadabburController extends Controller
 {
     /**
+     * Display a listing of the completed tadabbur history.
+     */
+    public function index()
+    {
+        $histories = DailyTadabbur::where('user_id', auth()->id())
+            ->where('status', 'completed')
+            ->with('quranSource')
+            ->latest('date')
+            ->get();
+
+        return view('tadabbur.index', compact('histories'));
+    }
+
+    /**
      * Update the daily tadabbur with a reflection.
      */
     public function store(Request $request, DailyTadabbur $dailyTadabbur)

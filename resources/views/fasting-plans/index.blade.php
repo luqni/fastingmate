@@ -31,7 +31,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="grid grid-cols-7 border-b border-gray-100 bg-gray-50">
                 @foreach(['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] as $day)
-                    <div class="py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wide">{{ $day }}</div>
+                    <div class="py-2 md:py-3 text-center text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wide">{{ $day }}</div>
                 @endforeach
             </div>
             
@@ -74,18 +74,18 @@
                             $planStatus = $day['plan'] ? $day['plan']->status : null;
                         @endphp
 
-                        <div class="min-h-[100px] relative border border-gray-50 p-2 {{ $bgColor }} transition hover:bg-gray-50 flex flex-col justify-between group">
+                        <div class="min-h-[85px] md:min-h-[100px] relative border border-gray-50 p-1.5 md:p-2 {{ $bgColor }} transition hover:bg-gray-50 flex flex-col justify-between group">
                             <!-- Date Info -->
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <span class="text-[9px] text-gray-500 uppercase tracking-tighter">{{ $day['date']->translatedFormat('M') }}</span>
-                                    <span class="block text-sm font-bold {{ $isToday ? 'bg-primary-600 text-white w-6 h-6 rounded-full flex items-center justify-center' : $textColor }}">
+                                    <span class="text-[9px] md:text-[9px] text-gray-500 uppercase tracking-tighter">{{ $day['date']->translatedFormat('M') }}</span>
+                                    <span class="block text-xs md:text-sm font-bold {{ $isToday ? 'bg-primary-600 text-white w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center' : $textColor }}">
                                         {{ $day['date']->day }}
                                     </span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-[9px] text-gray-400 uppercase tracking-tighter">{{ Str::limit($hijriMonths[$day['hijri']['month']] ?? '', 3, '') }}</span>
-                                    <span class="block text-[10px] text-gray-400 font-medium leading-tight">
+                                    <span class="text-[9px] md:text-[9px] text-gray-400 uppercase tracking-tighter">{{ Str::limit($hijriMonths[$day['hijri']['month']] ?? '', 3, '') }}</span>
+                                    <span class="block text-[9px] md:text-[10px] text-gray-400 font-medium leading-tight">
                                         {{ $day['hijri']['day'] }}
                                     </span>
                                 </div>
@@ -93,40 +93,59 @@
 
                             <!-- Sunnah Badge -->
                             @if($day['sunnah_type'] && $day['sunnah_type'] !== 'haram')
-                                <div class="mt-1">
-                                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-white/70 border border-gray-200 text-gray-600 font-medium inline-block truncate w-full">
+                                <div class="mt-0.5 md:mt-1">
+                                    <span class="text-[9px] md:text-[10px] px-1 md:px-1.5 py-0.5 rounded-md bg-white/70 border border-gray-200 text-gray-600 font-medium inline-block truncate w-full">
                                         {{ ucfirst(str_replace('_', ' ', $day['sunnah_type'])) }}
                                     </span>
                                 </div>
                             @endif
 
                             <!-- Interaction Area -->
-                            <div class="mt-2 flex justify-end">
+                            <div class="mt-1 md:mt-2 flex justify-end">
                                 @if($planStatus)
-                                    <div class="w-full flex gap-1">
+                                    <div class="w-full flex gap-1 items-center justify-end">
                                         <form action="{{ route('fasting-plans.update', $day['plan']->id) }}" method="POST" class="flex-1">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="status" value="{{ $planStatus == 'planned' ? 'completed' : 'planned' }}">
-                                            <button class="w-full py-1 rounded text-[10px] font-bold text-white transition {{ $planStatus == 'completed' ? 'bg-green-600 hover:bg-green-700' : 'bg-green-400 hover:bg-green-500' }}">
-                                                {{ $planStatus == 'completed' ? 'Selesai' : 'Terjadwal' }}
+                                            <button 
+                                                class="w-full py-1 rounded transition flex items-center justify-center gap-1 {{ $planStatus == 'completed' ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-white border border-green-500 text-green-600 hover:bg-green-50' }}"
+                                                aria-label="{{ $planStatus == 'completed' ? 'Batalkan Selesai' : 'Tandai Selesai' }}"
+                                                title="{{ $planStatus == 'completed' ? 'Batalkan Selesai' : 'Tandai Selesai' }}"
+                                            >
+                                                @if($planStatus == 'completed')
+                                                    <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                    <span class="hidden md:inline text-[10px] font-bold">Selesai</span>
+                                                @else
+                                                    <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                    <span class="hidden md:inline text-[10px] font-bold">Selesai</span>
+                                                @endif
                                             </button>
                                         </form>
                                         <form action="{{ route('fasting-plans.destroy', $day['plan']->id) }}" method="POST" class="action-confirm-form" data-confirm-title="Hapus Rencana?" data-confirm-text="Rencana puasa ini akan dihapus." data-confirm-icon="warning" data-confirm-btn="Ya, Hapus">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="px-2 py-1 rounded bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-500 transition">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                            <button 
+                                                class="px-1.5 md:px-2 py-1 rounded bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-500 transition flex items-center justify-center"
+                                                aria-label="Hapus Rencana"
+                                                title="Hapus Rencana"
+                                            >
+                                                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                             </button>
                                         </form>
                                     </div>
                                 @elseif($day['sunnah_type'] !== 'haram')
-                                    <form action="{{ route('fasting-plans.store') }}" method="POST" class="w-full opacity-0 group-hover:opacity-100 transition focus-within:opacity-100">
+                                    <form action="{{ route('fasting-plans.store') }}" method="POST" class="w-full opacity-100 md:opacity-0 md:group-hover:opacity-100 transition focus-within:opacity-100">
                                         @csrf
                                         <input type="hidden" name="date" value="{{ $day['date']->format('Y-m-d') }}">
                                         <input type="hidden" name="type" value="{{ $day['sunnah_type'] }}">
-                                        <button class="w-full py-1 rounded text-[10px] font-bold bg-white border border-gray-200 text-gray-400 hover:border-green-400 hover:text-green-500 transition">
-                                            + Rencana
+                                        <button 
+                                            class="w-full py-1 rounded bg-white border border-gray-200 text-gray-400 hover:border-primary-400 hover:text-primary-500 transition flex items-center justify-center gap-1"
+                                            aria-label="Tambah Rencana Puasa"
+                                            title="Tambah Rencana Puasa"
+                                        >
+                                            <svg class="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                            <span class="hidden md:inline text-[10px] font-bold">Rencana</span>
                                         </button>
                                     </form>
                                 @endif

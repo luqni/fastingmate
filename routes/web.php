@@ -51,10 +51,14 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::post('/fidyah/update-rate', [FidyahController::class, 'store'])->name('fidyah.update-rate');
 
     // Daily Tadabbur
+    Route::get('/tadabbur-history', [\App\Http\Controllers\TadabburController::class, 'index'])->name('tadabbur.index');
     Route::post('/daily-tadabbur/{dailyTadabbur}', [\App\Http\Controllers\TadabburController::class, 'store'])->name('daily-tadabbur.store');
 
     // Fasting Plans
     Route::resource('fasting-plans', FastingPlanController::class);
+    
+    // Smart Schedules (Interactive)
+    Route::patch('/smart-schedules/{smartSchedule}', [\App\Http\Controllers\SmartScheduleController::class, 'update'])->name('smart-schedules.update');
 
     // Push Notifications
     Route::post('/push/subscribe', [\App\Http\Controllers\PushController::class, 'store'])->name('push.subscribe');
