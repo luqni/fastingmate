@@ -507,6 +507,10 @@
 
             setupDrag();
             
+            // Expose function globally
+            window.expandDynamicIsland = expandIsland;
+            window.collapseDynamicIsland = collapseIsland;
+            
             // Click Handler (only if not dragged)
             wrapper.addEventListener('click', (e) => {
                 if (!isDragging) expandIsland();
