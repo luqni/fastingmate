@@ -32,10 +32,20 @@ class TadabburService
 
         // 2. If not found, generate a new one
         
-        // Pick a random Quran source
-        // Ideally, we could filter out sources already seen by the user recently, 
-        // but for now, pure random from available sources.
-        $source = QuranSource::inRandomOrder()->first();
+        // Get IDs of sources used in the last 7 days
+        $recentSourceIds = DailyTadabbur::where('user_id', $user->id)
+            ->whereDate('date', '>=', $today->copy()->subDays(7))
+            ->pluck('quran_source_id');
+
+        // Pick a random Quran source excluding recent ones
+        $source = QuranSource::whereNotIn('id', $recentSourceIds)
+            ->inRandomOrder()
+            ->first();
+
+        // Fallback: if all sources used recently (unlikely given enough sources), just pick any random
+        if (!$source) {
+            $source = QuranSource::inRandomOrder()->first();
+        }
 
         if (!$source) {
             return null; // Should not happen if seeded

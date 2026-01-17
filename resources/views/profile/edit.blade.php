@@ -64,9 +64,15 @@
                     <p class="text-sm text-gray-500 mb-6 leading-relaxed">
                         Dapatkan notifikasi pengingat untuk puasa sunnah (Senin, Kamis, Ayyamul Bidh) tepat waktu.
                     </p>
-                    <button onclick="subscribeToPush()" class="w-full py-3 px-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-900/10 flex items-center justify-center gap-2">
-                        <span>Aktifkan Notifikasi</span>
-                    </button>
+                    <div class="flex flex-col gap-3">
+                        <button onclick="subscribeToPush()" class="w-full py-3 px-4 bg-gray-900 text-white font-bold rounded-xl hover:bg-black transition-all shadow-lg shadow-gray-900/10 flex items-center justify-center gap-2">
+                            <span>Aktifkan Notifikasi</span>
+                        </button>
+                        <button onclick="testNotification()" class="w-full py-2 px-4 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-200 text-sm flex items-center justify-center gap-2">
+                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                             <span>Cirim Test Notifikasi</span>
+                        </button>
+                    </div>
                     <p id="push-status" class="text-xs text-center mt-3 text-gray-400 hidden">Status: Memeriksa...</p>
                 </div>
             </div>
@@ -109,13 +115,30 @@
                     throw new Error('Izin notifikasi ditolak.');
                 }
 
-                if (statusEl) statusEl.innerText = 'Mendaftarkan Service Worker...';
+                if (statusEl) statusEl.innerText = 'Mencari Service Worker...';
 
-                // 2. Register SW & Wait for Ready
-                const reg = await navigator.serviceWorker.register('/sw.js');
+                // 2. Get active registration or register new one
+                let registration = await navigator.serviceWorker.getRegistration();
+
+                if (!registration) {
+                     if (statusEl) statusEl.innerText = 'Mendaftarkan Service Worker...';
+                     registration = await navigator.serviceWorker.register('/sw.js');
+                }
                 
-                // Wait until the SW is active and ready
-                const registration = await navigator.serviceWorker.ready;
+                // Wait for it to be ready/active
+                if (!registration.active) {
+                    if (statusEl) statusEl.innerText = 'Menunggu Service Worker aktif...';
+                    await new Promise((resolve) => {
+                         const check = () => {
+                             if (registration.active) resolve();
+                             else setTimeout(check, 500);
+                         };
+                         check();
+                    });
+                }
+                
+                // Double check ready state
+                registration = await navigator.serviceWorker.ready;
 
                 if (statusEl) statusEl.innerText = 'Memproses subscription...';
                 
@@ -148,8 +171,6 @@
                 btn.classList.remove('bg-gray-900', 'hover:bg-black');
                 btn.classList.add('bg-green-600', 'hover:bg-green-700');
 
-                // alert('Berhasil mengaktifkan pengingat puasa!');
-
             } catch (error) {
                 console.error('Push Error:', error);
                 if (statusEl) {
@@ -171,6 +192,29 @@
                 outputArray[i] = rawData.charCodeAt(i);
             }
             return outputArray;
+        }
+
+        async function testNotification() {
+            try {
+                const response = await fetch('{{ route('push.test') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Notifikasi terkirim! Silakan cek notifikasi Anda.');
+                } else {
+                    alert('Gagal mengirim notifikasi: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim notifikasi.');
+            }
         }
     </script>
 </x-app-layout>

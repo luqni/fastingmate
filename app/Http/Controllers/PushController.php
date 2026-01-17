@@ -23,4 +23,17 @@ class PushController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
+    public function test(Request $request)
+    {
+        $user = $request->user();
+        
+        try {
+            $user->notify(new \App\Notifications\TestPushNotification());
+            return response()->json(['success' => true, 'message' => 'Notifikasi dikirim!'], 200);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }
