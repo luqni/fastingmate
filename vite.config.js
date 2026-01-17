@@ -16,6 +16,10 @@ export default defineConfig({
             outDir: 'public',
             buildBase: '/',
             scope: '/',
+            devOptions: {
+                enabled: true,
+                type: 'module',
+            },
             manifest: {
                 name: 'FastingMate',
                 short_name: 'FastingMate',
@@ -44,9 +48,6 @@ export default defineConfig({
                     }
                 ],
             },
-            devOptions: {
-                enabled: true
-            }
         }),
     ],
 });

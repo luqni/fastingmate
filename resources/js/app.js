@@ -85,7 +85,8 @@ import { registerSW } from 'virtual:pwa-register';
 registerSW({
     immediate: true,
     onNeedRefresh() {
-        console.log('App updated. Please reload.');
+        // Automatically reload when new version is available
+        window.location.reload();
     },
     onOfflineReady() {
         console.log('App is ready for offline work.');
@@ -152,6 +153,7 @@ window.addEventListener('appinstalled', () => {
 });
 
 // Push Notification Logic
+// Push Notification Logic
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
@@ -168,21 +170,23 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 window.enableNotifications = async () => {
+    // a. Check browser support
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
         Swal.fire('Error', 'Push messaging is not supported in this browser.', 'error');
         return;
     }
 
     try {
+        // b. Wait for Service Worker Ready (no loops needed with navigator.serviceWorker.ready)
         const registration = await navigator.serviceWorker.ready;
 
-        // Request permission
+        // c. Request Permission
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
             throw new Error('Notification permission denied');
         }
 
-        // Subscribe
+        // d. Subscribe
         const subscribeOptions = {
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(import.meta.env.VITE_VAPID_PUBLIC_KEY)
@@ -190,7 +194,7 @@ window.enableNotifications = async () => {
 
         const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
 
-        // Send to backend
+        // e. Send to backend
         await axios.post('/push/subscribe', pushSubscription);
 
         Swal.fire({
@@ -207,6 +211,6 @@ window.enableNotifications = async () => {
     }
 };
 
-window.subscribeUser = window.enableNotifications; // Alias for user request
+window.subscribeUser = window.enableNotifications;
 
 Alpine.start();
