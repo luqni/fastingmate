@@ -613,5 +613,8 @@
         }
     </script>
     @endif
+    <div style="width: 245px; height: 40px;margin-left: 30px;">
+        <script type='text/javascript' src='https://edge-cdn.trakteer.id/js/trbtn-overlay.min.js?v=14-05-2025'></script><script type='text/javascript' class='troverlay'>(function() {var trbtnId = trbtnOverlay.init('Dukung Saya di Trakteer','#be1e2d','https://trakteer.id/luqni/tip/embed/modal','https://trakteer.id/images/mix/coffee.png','40','inline');trbtnOverlay.draw(trbtnId);})();</script>
+    </div>
 </body>
 </html>

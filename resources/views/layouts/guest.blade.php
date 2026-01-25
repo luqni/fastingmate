@@ -56,7 +56,7 @@
             <div class="absolute inset-0 bg-gradient-premium-animation"></div>
         </div>
 
-        <div class="relative w-full max-w-md z-10">
+        <div class="relative w-full max-w-md z-10 mb-3">
 
 
             <div class="w-full glass-card rounded-[2.5rem] p-6 sm:p-10 relative overflow-hidden">
@@ -68,5 +68,7 @@
                 &copy; {{ date('Y') }} FastingMate. All rights reserved.
             </div>
         </div>
+        
+        <script type='text/javascript' src='https://edge-cdn.trakteer.id/js/trbtn-overlay.min.js?v=14-05-2025'></script><script type='text/javascript' class='troverlay'>(function() {var trbtnId = trbtnOverlay.init('Dukung Saya di Trakteer','#be1e2d','https://trakteer.id/luqni/tip/embed/modal','https://trakteer.id/images/mix/coffee.png','40','inline');trbtnOverlay.draw(trbtnId);})();</script>
     </body>
 </html>
