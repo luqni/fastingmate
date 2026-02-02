@@ -48,6 +48,11 @@ export default defineConfig({
                     }
                 ],
             },
+            workbox: {
+                dontCacheBustURLsMatching: /-[a-f0-9]{8,}\./,
+                globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+                maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+            },
         }),
     ],
 });
