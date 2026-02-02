@@ -5,8 +5,8 @@
 ### 1. Environment Variables
 Pastikan di Easypanel sudah set:
 ```bash
-VAPID_PUBLIC_KEY=BPYmxA9WtyVpz4WHwR-BLzewEK9HS39WHjbXZspgfDTrmXxcgJiOvZ1TYygrJmBfBLML9R2HiimqLFruz9PpR-k
-VAPID_PRIVATE_KEY=PhaS2UMaqUg5yvqCSPXnhHXkRw3Kd1cEa9wxNOhbSNY
+VAPID_PUBLIC_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+VAPID_PRIVATE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 VITE_VAPID_PUBLIC_KEY="${VAPID_PUBLIC_KEY}"
 QUEUE_CONNECTION=database
 ```
