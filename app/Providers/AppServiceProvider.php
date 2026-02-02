@@ -31,7 +31,11 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        \App\Models\MenstrualCycle::observe(\App\Observers\MenstrualCycleObserver::class);
+
+        // DISABLED: MenstrualCycleObserver was causing double debt calculation
+        // The Controller already handles debt calculation correctly (only counts Ramadan days)
+        // The Observer was adding ALL days without checking if they're in Ramadan
+        // \App\Models\MenstrualCycle::observe(\App\Observers\MenstrualCycleObserver::class);
         
         \Illuminate\Support\Facades\Event::listen(
             \Illuminate\Auth\Events\Login::class,

@@ -10,11 +10,11 @@ RUN npm run build
 # Build PHP App
 FROM php:8.2-fpm
 
-# Install dependencies (GD, zip, zlib, PostgreSQL)
+# Install dependencies (GD, zip, zlib, PostgreSQL, cron)
 RUN apt-get update && apt-get install -y \
     git unzip curl libzip-dev zip zlib1g-dev \
     libpng-dev libjpeg-dev libfreetype6-dev \
-    libpq-dev supervisor \
+    libpq-dev supervisor cron \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install zip pdo_pgsql gd pcntl bcmath
 

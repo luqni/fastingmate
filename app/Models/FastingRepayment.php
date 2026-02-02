@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FastingRepayment extends Model
 {
-    protected $fillable = ['fasting_debt_id', 'paid_days', 'repayment_date', 'description'];
+    protected $fillable = ['fasting_debt_id', 'smart_schedule_id', 'paid_days', 'repayment_date', 'description'];
 
     protected $casts = [
         'repayment_date' => 'date',
@@ -15,5 +15,10 @@ class FastingRepayment extends Model
     public function fastingDebt()
     {
         return $this->belongsTo(FastingDebt::class);
+    }
+
+    public function smartSchedule()
+    {
+        return $this->belongsTo(SmartSchedule::class);
     }
 }

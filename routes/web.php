@@ -67,6 +67,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
 
     // Push Notifications
     Route::post('/push/subscribe', [\App\Http\Controllers\PushController::class, 'store'])->name('push.subscribe');
+    Route::get('/push/status', [\App\Http\Controllers\PushController::class, 'status'])->name('push.status');
     Route::post('/push/test', [\App\Http\Controllers\PushController::class, 'test'])->name('push.test');
 
     // Notifications

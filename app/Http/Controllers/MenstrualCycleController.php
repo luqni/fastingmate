@@ -20,17 +20,31 @@ class MenstrualCycleController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'start_date' => 'required|date|before_or_equal:today',
-        ]);
-
-        // Check if the start date is in Ramadan
-        $startDate = Carbon::parse($request->start_date);
-        $hijri = HijriDate::gregorianToHijri($startDate->day, $startDate->month, $startDate->year);
+        // Manual validation with clear error messages (works better with SweetAlert)
+        if (!$request->start_date) {
+            return back()->with('error', 'Tanggal mulai harus diisi.');
+        }
         
+        try {
+            $startDate = Carbon::parse($request->start_date);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Format tanggal tidak valid.');
+        }
+        
+        // Check if date is not in the future
+        if ($startDate->isFuture()) {
+            return back()->with('error', 'Tanggal mulai tidak boleh di masa depan.');
+        }
+
+        // Check if TODAY (current date) is in Ramadan
+        // Users can only input menstrual cycles when we are currently in Ramadan month
+        
+        $today = Carbon::now();
+        $todayHijri = HijriDate::gregorianToHijri($today->day, $today->month, $today->year);
+
         // Ramadan is month 9
-        if ($hijri['month'] != 9) {
-            return back()->with('error', 'Hanya bisa mencatat siklus haid di bulan Ramadhan.');
+        if ($todayHijri['month'] != 9) {
+            return back()->with('error', 'Hanya bisa mencatat siklus haid saat sedang di bulan Ramadhan. Saat ini bulan Hijriyah: ' . $this->getHijriMonthName($todayHijri['month']) . '.');
         }
 
         // Check if there is an active cycle
@@ -104,6 +118,17 @@ class MenstrualCycleController extends Controller
              return back()->with('success', 'Haid selesai. Tidak ada hari Ramadhan yang terlewat.');
         }
     }
+    
+    private function getHijriMonthName($monthNumber)
+    {
+        $months = [
+            1 => 'Muharram', 2 => 'Safar', 3 => 'Rabiul Awal', 4 => 'Rabiul Akhir',
+            5 => 'Jumadil Awal', 6 => 'Jumadil Akhir', 7 => 'Rajab', 8 => 'Syaban',
+            9 => 'Ramadhan', 10 => 'Syawal', 11 => 'Dzulkaidah', 12 => 'Dzulhijjah'
+        ];
+        return $months[$monthNumber] ?? 'Unknown';
+    }
+    
     public function destroy(MenstrualCycle $menstrualCycle)
     {
         if ($menstrualCycle->user_id !== Auth::id()) {

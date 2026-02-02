@@ -60,16 +60,19 @@
                             <div>
                                 <x-input-label for="year" :value="__('Tahun')" />
                                 <x-text-input id="year" name="year" type="number" :value="old('year', date('Y')-1)" required />
+                                <p class="mt-1 text-xs text-gray-500">Tahun Ramadhan hutang puasa</p>
                                 <x-input-error class="mt-2" :messages="$errors->get('year')" />
                             </div>
                             <div>
                                 <x-input-label for="total_days" :value="__('Jumlah Hari')" />
                                 <x-text-input id="total_days" name="total_days" type="number" required />
+                                <p class="mt-1 text-xs text-gray-500">Total hari yang harus dibayar</p>
                                 <x-input-error class="mt-2" :messages="$errors->get('total_days')" />
                             </div>
                             <div>
-                                <x-input-label for="target_finish_date" :value="__('Target Lunas')" />
+                                <x-input-label for="target_finish_date" :value="__('Target Lunas (Opsional)')" />
                                 <x-text-input id="target_finish_date" name="target_finish_date" type="date" />
+                                <p class="mt-1 text-xs text-gray-500">Untuk generate jadwal otomatis</p>
                                 <x-input-error class="mt-2" :messages="$errors->get('target_finish_date')" />
                             </div>
                             <div>
@@ -93,13 +96,25 @@
                             <span class="text-xs font-bold text-gray-400 uppercase">Tahun</span>
                             <span class="text-xl font-extrabold text-gray-900">{{ $debt->year }}</span>
                         </div>
-                        <div>
-                            <div class="flex items-center gap-3 mb-1">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
                                 <span class="text-2xl font-extrabold text-gray-900">{{ $debt->total_days - $debt->paid_days }} <span class="text-sm text-gray-400 font-medium">Hari</span></span>
                                 @if($debt->paid_days > 0)
                                     <span class="px-2 py-1 rounded-lg bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wide">Dibayar {{ $debt->paid_days }}</span>
                                 @endif
                             </div>
+                            
+                            <!-- Progress Bar -->
+                            @php
+                                $progress = $debt->total_days > 0 ? ($debt->paid_days / $debt->total_days) * 100 : 0;
+                            @endphp
+                            <div class="mb-2">
+                                <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 h-2 rounded-full transition-all duration-500" style="width: {{ $progress }}%"></div>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">{{ number_format($progress, 1) }}% selesai</p>
+                            </div>
+                            
                             <div class="text-sm text-gray-500 font-medium flex items-center gap-2">
                                 <span>Target:</span>
                                 @if($debt->target_finish_date)
@@ -124,11 +139,13 @@
                                 <div @click.away="open = false" class="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 w-full max-w-xs md:w-full">
                                     <form action="{{ route('fasting-debts.update-progress', $debt) }}" method="POST">
                                         @csrf
-                                        <h4 class="text-sm font-bold text-gray-900 mb-3">Input Pembayaran</h4>
+                                        <h4 class="text-sm font-bold text-gray-900 mb-2">Bayar Hutang Puasa</h4>
+                                        <p class="text-xs text-gray-500 mb-3">Sisa: <span class="font-bold text-teal-600">{{ $debt->total_days - $debt->paid_days }} hari</span></p>
                                         <div class="mb-3">
-                                            <input name="paid_days_add" type="number" min="1" max="{{ $debt->total_days - $debt->paid_days }}" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-teal-500 focus:border-teal-500" placeholder="Jumlah hari" required />
+                                            <label class="text-xs font-medium text-gray-600 mb-1 block">Jumlah hari dibayar</label>
+                                            <input name="paid_days_add" type="number" min="1" max="{{ $debt->total_days - $debt->paid_days }}" class="w-full rounded-xl border-gray-200 bg-gray-50 text-sm focus:ring-teal-500 focus:border-teal-500" placeholder="Contoh: 1" required />
                                         </div>
-                                        <button type="submit" class="w-full px-4 py-2 bg-teal-600 text-white text-sm font-bold rounded-xl hover:bg-teal-700">Simpan</button>
+                                        <button type="submit" class="w-full px-4 py-2 bg-teal-600 text-white text-sm font-bold rounded-xl hover:bg-teal-700">Simpan Pembayaran</button>
                                     </form>
                                 </div>
                             </div>

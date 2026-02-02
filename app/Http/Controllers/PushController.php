@@ -24,6 +24,17 @@ class PushController extends Controller
         return response()->json(['success' => true], 200);
     }
 
+    public function status(Request $request)
+    {
+        $user = $request->user();
+        $hasSubscription = $user->pushSubscriptions()->exists();
+        
+        return response()->json([
+            'subscribed' => $hasSubscription,
+            'count' => $user->pushSubscriptions()->count()
+        ]);
+    }
+
     public function test(Request $request)
     {
         $user = $request->user();

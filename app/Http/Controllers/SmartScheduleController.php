@@ -36,8 +36,9 @@ class SmartScheduleController extends Controller
                     // Increment paid days
                     $debt->paid_days += 1;
                     
-                    // Create repayment record
+                    // Create repayment record linked to this schedule
                     $debt->repayments()->create([
+                        'smart_schedule_id' => $smartSchedule->id,
                         'paid_days' => 1,
                         'repayment_date' => now(),
                         'description' => 'Otomatis dari Smart Schedule: ' . $smartSchedule->scheduled_date->format('d M Y'),
@@ -45,21 +46,15 @@ class SmartScheduleController extends Controller
 
                 } else {
                     // Decrement paid days (Undo)
-                    $debt->paid_days = max(0, $debt->paid_days - 1);
-                    
-                    // Remove the latest repayment associated with this schedule if possible, 
-                    // or just remove the latest auto-repayment.
-                    // For simplicity and safety, we'll try to find a repayment made today or recently.
-                    // Ideally we should link repayment to schedule, but for now we'll just delete the latest one 
-                    // that matches the description or just the latest one to keep count correct.
-                    
-                    $latestRepayment = $debt->repayments()
-                        ->where('paid_days', 1)
-                        ->latest('created_at')
+                    // Only delete the repayment that belongs to THIS specific schedule
+                    $repayment = $debt->repayments()
+                        ->where('smart_schedule_id', $smartSchedule->id)
                         ->first();
                         
-                    if ($latestRepayment) {
-                        $latestRepayment->delete();
+                    if ($repayment) {
+                        // Safely decrement, ensuring it doesn't go below 0
+                        $debt->paid_days = max(0, $debt->paid_days - $repayment->paid_days);
+                        $repayment->delete();
                     }
                 }
 

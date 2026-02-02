@@ -54,6 +54,30 @@
                         <svg class="w-16 h-16 text-red-600 drop-shadow-xl filter animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C12 2 5.05 10.95 5.05 15.3C5.05 19 8.15 22 12 22C15.85 22 18.95 19 18.95 15.3C18.95 10.95 12 2 12 2Z"></path></svg>
                     </div>
 
+                    {{-- Info Box: Ramadan Restriction --}}
+                    <div class="mb-6 p-4 rounded-xl bg-blue-50 border border-blue-100">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <div class="text-sm text-blue-800">
+                                <p class="font-bold mb-1">ℹ️ Catatan Penting</p>
+                                <p>Hanya bisa mencatat siklus haid yang dimulai di <span class="font-bold">bulan Ramadhan</span>.</p>
+                                <p class="text-xs text-blue-600 mt-2">
+                                    @php
+                                        $now = now();
+                                        $hijri = \App\Helpers\HijriDate::gregorianToHijri($now->day, $now->month, $now->year);
+                                        $hijriMonths = [
+                                            1 => 'Muharram', 2 => 'Safar', 3 => 'Rabiul Awal', 4 => 'Rabiul Akhir',
+                                            5 => 'Jumadil Awal', 6 => 'Jumadil Akhir', 7 => 'Rajab', 8 => 'Syaban',
+                                            9 => 'Ramadhan', 10 => 'Syawal', 11 => 'Dzulkaidah', 12 => 'Dzulhijjah'
+                                        ];
+                                        $currentHijriMonth = $hijriMonths[$hijri['month']];
+                                    @endphp
+                                    Bulan Hijriyah saat ini: <span class="font-bold">{{ $currentHijriMonth }} {{ $hijri['year'] }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     <h3 class="text-2xl font-extrabold mb-8 text-gray-900">Catat Siklus Baru</h3>
                     
                     <form action="{{ route('menstrual-cycles.store') }}" method="POST" class="w-full max-w-sm mx-auto action-confirm-form" data-confirm-title="Mulai Haid Baru?" data-confirm-text="Pastikan tanggal mulai sudah benar." data-confirm-icon="question" data-confirm-btn="Ya, Mulai">
@@ -61,6 +85,7 @@
                         <div class="mb-6 text-left">
                             <x-input-label for="start_date" :value="__('Tanggal Mulai')" />
                             <x-text-input id="start_date" name="start_date" type="date" :value="date('Y-m-d')" required />
+                            <p class="mt-1 text-xs text-gray-500">Hanya tanggal di bulan Ramadhan yang dapat dicatat</p>
                         </div>
                         <button class="w-full justify-center px-6 py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-2xl shadow-lg transition-all">
                             {{ __('Mulai Haid') }}

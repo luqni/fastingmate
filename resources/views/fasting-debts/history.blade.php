@@ -72,10 +72,21 @@
                                     <div class="text-[10px] text-gray-400 font-normal uppercase mt-0.5">{{ $repayment->repayment_date->isoFormat('dddd') }}</div>
                                 </td>
                                 <td class="px-6 py-4">
-                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-teal-50 text-teal-700 text-xs font-bold">
-                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                        +{{ $repayment->paid_days }} Hari
-                                     </span>
+                                    @if($repayment->smart_schedule_id)
+                                        {{-- Automatic payment from schedule --}}
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            +{{ $repayment->paid_days }} Hari
+                                        </span>
+                                        <div class="text-[10px] text-indigo-600 font-medium mt-1">Otomatis</div>
+                                    @else
+                                        {{-- Manual payment --}}
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-teal-50 text-teal-700 text-xs font-bold">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                            +{{ $repayment->paid_days }} Hari
+                                        </span>
+                                        <div class="text-[10px] text-teal-600 font-medium mt-1">Manual</div>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 text-gray-500 font-medium text-sm">
                                     {{ $repayment->description ?? '-' }}
