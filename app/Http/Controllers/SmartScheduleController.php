@@ -33,16 +33,19 @@ class SmartScheduleController extends Controller
 
             if ($debt) {
                 if ($newStatus === 'completed') {
-                    // Increment paid days
-                    $debt->paid_days += 1;
-                    
-                    // Create repayment record linked to this schedule
-                    $debt->repayments()->create([
-                        'smart_schedule_id' => $smartSchedule->id,
-                        'paid_days' => 1,
-                        'repayment_date' => now(),
-                        'description' => 'Otomatis dari Smart Schedule: ' . $smartSchedule->scheduled_date->format('d M Y'),
-                    ]);
+                    // Prevent negative debt (overpayment)
+                    if ($debt->paid_days < $debt->total_days) {
+                        // Increment paid days
+                        $debt->paid_days += 1;
+                        
+                        // Create repayment record linked to this schedule
+                        $debt->repayments()->create([
+                            'smart_schedule_id' => $smartSchedule->id,
+                            'paid_days' => 1,
+                            'repayment_date' => now(),
+                            'description' => 'Otomatis dari Smart Schedule: ' . $smartSchedule->scheduled_date->format('d M Y'),
+                        ]);
+                    }
 
                 } else {
                     // Decrement paid days (Undo)
