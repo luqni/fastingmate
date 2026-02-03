@@ -71,6 +71,12 @@ class FastingDebtController extends Controller
         // If target date is provided, use SmartPlannerService
         if ($request->has('target_date')) {
             $targetDate = Carbon::parse($request->target_date);
+            
+            // Save the target date to the debt record so it appears on the card
+            $fastingDebt->update([
+                'target_finish_date' => $targetDate
+            ]);
+            
             $service = new \App\Services\SmartPlannerService(); // Direct instantiation or inject
             $service->generateScheduleByTarget(Auth::user(), $fastingDebt, $targetDate);
         } else {
