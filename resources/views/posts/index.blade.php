@@ -27,9 +27,13 @@
                         @endif
                     </div>
                     <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex items-center gap-2 mb-3">
+                        <div class="flex items-center gap-2 mb-3 flex-wrap">
                             <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">Article</span>
                             <span class="text-xs text-gray-400">{{ $post->published_at->format('d M Y') }}</span>
+                            <span class="flex items-center gap-1 text-xs text-gray-400">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {{ $post->reading_time }}
+                            </span>
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                             {{ $post->title }}

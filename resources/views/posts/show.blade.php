@@ -129,9 +129,13 @@
                              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <img src="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                             <div class="absolute bottom-0 left-0 p-8 text-white">
-                                <div class="flex items-center gap-3 mb-2">
+                                <div class="flex items-center gap-3 mb-2 flex-wrap">
                                      <span class="bg-indigo-600/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Article</span>
                                      <span class="text-white/90 text-sm font-medium">{{ $post->published_at->format('d F Y') }}</span>
+                                     <span class="flex items-center gap-1 text-white/90 text-sm font-medium">
+                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                         {{ $post->reading_time }}
+                                     </span>
                                 </div>
                                 <h1 class="text-3xl md:text-4xl font-bold leading-tight shadow-black drop-shadow-md">
                                     {{ $post->title }}
@@ -140,9 +144,13 @@
                         </div>
                     @else
                         <div class="p-8 pb-0">
-                            <div class="flex items-center gap-3 mb-4">
+                            <div class="flex items-center gap-3 mb-4 flex-wrap">
                                 <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Article</span>
                                 <span class="text-gray-500 text-sm font-medium">{{ $post->published_at->format('d F Y') }}</span>
+                                <span class="flex items-center gap-1 text-gray-500 text-sm font-medium">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ $post->reading_time }}
+                                </span>
                             </div>
                              <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
                                 {{ $post->title }}

@@ -101,6 +101,37 @@
                             selector: '#content',
                             plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                             toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                            
+                            // Match frontend styling
+                            content_css: [
+                                'https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css'
+                            ],
+                            body_class: 'prose prose-lg prose-indigo max-w-none text-gray-700',
+                            content_style: `
+                                body {
+                                    font-family: 'Plus Jakarta Sans', sans-serif;
+                                    line-height: 1.75;
+                                    text-align: justify;
+                                    padding: 1rem;
+                                }
+                                p {
+                                    margin-bottom: 1.25em;
+                                }
+                                h1, h2, h3, h4, h5, h6 {
+                                    margin-top: 1.5em;
+                                    margin-bottom: 0.75em;
+                                    font-weight: 700;
+                                    line-height: 1.3;
+                                }
+                                ul, ol {
+                                    margin-bottom: 1.25em;
+                                    padding-left: 1.5em;
+                                }
+                                li {
+                                    margin-bottom: 0.5em;
+                                }
+                            `,
+                            
                             images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
                                 const xhr = new XMLHttpRequest();
                                 xhr.withCredentials = false;
