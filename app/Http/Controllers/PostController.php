@@ -24,6 +24,13 @@ class PostController extends Controller
             abort(404);
         }
         
+        // Only increment views if this post hasn't been viewed in this session
+        $sessionKey = 'post_viewed_' . $post->id;
+        if (!session()->has($sessionKey)) {
+            $post->incrementViews();
+            session()->put($sessionKey, true);
+        }
+
         return view('posts.show', compact('post'));
     }
 }

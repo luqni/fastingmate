@@ -18,6 +18,7 @@ class Post extends Model
         'is_published',
         'is_locked',
         'published_at',
+        'views_count',
     ];
 
     protected $casts = [
@@ -25,6 +26,11 @@ class Post extends Model
         'is_locked' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    public function incrementViews(): void
+    {
+        $this->increment('views_count');
+    }
 
     /**
      * Get the estimated reading time for the article.
