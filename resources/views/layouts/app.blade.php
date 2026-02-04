@@ -183,7 +183,7 @@
             <!-- GLOBAL TRAKTEER WIDGET -->
             <div class="mt-8 mb-8 flex justify-center w-full pointer-events-auto relative z-10">
                 <div style="width: 245px; height: 40px;">
-                    <script type='text/javascript' src='https://edge-cdn.trakteer.id/js/trbtn-overlay.min.js?v=14-05-2025'></script><script type='text/javascript' class='troverlay'>(function() {var trbtnId = trbtnOverlay.init('Dukung Saya di Trakteer','#be1e2d','https://trakteer.id/luqni/tip/embed/modal','https://trakteer.id/images/mix/coffee.png','40','inline');trbtnOverlay.draw(trbtnId);})();</script>
+                    <script type='text/javascript' src='https://edge-cdn.trakteer.id/js/trbtn-overlay.min.js?v=14-05-2025'></script><script type='text/javascript' class='troverlay'>(function() {var trbtnId = trbtnOverlay.init('Dukung Saya di Trakteer','#be1e2d','https://trakteer.id/v1/luqni/tip/embed/modal','https://edge-cdn.trakteer.id/images/embed/trbtn-icon.png?v=14-05-2025','40','inline');trbtnOverlay.draw(trbtnId);})();</script>
                 </div>
             </div>
         </main>
