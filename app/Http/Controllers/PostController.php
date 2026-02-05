@@ -8,12 +8,20 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::where('is_published', true)
-            ->whereNotNull('published_at')
-            ->latest('published_at')
-            ->paginate(9);
+        $query = Post::where('is_published', true)
+            ->whereNotNull('published_at');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $posts = $query->latest('published_at')
+            ->paginate(9)
+            ->withQueryString();
             
         return view('posts.index', compact('posts'));
     }

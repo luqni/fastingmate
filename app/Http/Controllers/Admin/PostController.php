@@ -17,9 +17,39 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::latest()->paginate(10);
+        $query = Post::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            switch ($request->status) {
+                case 'published':
+                    $query->where('is_published', true);
+                    break;
+                case 'draft':
+                    $query->where('is_published', false);
+                    break;
+                case 'locked':
+                    $query->where('is_locked', true);
+                    break;
+            }
+        }
+
+        // Get per_page value or default to 10
+        $perPage = $request->get('per_page', 10);
+
+        $posts = $query->latest()->paginate($perPage)->withQueryString();
+
         return view('admin.posts.index', compact('posts'));
     }
 

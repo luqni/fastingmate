@@ -7,6 +7,48 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Search Bar -->
+            <div class="mb-8">
+                <form method="GET" action="{{ route('posts.index') }}" class="relative">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Cari artikel berdasarkan judul..." 
+                            class="w-full pl-12 pr-32 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                        >
+                        <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-2">
+                            @if(request('search'))
+                                <a href="{{ route('posts.index') }}" class="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 font-medium">
+                                    Clear
+                                </a>
+                            @endif
+                            <button type="submit" class="px-4 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Search Results Info -->
+                @if(request('search'))
+                    <div class="mt-3 text-sm text-gray-600">
+                        Menampilkan <span class="font-semibold text-gray-900">{{ $posts->total() }}</span> artikel untuk "<span class="font-semibold text-indigo-600">{{ request('search') }}</span>"
+                    </div>
+                @else
+                    <div class="mt-3 text-sm text-gray-600">
+                        Menampilkan <span class="font-semibold text-gray-900">{{ $posts->total() }}</span> artikel
+                    </div>
+                @endif
+            </div>
+
+            <!-- Blog Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($posts as $post)
                 <a href="{{ route('posts.show', $post) }}" class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
@@ -54,19 +96,58 @@
                 @endforeach
             </div>
 
+            <!-- Empty State -->
             @if($posts->isEmpty())
-                <div class="text-center py-12">
+                <div class="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
                     <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900">Belum ada artikel</h3>
-                    <p class="text-gray-500 mt-1">Nantikan artikel menarik dari kami.</p>
+                    @if(request('search'))
+                        <h3 class="text-lg font-medium text-gray-900">Tidak ada artikel ditemukan</h3>
+                        <p class="text-gray-500 mt-1">Coba kata kunci lain atau <a href="{{ route('posts.index') }}" class="text-indigo-600 hover:underline">lihat semua artikel</a></p>
+                    @else
+                        <h3 class="text-lg font-medium text-gray-900">Belum ada artikel</h3>
+                        <p class="text-gray-500 mt-1">Nantikan artikel menarik dari kami.</p>
+                    @endif
                 </div>
             @endif
 
-            <div class="mt-6">
-                {{ $posts->links() }}
+            <!-- Pagination -->
+            @if($posts->hasPages())
+            <div class="mt-8">
+                <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-lg shadow-sm">
+                    <div class="flex flex-1 justify-between sm:hidden">
+                        @if ($posts->onFirstPage())
+                            <span class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400">Previous</span>
+                        @else
+                            <a href="{{ $posts->previousPageUrl() }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+                        @endif
+
+                        @if ($posts->hasMorePages())
+                            <a href="{{ $posts->nextPageUrl() }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+                        @else
+                            <span class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400">Next</span>
+                        @endif
+                    </div>
+                    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-sm text-gray-700">
+                                Menampilkan
+                                <span class="font-medium">{{ $posts->firstItem() }}</span>
+                                sampai
+                                <span class="font-medium">{{ $posts->lastItem() }}</span>
+                                dari
+                                <span class="font-medium">{{ $posts->total() }}</span>
+                                artikel
+                            </p>
+                        </div>
+                        <div>
+                            {{ $posts->links() }}
+                        </div>
+                    </div>
+                </div>
             </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
