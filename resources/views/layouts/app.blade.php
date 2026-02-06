@@ -622,5 +622,6 @@
         }
     </script>
     @endif
+    @include('components.tour-guide')
 </body>
 </html>

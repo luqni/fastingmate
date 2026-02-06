@@ -37,7 +37,7 @@
             </button>
         </div>
 
-        <div id="prayer-times-content" class="space-y-3 hidden"></div>
+        <div id="prayer-times-content" class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-6 hidden"></div>
     </div>
 
     <!-- Dynamic Countdown (Iftar / Sahur) -->
@@ -181,7 +181,12 @@ function displayPrayerTimes(data) {
             locationText = `📍 ${city}, ${country}`;
         }
     }
-    document.getElementById('location-display').textContent = locationText;
+    document.getElementById('location-display').innerHTML = `
+        <div class="flex items-center gap-1.5 cursor-pointer hover:underline decoration-white/30" onclick="showLocationModal()" title="Ubah Lokasi">
+            <span>${locationText}</span>
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+        </div>
+    `;
     
     // Display date
     if (data.date) {
@@ -204,14 +209,14 @@ function displayPrayerTimes(data) {
         const isNext = data.next_prayer && data.next_prayer.name === prayer.englishName;
         // Responsive list item: compact on mobile, spacious on desktop
         return `
-            <div class="flex items-center justify-between py-2 md:py-3 px-3 rounded-lg transition-colors ${isNext ? 'bg-white/20 shadow-sm' : 'hover:bg-white/5'}">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl md:text-2xl filter drop-shadow-sm">${prayer.icon}</span>
-                    <span class="font-medium text-white text-base md:text-lg drop-shadow-sm">${prayer.name}</span>
+            <div class="flex md:flex-col items-center justify-between md:justify-center py-3 px-4 rounded-xl transition-all duration-300 gap-2 md:gap-3 ${isNext ? 'bg-white/20 shadow-lg ring-1 ring-white/30 transform md:-translate-y-1 scale-[1.02]' : 'hover:bg-white/10 hover:shadow-md'}">
+                <div class="flex md:flex-col items-center gap-3 md:gap-2">
+                    <span class="text-2xl md:text-3xl lg:text-4xl filter drop-shadow-md transition-transform hover:scale-110">${prayer.icon}</span>
+                    <span class="font-bold text-white text-base md:text-lg drop-shadow-sm">${prayer.name}</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="font-bold text-lg md:text-xl text-white drop-shadow-sm tracking-wide">${prayer.time}</span>
-                    ${isNext ? '<span class="text-[10px] md:text-xs bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full font-bold shadow-sm ring-1 ring-yellow-300">SELANJUTNYA</span>' : ''}
+                <div class="flex md:flex-col items-center gap-2 md:gap-1">
+                    <span class="font-extrabold text-lg md:text-2xl text-white drop-shadow-sm tracking-wide font-mono">${prayer.time}</span>
+                    ${isNext ? '<span class="text-[10px] uppercase tracking-wider bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full font-bold shadow-sm ring-1 ring-yellow-300 mt-1">Next</span>' : ''}
                 </div>
             </div>
         `;

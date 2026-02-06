@@ -3,6 +3,11 @@
         {!! __('Assalamualaikum, <br/>' . e(Auth::user()->name) . ' 👋') !!}
     </x-slot>
 
+    <!-- Prayer Times Widget (Full Width) -->
+    <div class="mb-8">
+        @include('components.prayer-times-widget')
+    </div>
+
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
         
@@ -142,10 +147,7 @@
             </div>
         </a>
 
-        <!-- Prayer Times Widget -->
-        <div class="md:col-span-1 lg:col-span-1">
-            @include('components.prayer-times-widget')
-        </div>
+
 
     </div>
 

@@ -52,6 +52,10 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+                        
+                        <x-dropdown-link href="#" onclick="event.preventDefault(); window.startTour()">
+                            {{ __('Panduan Aplikasi') }}
+                        </x-dropdown-link>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -110,6 +114,10 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+                
+                <x-responsive-nav-link href="#" onclick="event.preventDefault(); window.startTour()">
+                    {{ __('Panduan Aplikasi') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
