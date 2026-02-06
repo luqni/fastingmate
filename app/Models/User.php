@@ -42,6 +42,9 @@ class User extends Authenticatable
         'installed_at',
         'google_id',
         'avatar',
+        'prayer_city',
+        'prayer_country',
+        'prayer_method',
     ];
 
     /**

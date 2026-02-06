@@ -7,6 +7,7 @@ use App\Console\Commands\SendDailyHadith;
 
 Schedule::command('fasting:reminders')->dailyAt('20:00')->timezone('Asia/Jakarta');
 Schedule::command('daily:hadith')->dailyAt('05:00')->timezone('Asia/Jakarta');
+Schedule::command('prayers:notify')->dailyAt('00:05')->timezone('Asia/Jakarta');
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

@@ -4,7 +4,7 @@
     </x-slot>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
         
         <!-- Progress Card -->
         <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100 flex items-center justify-between relative overflow-hidden group">
@@ -141,6 +141,11 @@
                </p>
             </div>
         </a>
+
+        <!-- Prayer Times Widget -->
+        <div class="md:col-span-1 lg:col-span-1">
+            @include('components.prayer-times-widget')
+        </div>
 
     </div>
 

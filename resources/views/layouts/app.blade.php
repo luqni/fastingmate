@@ -49,6 +49,7 @@
 <body class="bg-gray-50 text-gray-900 antialiased pb-32">
 
     <div class="min-h-screen">
+        @include('components.sticky-prayer-bar')
         
         <!-- Main Content -->
         <main class="min-h-screen transition-all bg-gray-50/50">
