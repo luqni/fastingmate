@@ -254,6 +254,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    window.resetTour = function() {
+        const keys = [
+            'tour_completed_dashboard',
+            'tour_completed_debts',
+            'tour_completed_fidyah',
+            'tour_completed_plans',
+            'tour_completed_menstrual'
+        ];
+        
+        keys.forEach(key => localStorage.removeItem(key));
+        
+        const path = window.location.pathname;
+        const hasTour = (path === '/dashboard' || path === '/' || path.includes('/fasting-debts') || path.includes('/fidyah') || path.includes('/fasting-plans') || path.includes('/menstrual-cycles'));
+        
+        if (hasTour) {
+             // If we are on a page with a tour, start it immediately
+             window.startTour();
+        } else {
+             // Otherwise, show feedback and guide to Dashboard
+             if (typeof Swal !== 'undefined') {
+                 Swal.fire({
+                     title: 'Panduan Direset!',
+                     icon: 'success',
+                     html: 'Panduan aplikasi telah diatur ulang.<br>Silakan kunjungi <b>Dashboard</b> atau menu lainnya untuk memulai tur.',
+                     confirmButtonText: 'Ke Dashboard',
+                     confirmButtonColor: '#0ea5e9',
+                     showCancelButton: true,
+                     cancelButtonText: 'Tutup'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         window.location.href = '/dashboard';
+                     }
+                 });
+             } else {
+                 alert('Panduan berhasil direset. Silakan kembali ke Dashboard.');
+                 window.location.href = '/dashboard';
+             }
+        }
+    }
+
     // Auto-start check
     setTimeout(() => {
         const path = window.location.pathname;

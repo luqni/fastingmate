@@ -56,12 +56,12 @@
             <!-- Fasting Reminder -->
             <div class="bg-white p-8 rounded-[2rem] shadow-soft border border-gray-100 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-50 rounded-full blur-3xl -mr-10 -mt-10"></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 mb-6">
+                <div class="relative z-10 flex flex-col items-center text-center">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-2xl flex items-center justify-center text-yellow-600 mb-6 shadow-sm">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
                     </div>
                     <h2 class="text-xl font-bold text-gray-900 mb-2">Pengingat Puasa</h2>
-                    <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+                    <p class="text-sm text-gray-500 mb-6 leading-relaxed max-w-xs mx-auto">
                         Dapatkan notifikasi pengingat untuk puasa sunnah (Senin, Kamis, Ayyamul Bidh) tepat waktu.
                     </p>
                     <div class="flex flex-col gap-3">
@@ -74,6 +74,24 @@
                         </button>
                     </div>
                     <p id="push-status" class="text-xs text-center mt-3 text-gray-400 hidden">Status: Memeriksa...</p>
+                </div>
+            </div>
+
+            <!-- Bantuan / Panduan -->
+            <div class="bg-white p-8 rounded-[2rem] shadow-soft border border-gray-100 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-50 rounded-full blur-2xl"></div>
+                <div class="relative z-10 flex flex-col items-center text-center">
+                     <div class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-primary-600 mb-4 shadow-sm">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                     </div>
+                     <h2 class="text-lg font-bold text-gray-900 mb-2">Butuh Bantuan?</h2>
+                     <p class="text-sm text-gray-500 mb-6 leading-relaxed">
+                        Mulai ulang panduan interaktif untuk mengenal fitur aplikasi.
+                     </p>
+                     <button onclick="window.resetTour()" class="w-full py-3 px-4 bg-white border-2 border-primary-100 text-primary-700 font-bold rounded-xl hover:bg-primary-50 hover:border-primary-200 transition-all flex items-center justify-center gap-2 group">
+                        <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Mulai Tour Aplikasi
+                     </button>
                 </div>
             </div>
 

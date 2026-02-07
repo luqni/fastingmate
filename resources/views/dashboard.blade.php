@@ -122,32 +122,38 @@
         </div>
 
         <!-- Blog Card -->
-        <a href="{{ route('posts.index') }}" class="bg-white rounded-[2rem] p-8 shadow-soft border border-gray-100 relative overflow-hidden flex flex-col justify-between min-h-[160px] group transition-all hover:shadow-lg hover:-translate-y-1">
-            <div class="absolute right-0 top-0 w-32 h-32 bg-indigo-50 rounded-full blur-2xl -mr-10 -mt-10 transition-all group-hover:bg-indigo-100"></div>
-            
-            <div class="relative z-10 flex justify-between items-start">
-                <div>
-                     <p class="text-indigo-600 font-bold text-sm tracking-wide uppercase mb-1">Artikel & Blog</p>
-                    <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight">
-                        Wawasan Islami
-                    </h3>
-                </div>
-    
+        <a href="{{ route('posts.index') }}" class="group relative block overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-indigo-800 p-8 shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/20">
+            <!-- Decorative background blobs -->
+            <div class="absolute right-0 top-0 -mr-16 -mt-16 h-48 w-48 rounded-full bg-white/10 blur-3xl transition-transform duration-500 group-hover:scale-110"></div>
+            <div class="absolute bottom-0 left-0 -ml-16 -mb-16 h-32 w-32 rounded-full bg-indigo-500/30 blur-2xl"></div>
 
-                <div class="bg-indigo-50 p-3 rounded-2xl group-hover:scale-110 transition-transform">
-                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+            <div class="relative z-10 flex flex-col h-full justify-between">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="space-y-1">
+                        <span class="inline-flex items-center gap-1.5 rounded-lg bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md border border-white/10">
+                            <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
+                            Artikel & Blog
+                        </span>
+                        <h3 class="mt-2 text-3xl font-extrabold tracking-tight text-white leading-tight">
+                            Wawasan Islami
+                        </h3>
+                    </div>
+                    
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm transition-all duration-300 group-hover:bg-white group-hover:text-indigo-600 group-hover:rotate-12 shadow-lg border border-white/20">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
                 </div>
-            </div>
 
-            <div class="relative z-10 mt-4">
-               <p class="text-gray-500 font-medium text-sm flex items-center gap-2 group-hover:text-indigo-600 transition-colors">
-                    Baca Artikel Terbaru
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-               </p>
+                <div class="mt-6 flex items-center">
+                    <span class="inline-flex items-center gap-2 text-sm font-bold text-white group-hover:gap-3 transition-all">
+                        Baca Artikel Terbaru
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </span>
+                </div>
             </div>
         </a>
-
-
 
     </div>
 

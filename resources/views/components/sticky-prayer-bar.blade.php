@@ -7,19 +7,16 @@
         <div id="spb-bg-default" class="absolute inset-0 bg-primary-600"></div>
 
         <!-- Content -->
-        <div class="relative z-10 flex items-center gap-4 text-white text-xs md:text-sm font-medium">
-            <!-- Next Prayer -->
-            <div class="flex items-center gap-1.5" id="spb-next-prayer">
-                <span class="text-lg" id="spb-icon">🌙</span>
+        <div class="relative z-10 flex items-center justify-center gap-2 text-white text-xs md:text-sm font-bold tracking-wide">
+            <!-- Icon -->
+            <span class="text-lg filter drop-shadow-sm" id="spb-icon">🌙</span>
+            
+            <!-- Text Content -->
+            <div class="flex items-center gap-2">
                 <span id="spb-label">Subuh 04:30</span>
-            </div>
-
-            <div class="h-4 w-px bg-white/30"></div>
-
-            <!-- Countdown -->
-            <div class="flex items-center gap-1.5 font-bold tracking-wide">
+                <span class="text-white/50">•</span>
                 <span id="spb-countdown-label" class="opacity-90">Menuju Imsak</span>
-                <span id="spb-timer" class="bg-white/20 px-1.5 py-0.5 rounded text-white">00:00:00</span>
+                <span id="spb-timer" class="bg-white/20 px-2 py-0.5 rounded-lg text-white font-mono">00:00:00</span>
             </div>
         </div>
         

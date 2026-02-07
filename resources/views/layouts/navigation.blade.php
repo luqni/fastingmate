@@ -53,7 +53,7 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
                         
-                        <x-dropdown-link href="#" onclick="event.preventDefault(); window.startTour()">
+                        <x-dropdown-link href="#" onclick="event.preventDefault(); window.resetTour()">
                             {{ __('Panduan Aplikasi') }}
                         </x-dropdown-link>
 
@@ -116,7 +116,7 @@
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
                 
-                <x-responsive-nav-link href="#" onclick="event.preventDefault(); window.startTour()">
+                <x-responsive-nav-link href="#" onclick="event.preventDefault(); window.resetTour()">
                     {{ __('Panduan Aplikasi') }}
                 </x-responsive-nav-link>
 

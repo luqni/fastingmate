@@ -249,9 +249,9 @@ function startCountdowns(data) {
         } else {
             // Default to Iftar Dua
             document.getElementById('dua-title').textContent = '🤲 Doa Berbuka Puasa';
-            document.getElementById('dua-arabic').textContent = 'اللَّهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ';
-            document.getElementById('dua-latin').textContent = "Allahumma laka sumtu wa bika amantu wa 'alayka tawakkaltu wa 'ala rizqika aftartu";
-            document.getElementById('dua-translation').textContent = '"Ya Allah, untuk-Mu aku berpuasa, dan dengan rezeki-Mu aku berbuka"';
+            document.getElementById('dua-arabic').textContent = 'ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللهُ';
+            document.getElementById('dua-latin').textContent = "Dzahabaz zhame'u wabtallatil 'uruqu wa tsabbatal ajru insya Allah";
+            document.getElementById('dua-translation').textContent = '"Telah hilang dahaga, telah basah urat-urat, dan telah pasti pahala, insya Allah"';
         }
         
         // Start Timer
