@@ -47,6 +47,7 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased pb-32">
+    @include('components.preloader')
 
     <div class="min-h-screen">
         @include('components.sticky-prayer-bar')
