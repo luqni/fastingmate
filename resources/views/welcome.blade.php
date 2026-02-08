@@ -88,6 +88,7 @@
                     <span class="font-bold text-xl tracking-tight text-gray-800">FastingMate</span>
                 </div>
                 <div class="flex items-center gap-4">
+                    <a href="{{ route('documentation') }}" class="text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-colors">Panduan</a>
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-full bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm border border-gray-200 shadow-sm hover:shadow-md">Dashboard</a>
@@ -188,7 +189,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Smart Qadha Tracker -->
-                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-emerald-50/50 transition-all duration-300 border border-transparent hover:border-emerald-100">
+                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-emerald-50/50 transition-all duration-300 border border-transparent hover:border-emerald-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-emerald-600 border border-gray-100">
                         �
                     </div>
@@ -199,7 +200,7 @@
                 </div>
 
                 <!-- Auto Scheduler -->
-                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-teal-50/50 transition-all duration-300 border border-transparent hover:border-teal-100">
+                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-teal-50/50 transition-all duration-300 border border-transparent hover:border-teal-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-teal-600 border border-gray-100">
                         🗓️
                     </div>
@@ -210,7 +211,7 @@
                 </div>
 
                 <!-- Menstrual Tracker -->
-                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-rose-50/50 transition-all duration-300 border border-transparent hover:border-rose-100">
+                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-rose-50/50 transition-all duration-300 border border-transparent hover:border-rose-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-rose-500 border border-gray-100">
                         🌸
                     </div>
@@ -221,7 +222,7 @@
                 </div>
 
                 <!-- Fidyah -->
-                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-orange-50/50 transition-all duration-300 border border-transparent hover:border-orange-100">
+                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-orange-50/50 transition-all duration-300 border border-transparent hover:border-orange-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-orange-500 border border-gray-100">
                         🍚
                     </div>
@@ -232,7 +233,7 @@
                 </div>
 
                 <!-- Tadabbur -->
-                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-indigo-50/50 transition-all duration-300 border border-transparent hover:border-indigo-100">
+                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-indigo-50/50 transition-all duration-300 border border-transparent hover:border-indigo-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-indigo-600 border border-gray-100">
                         ✨
                     </div>
@@ -243,7 +244,7 @@
                 </div>
 
                  <!-- Wawasan -->
-                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-purple-50/50 transition-all duration-300 border border-transparent hover:border-purple-100">
+                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-purple-50/50 transition-all duration-300 border border-transparent hover:border-purple-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-purple-600 border border-gray-100">
                         �
                     </div>

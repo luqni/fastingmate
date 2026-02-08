@@ -14,8 +14,13 @@ Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
     return view('welcome');
 });
+
+Route::view('/documentation', 'documentation')->name('documentation');
 
 // Blog (Public)
 Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->name('posts.index');
