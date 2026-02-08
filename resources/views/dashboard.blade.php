@@ -3,6 +3,21 @@
         {!! __('Assalamualaikum, <br/>' . e(Auth::user()->name) . ' 👋') !!}
     </x-slot>
 
+    <!-- Smart Dhikr Widget -->
+    @php
+        $now = now();
+        $isMorning = $now->hour >= 3 && $now->hour < 11;
+        $isEvening = $now->hour >= 15 && $now->hour < 19;
+    @endphp
+
+    @if($isMorning)
+        <x-dhikr-smart-widget type="morning" />
+    @elseif($isEvening)
+        <x-dhikr-smart-widget type="evening" />
+    @else
+        <x-dhikr-smart-widget type="general" />
+    @endif
+
     <!-- Prayer Times Widget (Full Width) -->
     <div class="mb-8">
         @include('components.prayer-times-widget')
@@ -97,16 +112,23 @@
             
             <div class="relative z-10 flex justify-between items-start">
                 <div>
-                     <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Menuju Ramadhan {{ $nextRamadan['hijri_year'] }}</p>
-                    <h3 class="text-4xl font-extrabold tracking-tight">
-                        @if($daysToRamadan > 0)
-                            {{ $daysToRamadan }} <span class="text-2xl font-bold text-emerald-100">Hari</span>
-                        @elseif($daysToRamadan == 0)
-                            Hari Ini!
-                        @else
-                            -
-                        @endif
-                    </h3>
+                    @if($isInRamadhan)
+                        <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Ramadhan {{ $nextRamadan['hijri_year'] }}</p>
+                        <h3 class="text-4xl font-extrabold tracking-tight">
+                            Hari ke-<span class="text-5xl">{{ $ramadhanDay }}</span>
+                        </h3>
+                    @else
+                        <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Menuju Ramadhan {{ $nextRamadan['hijri_year'] }}</p>
+                        <h3 class="text-4xl font-extrabold tracking-tight">
+                            @if($daysToRamadan > 0)
+                                {{ $daysToRamadan }} <span class="text-2xl font-bold text-emerald-100">Hari</span>
+                            @elseif($daysToRamadan == 0)
+                                Hari Ini!
+                            @else
+                                -
+                            @endif
+                        </h3>
+                    @endif
                 </div>
                 <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
                     <svg class="w-8 h-8 text-emerald-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
@@ -118,6 +140,27 @@
                     <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     Estimasi: {{ $nextRamadan['date']->translatedFormat('d F Y') }}
                </p>
+            </div>
+        </div>
+
+        <!-- Ibadah Card -->
+        <div class="bg-white rounded-[2.5rem] p-8 shadow-soft border border-gray-100 relative overflow-hidden group min-h-[160px] flex flex-col justify-between">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-primary-50 rounded-full blur-3xl -mr-10 -mt-10 transition-all group-hover:bg-primary-100"></div>
+            
+            <div class="relative z-10">
+                <p class="text-gray-500 font-bold text-sm tracking-wide uppercase mb-1">Amalan Harian</p>
+                <h3 class="text-3xl font-extrabold text-gray-900 tracking-tight">Dzikir Pagi & Petang</h3>
+            </div>
+
+            <div class="relative z-10 mt-6 flex gap-3">
+                <a href="{{ route('ibadah.morning') }}" class="flex-1 bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors py-3 rounded-xl text-center font-bold text-sm flex items-center justify-center gap-2 text-orange-700">
+                    <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Pagi
+                </a>
+                <a href="{{ route('ibadah.evening') }}" class="flex-1 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 transition-colors py-3 rounded-xl text-center font-bold text-sm flex items-center justify-center gap-2 text-indigo-700">
+                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    Petang
+                </a>
             </div>
         </div>
 

@@ -16,6 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
 
     <script>
         window.flashMessages = {
@@ -55,6 +56,7 @@
         <!-- Main Content -->
         <main class="min-h-screen transition-all bg-gray-50/50">
             <!-- Header -->
+            @if(!isset($hideHeader) || !$hideHeader)
             <header class="sticky top-0 z-30 glass border-b border-gray-100/50 h-20 flex justify-center shadow-sm">
                 <div class="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
                     <div class="flex items-center gap-3">
@@ -160,6 +162,7 @@
                     </div>
                 </div>
             </header>
+            @endif
 
             @if (isset($noContainer) && $noContainer)
                  @if (isset($header))
@@ -191,7 +194,7 @@
         </main>
 
         <!-- Bottom Navigation (Visible on ALL screens) -->
-        @auth
+        @if((!isset($hideBottomNav) || !$hideBottomNav) && Auth::check())
         <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-40 flex justify-center items-center h-24 px-6 shadow-[0_-4px_30px_-4px_rgba(0,0,0,0.1)]">
             <div class="w-full max-w-md md:max-w-4xl flex justify-around items-center">
                  <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">
@@ -232,7 +235,7 @@
                 @endif
             </div>
         </nav>
-        @endauth
+        @endif
     </div>
     <!-- Flash Messages -->
 
@@ -261,7 +264,7 @@
                 <div class="flex flex-col pr-1">
                     <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-0.5">Tadabbur</span>
                     <span class="text-xs font-bold text-white leading-none whitespace-nowrap">
-                        {{ $tadabbur->status === 'completed' ? 'Selesai' : 'Buka Ayat' }}
+                        {{ $tadabbur->status === 'completed' ? 'Selesai' : 'Sekarang!' }}
                     </span>
                 </div>
             </div>
@@ -560,7 +563,7 @@
 
                 async fetchNotifications() {
                     try {
-                        const response = await fetch('{{ route('notifications.index') }}');
+                        const response = await fetch('{{ route('notifications.index', [], false) }}');
                         const data = await response.json();
                         this.notifications = data;
                         this.unreadCount = data.filter(n => !n.read_at).length;
@@ -571,7 +574,7 @@
 
                 async markAllRead() {
                     try {
-                        await fetch('{{ route('notifications.mark-all-read') }}', {
+                        await fetch('{{ route('notifications.mark-all-read', [], false) }}', {
                             method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

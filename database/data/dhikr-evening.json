@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "title": "Ayat Kursi",
+        "arabic": "اَللّٰهُ لَآ اِلٰهَ اِلَّا هُوَۚ اَلْحَيُّ الْqayyūm ەۚ لَا تَأْخُذُهٗ سِنَةٌ وَّلَا نَوْمٌۗ لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الْاَرْضِۗ مَنْ ذَا الَّذِيْ يَشْفَعُ عِنْدَهٗٓ اِلَّا بِاِذْنِهٖۗ يَعْلَمُ مَا بَيْنَ اَيْدِيْهِمْ وَمَا خَلْفَهُمْۚ وَلَا يُحِيْطُوْنَ بِشَيْءٍ مِّنْ عِلْمِهٖٓ اِلَّا bima syā'aۚ وَسِعَ كُرْسِيُّهُ السَّمٰوٰتِ وَالْاَرْضَۚ وَلَا يَـُٔوْدُهٗ حِفْظُهُمَاۚ وَهُوَ الْعَلِيُّ الْعَظِيْمُ",
+        "latin": "Allāhu lā ilāha illā huw, al-ḥayyul-qayyūm, lā ta'khużuhū sinatuw wa lā naum, lahū mā fis-samāwāti wa mā fil-arḍ, man żallażī yasyfa'u 'indahū illā bi'iżnih, ya'lamu mā baina aidīhim wa mā khalfahum, wa lā yuḥīṭūna bisyai'im min 'ilmihī illā bimā syā', wasi'a kursiyyuhus-samāwāti wal-arḍ, wa lā ya'ūdūhū ḥifẓuhumā, wa huwal-'aliyyul-'aẓīm.",
+        "translation": "Allah, tidak ada tuhan selain Dia. Yang Maha Hidup, Yang terus menerus mengurus (makhluk-Nya), tidak mengantuk dan tidak tidur. Milik-Nya apa yang ada di langit dan apa yang ada di bumi. Tidak ada yang dapat memberi syafaat di sisi-Nya tanpa izin-Nya. Dia mengetahui apa yang di hadapan mereka dan apa yang di belakang mereka, dan mereka tidak mengetahui sesuatu apa pun tentang ilmu-Nya melainkan apa yang Dia kehendaki. Kursi-Nya meliputi langit dan bumi. Dan Dia tidak merasa berat memelihara keduanya, dan Dia Maha Tinggi, Maha Besar.",
+        "repeat": 1,
+        "source": "QS. Al-Baqarah: 255 (Dibaca 1x)",
+        "dalil": "Siapa yang membacanya ketika pagi, maka ia akan dilindungi (oleh Allah dari berbagai gangguan) hingga petang. Siapa yang membacanya ketika petang, maka ia akan dilindungi hingga pagi. (HR. Hakim)"
+    },
+    {
+        "id": 2,
+        "title": "Al-Ikhlas, Al-Falaq, An-Nas",
+        "arabic": "Surat Al-Ikhlas, Al-Falaq, dan An-Nas",
+        "latin": "Membaca Surat Al-Ikhlas, Al-Falaq, dan An-Nas masing-masing 3 kali.",
+        "translation": "(Membaca 3 surat pendek ini)",
+        "repeat": 3,
+        "source": "HR. Abu Daud no. 5082",
+        "dalil": "Siapa yang membacanya tiga kali di pagi hari dan tiga kali di petang hari, maka bacaan tersebut sudah mencukupinya dari segala sesuatu."
+    },
+    {
+        "id": 3,
+        "title": "Sayyidul Istighfar",
+        "arabic": "اَللَّهُمَّ أَنْتَ رَبِّيْ لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِيْ وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ. أَعُوْذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ. أَبُوْءُ لَكَ بِنِعْمَتِكَ عَلَيَّ. وَأَبُوْءُ بِذَنْبِيْ. فَاغْفِرْ لِيْ فَإِنَّهُ لَا يَغْفِرُ الذُّنُوْبَ إِلَّا أَنْتَ",
+        "latin": "Allāhumma anta rabbī, lā ilāha illā anta khalaqtanī. Wa anā 'abduka, wa anā 'alā 'ahdika wa wa'dika mastatha'tu. A'ūdzu bika min syarri mā shana'tu. Abū'u laka bini'matika 'alayya. Wa abū'u bi dzanbī. Faghfirlī. Fa innahū lā yaghfirudz dzunūba illā anta.",
+        "translation": "Ya Allah, Engkau adalah Rabbku, tidak ada Ilah yang berhak disembah kecuali Engkau, Engkaulah yang menciptakanku. Aku adalah hamba-Mu. Aku akan setia pada perjanjianku pada-Mu (yaitu aku akan mentauhidkan-Mu) dan janjiku (iman dan taat) pada-Mu dengan segala kemampuanku. Aku berlindung kepada-Mu dari kejelekan yang kuperbuat. Aku mengakui nikmat-Mu (yang diberikan) kepadaku dan aku mengakui dosaku, oleh karena itu, ampunilah aku. Sesungguhnya tidak ada yang dapat mengampuni dosa kecuali Engkau.",
+        "repeat": 1,
+        "source": "HR. Bukhari no. 6306",
+        "dalil": "Barangsiapa mengucapkannya pada siang hari dan meyakininya, lalu dia mati pada hari itu sebelum waktu sore, maka dia termasuk penghuni surga."
+    },
+    {
+        "id": 4,
+        "title": "Doa Sore Hari",
+        "arabic": "اَللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوْتُ، وَإِلَيْكَ الْمَصِيْرُ",
+        "latin": "Allāhumma bika amsainā, wa bika ashbahnā, wa bika nahyā, wa bika namūtu, wa ilaikal mashīr.",
+        "translation": "Ya Allah, dengan rahmat dan pertolongan-Mu kami memasuki waktu sore, dan dengan rahmat dan pertolongan-Mu kami memasuki waktu pagi. Dengan rahmat dan pertolongan-Mu kami hidup dan dengan kehendak-Mu kami mati. Dan kepada-Mu tempat kembali (bagi semua makhluk).",
+        "repeat": 1,
+        "source": "HR. Tirmidzi no. 3391",
+        "dalil": "Shahih (Al-Albani)"
+    },
+    {
+        "id": 5,
+        "title": "Doa Perlindungan (3x)",
+        "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+        "latin": "Bismillāhil-ladzī lā yadhurru ma’as-mihī syai-un fil ardhi wa lā fis-samā’, wa huwas-samī’ul ‘alīm.",
+        "translation": "Dengan nama Allah yang bila disebut, segala sesuatu di bumi dan langit tidak akan berbahaya, Dialah Yang Maha Mendengar lagi Maha Mengetahui.",
+        "repeat": 3,
+        "source": "HR. Abu Daud no. 5088",
+        "dalil": "Barangsiapa yang mengucapkannya tiga kali di pagi hari dan tiga kali di petang hari, maka tidak akan ada sesuatu pun yang membahayakannya."
+    },
+    {
+        "id": 6,
+        "title": "Tasbih & Tahmid (100x)",
+        "arabic": "سُبْحَانَ اللهِ وَبِحَمْدِهِ",
+        "latin": "Subhānallāhi wa bihamdih.",
+        "translation": "Maha Suci Allah dan segala puji bagi-Nya.",
+        "repeat": 100,
+        "source": "HR. Muslim no. 2692",
+        "dalil": "Barangsiapa yang mengucapkan kalimat ini di pagi hari dan petang hari sebanyak 100 kali, maka tidak ada yang datang pada hari kiamat dengan membawa pahala yang lebih baik dari pahala yang dia bawa."
+    }
+]

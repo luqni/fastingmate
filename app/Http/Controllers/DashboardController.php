@@ -56,14 +56,21 @@ class DashboardController extends Controller
             ->latest('start_date')
             ->first();
 
+
         $nextRamadan = $this->getNextRamadanDate();
         $daysToRamadan = ceil(Carbon::now()->floatDiffInDays($nextRamadan['date'], false));
+        
+        // Check if currently in Ramadhan
+        $now = Carbon::now();
+        $hijriNow = \App\Helpers\HijriDate::gregorianToHijri($now->day, $now->month, $now->year);
+        $isInRamadhan = $hijriNow['month'] == 9;
+        $ramadhanDay = $isInRamadhan ? $hijriNow['day'] : null;
 
         $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
 
         $todayTadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
 
-        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'todayTadabbur', 'tadabbur'));
+        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'isInRamadhan', 'ramadhanDay', 'todayTadabbur', 'tadabbur'));
     }
 
     private function getNextRamadanDate()

@@ -8,13 +8,17 @@ use Illuminate\View\View;
 class AppLayout extends Component
 {
     public $noContainer;
+    public $hideHeader;
+    public $hideBottomNav;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($noContainer = false)
+    public function __construct($noContainer = false, $hideHeader = false, $hideBottomNav = false)
     {
         $this->noContainer = $noContainer;
+        $this->hideHeader = $hideHeader;
+        $this->hideBottomNav = $hideBottomNav;
     }
 
     /**

@@ -59,6 +59,16 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::post('/daily-tadabbur/generate-summary', [\App\Http\Controllers\TadabburController::class, 'generateSummary'])->name('daily-tadabbur.generate-summary');
     Route::post('/daily-tadabbur/{dailyTadabbur}', [\App\Http\Controllers\TadabburController::class, 'store'])->name('daily-tadabbur.store');
 
+    // Al-Quran
+    Route::get('/quran', [\App\Http\Controllers\QuranController::class, 'index'])->name('quran.index');
+    Route::get('/quran/continue', [\App\Http\Controllers\QuranController::class, 'continueReading'])->name('quran.continue');
+    Route::post('/quran/bookmark', [\App\Http\Controllers\QuranController::class, 'saveBookmark'])->name('quran.bookmark');
+    Route::get('/quran/{surah}', [\App\Http\Controllers\QuranController::class, 'show'])->name('quran.show');
+
+    // Ibadah (Dhikr)
+    Route::get('/ibadah/dzikir-pagi', [\App\Http\Controllers\IbadahController::class, 'morning'])->name('ibadah.morning');
+    Route::get('/ibadah/dzikir-petang', [\App\Http\Controllers\IbadahController::class, 'evening'])->name('ibadah.evening');
+
     // Fasting Plans
     Route::resource('fasting-plans', FastingPlanController::class);
     
