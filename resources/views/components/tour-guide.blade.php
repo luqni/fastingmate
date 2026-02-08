@@ -80,6 +80,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     intro: 'Renungan harian dan ayat pilihan muncul di sini. Klik untuk membuka dan menyimpan refleksi Anda.',
                 },
                 {
+                    element: document.querySelector('#profile-icon'),
+                    title: 'Profil & Pengaturan',
+                    intro: 'Akses pengaturan akun, reset panduan aplikasi, dan kelola data Anda dari sini.',
+                    position: 'bottom'
+                },
+                {
                     element: document.querySelector('nav.fixed.bottom-0'), // Bottom Nav
                     title: 'Navigasi Utama',
                     intro: 'Akses cepat ke fitur Hutang Puasa, Zakat/Fidyah, dan Kalender Puasa/Haid dari sini.',
@@ -233,6 +239,78 @@ document.addEventListener('DOMContentLoaded', function() {
                     position: 'top'
                  });
             }
+        } else if (path.includes('/quran')) {
+            tourKey = 'tour_completed_quran';
+            steps = [
+                {
+                    intro: "📖 Selamat datang di <b>Al-Quran</b>!<br>Baca dan renungkan Al-Quran dengan tampilan Mushaf Madinah yang indah."
+                },
+                {
+                    element: document.querySelector('.grid-cols-1 > a'), // First surah link
+                    title: 'Daftar Surah',
+                    intro: 'Pilih surah yang ingin Anda baca dari daftar 114 surah. Klik salah satu untuk membuka halaman baca.',
+                    position: 'bottom'
+                }
+            ];
+            
+            // If on surah detail page
+            const mushafToggle = document.querySelector('button[x-text*="mode"]');
+            if (mushafToggle) {
+                steps.push({
+                    element: mushafToggle.closest('.flex.gap-2'),
+                    title: 'Mode Tampilan',
+                    intro: 'Toggle antara <b>Mushaf</b> (tampilan seperti Al-Quran fisik) dan <b>List</b> (dengan terjemahan per ayat).',
+                    position: 'bottom'
+                });
+                
+                const bookmarkBtn = document.querySelector('#profile-icon') ? document.querySelector('button[title*="Terakhir"]') : null;
+                if (bookmarkBtn) {
+                    steps.push({
+                        element: bookmarkBtn,
+                        title: 'Bookmark',
+                        intro: 'Tandai halaman terakhir dibaca. Icon akan terisi penuh jika sudah ada bookmark tersimpan.',
+                        position: 'bottom'
+                    });
+                }
+                
+                steps.push({
+                    element: document.querySelector('nav.fixed.bottom-0') || document.querySelector('.flex.gap-3.items-center'),
+                    title: 'Navigasi Halaman',
+                    intro: 'Gunakan tombol panah atau slider untuk berpindah halaman. Swipe kiri/kanan juga bisa digunakan di mobile.',
+                    position: 'top'
+                });
+            }
+        } else if (path.includes('/ibadah/dhikr')) {
+            tourKey = 'tour_completed_dhikr';
+            steps = [
+                {
+                    intro: "🤲 Selamat datang di <b>Dzikir</b>!<br>Amalkan dzikir pagi/petang dengan panduan lengkap dan counter otomatis."
+                },
+                {
+                    element: document.querySelector('.bg-gradient-to-r.from-emerald-600'),
+                    title: 'Progress Bar',
+                    intro: 'Pantau progres dzikir Anda. Bar ini akan terisi seiring Anda menyelesaikan setiap dzikir.',
+                    position: 'bottom'
+                },
+                {
+                    element: document.querySelector('.bg-white.rounded-3xl'),
+                    title: 'Kartu Dzikir',
+                    intro: 'Setiap kartu berisi teks Arab, latin, terjemahan, dan dalil dari dzikir tersebut. Scroll untuk membaca selengkapnya.',
+                    position: 'top'
+                },
+                {
+                    element: document.querySelector('button[\\@click="handleTap()"]'),
+                    title: 'Counter Dzikir',
+                    intro: '<b>Ketuk tombol ini</b> atau area kartu untuk menghitung dzikir. Angka akan bertambah hingga mencapai target. Tombol akan berubah hijau saat selesai.',
+                    position: 'top'
+                },
+                {
+                    element: document.querySelector('.bg-white\\/80.backdrop-blur-md'),
+                    title: 'Navigasi Dzikir',
+                    intro: 'Gunakan tombol <b>Selanjutnya</b> untuk pindah ke dzikir berikutnya setelah selesai, atau <b>Lewati</b> jika ingin skip.',
+                    position: 'top'
+                }
+            ];
         }
 
         if (steps.length > 0) {
@@ -260,13 +338,15 @@ document.addEventListener('DOMContentLoaded', function() {
             'tour_completed_debts',
             'tour_completed_fidyah',
             'tour_completed_plans',
-            'tour_completed_menstrual'
+            'tour_completed_menstrual',
+            'tour_completed_quran',
+            'tour_completed_dhikr'
         ];
         
         keys.forEach(key => localStorage.removeItem(key));
         
         const path = window.location.pathname;
-        const hasTour = (path === '/dashboard' || path === '/' || path.includes('/fasting-debts') || path.includes('/fidyah') || path.includes('/fasting-plans') || path.includes('/menstrual-cycles'));
+        const hasTour = (path === '/dashboard' || path === '/' || path.includes('/fasting-debts') || path.includes('/fidyah') || path.includes('/fasting-plans') || path.includes('/menstrual-cycles') || path.includes('/quran') || path.includes('/ibadah/dhikr'));
         
         if (hasTour) {
              // If we are on a page with a tour, start it immediately
@@ -309,11 +389,15 @@ document.addEventListener('DOMContentLoaded', function() {
             tourKey = 'tour_completed_plans';
         } else if (path.includes('/menstrual-cycles')) {
             tourKey = 'tour_completed_menstrual';
+        } else if (path.includes('/quran')) {
+            tourKey = 'tour_completed_quran';
+        } else if (path.includes('/ibadah/dhikr')) {
+            tourKey = 'tour_completed_dhikr';
         }
 
         if (tourKey && !localStorage.getItem(tourKey)) {
              // Only auto-start if relevant elements exist
-             if (path.includes('/fasting-debts') || path.includes('/fidyah') || path.includes('/fasting-plans') || path.includes('/menstrual-cycles')) {
+             if (path.includes('/fasting-debts') || path.includes('/fidyah') || path.includes('/fasting-plans') || path.includes('/menstrual-cycles') || path.includes('/quran') || path.includes('/ibadah/dhikr')) {
                  window.startTour();
              } else if (document.querySelector('#sticky-prayer-bar')) {
                  // For dashboard
