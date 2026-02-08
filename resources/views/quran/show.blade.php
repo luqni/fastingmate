@@ -10,7 +10,7 @@
     <div x-data="quranReader({ 
             totalPages: {{ $totalPages }},
             pageNumbers: @json($pageKeys),
-            surahName: '{{ $title }}',
+            surahName: '{{ addslashes($title) }}',
             initialPage: {{ session('jump_to_page') ? array_search(session('jump_to_page'), $pageKeys->toArray()) : 0 }},
             nextSurahUrl: '{{ $nextSurah ? route('quran.show', $nextSurah) : '' }}',
             prevSurahUrl: '{{ $prevSurah ? route('quran.show', $prevSurah) : '' }}'
