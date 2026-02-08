@@ -35,7 +35,10 @@
             
             <div class="flex items-center gap-1">
                 <button @click="saveBookmark" class="p-2 rounded-full hover:bg-emerald-50 text-emerald-600 transition-colors relative" title="Tandai Terakhir Dibaca">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <!-- Outline icon (when no bookmark) -->
+                    <svg x-show="!hasBookmark" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                    <!-- Filled icon (when bookmark exists) -->
+                    <svg x-show="hasBookmark" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7a2 2 0 00-2 2v16l7-3.5L19 21V5a2 2 0 00-2-2z"></path></svg>
                     <span x-show="showBookmarkTooltip" x-transition class="absolute top-full right-0 mt-2 bg-emerald-600 text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">Tersimpan!</span>
                 </button>
                 <button @click="showSettings = !showSettings" class="p-2 -mr-2 rounded-full hover:bg-gray-100/50 text-gray-600 transition-colors">
@@ -200,6 +203,7 @@
                 fontSize: 2, // Default Smaller
                 mode: 'mushaf', // Default to Mushaf view
                 showBookmarkTooltip: false,
+                hasBookmark: {{ $hasBookmark ? 'true' : 'false' }}, // Bookmark status
                 touchStartX: 0,
                 touchEndX: 0,
                 nextSurahUrl: config.nextSurahUrl,
@@ -264,6 +268,7 @@
                         });
                         
                         if (response.ok) {
+                            this.hasBookmark = true; // Update bookmark status to show filled icon
                             this.showBookmarkTooltip = true;
                             setTimeout(() => this.showBookmarkTooltip = false, 2000);
                         }

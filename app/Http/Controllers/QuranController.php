@@ -75,8 +75,18 @@ class QuranController extends Controller
 
         // Group by Page Number for Mushaf View
         $pages = $quran->groupBy('page');
+        
+        // Additional variables for Alpine.js
+        $totalPages = $pages->count();
+        $pageKeys = $pages->keys();
+        $verses = $quran; // For list/translation mode
+        
+        // Check if user has bookmark for this surah
+        $hasBookmark = auth()->check() && \App\Models\QuranProgress::where('user_id', auth()->id())
+            ->where('surah_name', $title)
+            ->exists();
 
-        return view('quran.show', compact('quran', 'pages', 'title', 'prevSurah', 'nextSurah'));
+        return view('quran.show', compact('quran', 'pages', 'title', 'prevSurah', 'nextSurah', 'totalPages', 'pageKeys', 'verses', 'hasBookmark'));
     }
 
     public function saveBookmark(Request $request)

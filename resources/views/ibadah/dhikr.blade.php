@@ -1,17 +1,17 @@
 <x-app-layout :hideHeader="true" :hideBottomNav="true" :noContainer="true">
-    <div x-data="dhikrApp({{ json_encode($dhikrs) }})" class="h-screen flex flex-col bg-gray-50 overflow-hidden">
-        <!-- Header -->
-        <div class="bg-white sticky top-0 z-30 border-b border-gray-100 px-6 h-16 flex items-center justify-between shadow-sm shrink-0">
-            <a href="{{ route('dashboard') }}" class="p-2 -ml-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors">
+    <div x-data="dhikrApp({{ json_encode($dhikrs) }})" class="h-screen flex flex-col bg-gradient-to-br from-emerald-50 via-white to-amber-50 overflow-hidden">
+        <!-- Header with Gradient -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 sticky top-0 z-30 px-6 h-16 flex items-center justify-between shadow-lg shrink-0">
+            <a href="{{ route('dashboard') }}" class="p-2 -ml-2 rounded-full hover:bg-white/20 text-white transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
             </a>
-            <h1 class="text-lg font-bold text-gray-900">{{ $title }}</h1>
+            <h1 class="text-lg font-bold text-white drop-shadow-sm">{{ $title }}</h1>
             <div class="w-10"></div> <!-- Spacer for centering -->
         </div>
 
-        <!-- Progress Bar -->
-        <div class="h-1 bg-gray-200 shrink-0">
-            <div class="h-full bg-primary-600 transition-all duration-300" :style="'width: ' + progress + '%'"></div>
+        <!-- Progress Bar with Gradient -->
+        <div class="h-1.5 bg-emerald-100 shrink-0">
+            <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300 shadow-sm" :style="'width: ' + progress + '%'"></div>
         </div>
 
         <!-- Main Content Area -->
@@ -27,12 +27,12 @@
                          x-transition:leave="transition ease-in duration-300"
                          x-transition:leave-start="opacity-100 translate-x-0"
                          x-transition:leave-end="opacity-0 -translate-x-10"
-                         class="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden relative flex flex-col h-full absolute inset-0">
+                         class="bg-white rounded-3xl shadow-2xl shadow-emerald-500/10 border-2 border-emerald-100/50 overflow-hidden relative flex flex-col h-full absolute inset-0 backdrop-blur-sm">
                         
-                        <!-- Card Header -->
-                        <div class="bg-gray-50/50 px-5 py-3 border-b border-gray-100 flex justify-between items-center shrink-0">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate max-w-[200px]" x-text="item.source"></span>
-                            <span class="px-2 py-1 bg-primary-50 text-primary-700 text-[10px] font-bold rounded-full border border-primary-100 shrink-0">
+                        <!-- Card Header with Gradient -->
+                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-3.5 border-b-2 border-emerald-100 flex justify-between items-center shrink-0">
+                            <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest truncate max-w-[200px]" x-text="item.source"></span>
+                            <span class="px-3 py-1.5 bg-white text-emerald-700 text-[10px] font-bold rounded-full border-2 border-emerald-200 shrink-0 shadow-sm">
                                 <span x-text="index + 1"></span> / <span x-text="dhikrs.length"></span>
                             </span>
                         </div>
@@ -40,89 +40,99 @@
                         <!-- Card Scrollable Content -->
                         <div class="p-6 flex-1 overflow-y-auto no-scrollbar" @click="handleTap()">
                              <!-- Title & Repeat Badge -->
-                             <div class="flex items-start justify-between mb-4">
-                                <h2 class="text-lg font-bold text-gray-800" x-text="item.title"></h2>
+                             <div class="flex items-start justify-between mb-6">
+                                <h2 class="text-xl font-bold bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent" x-text="item.title"></h2>
                                 
-                                <div class="flex items-center gap-1 shrink-0">
-                                    <span class="text-[10px] font-medium text-gray-400">Target:</span>
-                                    <span class="w-6 h-6 rounded-full bg-gray-100 text-gray-600 text-xs font-bold flex items-center justify-center" x-text="item.repeat"></span>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="text-[10px] font-semibold text-emerald-600">Target:</span>
+                                    <span class="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 text-white text-xs font-bold flex items-center justify-center shadow-md" x-text="item.repeat"></span>
                                 </div>
                              </div>
 
 
-                             <!-- Arabic -->
-                             <div class="text-justify mb-6 px-4 bg-[#fffcf2] py-6 rounded-2xl border border-[#e5e0d0]">
-                                <p class="text-3xl md:text-4xl font-mushaf leading-[2.6] text-gray-900" 
-                                   dir="rtl" 
-                                   style="font-feature-settings: 'cv01', 'cv02'; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;"
-                                   x-text="item.arabic"></p>
+                             <!-- Arabic with Decorative Border -->
+                             <div class="relative mb-6">
+                                <div class="absolute inset-0 bg-gradient-to-br from-amber-100/50 to-emerald-100/50 rounded-2xl blur-sm"></div>
+                                <div class="relative text-justify px-6 py-8 bg-gradient-to-br from-[#fffcf2] to-[#fef8e8] rounded-2xl border-2 border-[#d4c5a9] shadow-lg">
+                                    <div class="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-[#d4c5a9] rounded-tl-lg"></div>
+                                    <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-[#d4c5a9] rounded-tr-lg"></div>
+                                    <div class="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-[#d4c5a9] rounded-bl-lg"></div>
+                                    <div class="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-[#d4c5a9] rounded-br-lg"></div>
+                                    <p class="text-3xl md:text-4xl font-mushaf leading-[2.6] text-gray-900" 
+                                       dir="rtl" 
+                                       style="font-feature-settings: 'cv01', 'cv02'; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;"
+                                       x-text="item.arabic"></p>
+                                </div>
                              </div>
 
-                             <!-- Latin & Translation -->
-                             <div class="space-y-3 pb-4">
-                                <p class="text-sm font-medium text-primary-600 italic leading-relaxed" x-text="item.latin"></p>
-                                <p class="text-sm text-gray-600 leading-relaxed" x-text="item.translation"></p>
+                             <!-- Latin & Translation with Enhanced Styling -->
+                             <div class="space-y-4 pb-4">
+                                <p class="text-sm font-semibold text-teal-700 italic leading-relaxed bg-teal-50/50 px-4 py-3 rounded-xl border border-teal-100" x-text="item.latin"></p>
+                                <p class="text-sm text-gray-700 leading-relaxed px-2" x-text="item.translation"></p>
                                 
-                                <!-- Dalil / Info -->
-                                <div class="mt-4 p-3 bg-gray-50 rounded-xl border border-gray-100 flex gap-3 items-start">
-                                    <svg class="w-4 h-4 text-gray-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <p class="text-[10px] text-gray-500 leading-snug" x-text="item.dalil"></p>
+                                <!-- Dalil / Info with Gradient -->
+                                <div class="mt-4 p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-200/50 flex gap-3 items-start shadow-sm">
+                                    <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <p class="text-xs text-amber-900 leading-relaxed font-medium" x-text="item.dalil"></p>
                                 </div>
                              </div>
                         </div>
 
-                        <!-- Tap Area / Counter (Fixed at bottom of card) -->
-                        <div class="bg-gray-50 border-t border-gray-100 p-4 shrink-0 z-10">
+                        <!-- Tap Area / Counter with Enhanced Design -->
+                        <div class="bg-gradient-to-r from-emerald-50 to-teal-50 border-t-2 border-emerald-100 p-5 shrink-0 z-10">
                              <button @click="handleTap()" 
-                                     class="w-full h-20 rounded-xl flex items-center justify-center gap-4 transition-all duration-100 transform active:scale-95 touch-manipulation select-none"
-                                     :class="isCompleted ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-white border-2 border-primary-100 text-primary-600 hover:border-primary-300 hover:bg-primary-50'">
+                                     class="w-full h-24 rounded-2xl flex items-center justify-center gap-4 transition-all duration-200 transform active:scale-95 touch-manipulation select-none relative overflow-hidden"
+                                     :class="isCompleted ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-2xl shadow-emerald-500/40' : 'bg-white border-3 border-emerald-200 text-emerald-700 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/20'">
                                 
-                                <div x-show="!isCompleted" class="text-center">
-                                    <span class="block text-[10px] font-bold uppercase tracking-widest opacity-60 mb-0.5">Ketuk Layar</span>
-                                    <div class="text-3xl font-black">
-                                        <span x-text="currentCount"></span> <span class="text-lg font-medium opacity-50 mx-0.5">/</span> <span class="text-xl opacity-50" x-text="item.repeat"></span>
+                                <!-- Ripple effect background -->
+                                <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-active:translate-x-[100%] transition-transform duration-700"></div>
+                                
+                                <div x-show="!isCompleted" class="text-center relative z-10">
+                                    <span class="block text-xs font-bold uppercase tracking-widest opacity-70 mb-1">Ketuk Layar</span>
+                                    <div class="text-4xl font-black">
+                                        <span x-text="currentCount"></span> <span class="text-xl font-medium opacity-60 mx-1">/</span> <span class="text-2xl opacity-60" x-text="item.repeat"></span>
                                     </div>
                                 </div>
 
-                                <div x-show="isCompleted" class="flex items-center gap-2">
-                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                                     <span class="text-lg font-bold">Selesai</span>
+                                <div x-show="isCompleted" class="flex items-center gap-3 relative z-10">
+                                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                     <span class="text-xl font-bold">Selesai!</span>
                                 </div>
                              </button>
-                             <p class="text-center text-[10px] text-gray-400 mt-2 font-medium">Ketuk tombol atau area kartu untuk menghitung</p>
+                             <p class="text-center text-xs text-emerald-700 mt-3 font-medium">Ketuk tombol atau area kartu untuk menghitung</p>
                         </div>
                     </div>
                 </template>
                 
-                <!-- Completed All State -->
+                <!-- Completed All State with Enhanced Design -->
                 <div x-show="finishedAll" 
-                     class="bg-white rounded-[2rem] p-8 shadow-xl text-center border border-gray-100 flex flex-col items-center justify-center absolute inset-0 h-full"
+                     class="bg-gradient-to-br from-white via-emerald-50 to-teal-50 rounded-3xl p-10 shadow-2xl text-center border-2 border-emerald-200 flex flex-col items-center justify-center absolute inset-0 h-full"
                      style="display: none;">
-                    <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mb-6 mx-auto animate-bounce">
-                        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <div class="w-24 h-24 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mb-6 mx-auto animate-bounce shadow-2xl shadow-emerald-500/40">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <h2 class="text-xl font-bold text-gray-900 mb-2">Alhamdulillah!</h2>
-                    <p class="text-sm text-gray-500 mb-8">Anda telah menyelesaikan dzikir {{ $type === 'morning' ? 'pagi' : 'petang' }} hari ini.</p>
-                    <a href="{{ route('dashboard') }}" class="px-8 py-3 bg-primary-600 text-white font-bold rounded-xl shadow-lg shadow-primary-600/30 hover:bg-primary-700 transition w-full">Kembali ke Dashboard</a>
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-emerald-700 to-teal-700 bg-clip-text text-transparent mb-3">Alhamdulillah!</h2>
+                    <p class="text-sm text-gray-600 mb-8 max-w-xs">Anda telah menyelesaikan dzikir {{ $type === 'morning' ? 'pagi' : 'petang' }} hari ini. Semoga menjadi amal yang diterima.</p>
+                    <a href="{{ route('dashboard') }}" class="px-10 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-2xl shadow-2xl shadow-emerald-600/40 hover:shadow-emerald-600/60 hover:scale-105 transition-all w-full max-w-xs">Kembali ke Dashboard</a>
                 </div>
 
             </div>
         </div>
 
-        <!-- Navigation Controls -->
-        <div class="bg-white border-t border-gray-100 p-4 pb-6 glass z-40 shrink-0" x-show="!finishedAll">
+        <!-- Navigation Controls with Enhanced Design -->
+        <div class="bg-white/80 backdrop-blur-md border-t-2 border-emerald-100 p-5 pb-6 z-40 shrink-0 shadow-lg" x-show="!finishedAll">
             <div class="max-w-lg mx-auto flex gap-4">
                 <button @click="prev()" 
-                        class="px-5 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition flex-1 border border-transparent text-sm"
+                        class="px-6 py-3.5 rounded-xl font-bold text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all flex-1 border-2 border-transparent text-sm disabled:opacity-40 disabled:cursor-not-allowed"
                         :class="{ 'opacity-50 cursor-not-allowed': currentIndex === 0 }"
                         :disabled="currentIndex === 0">
-                    Sebelumnya
+                    ← Sebelumnya
                 </button>
 
-                <!-- Next Button -->
+                <!-- Next Button with Gradient -->
                 <button @click="next()" 
-                        class="px-5 py-3 rounded-xl font-bold transition flex-[2] shadow-lg flex items-center justify-center gap-2 text-sm"
-                        :class="isCompleted ? 'bg-primary-600 text-white hover:bg-primary-700 shadow-primary-600/30' : 'bg-white border-2 border-gray-100 text-gray-400 hover:bg-gray-50'">
+                        class="px-6 py-3.5 rounded-xl font-bold transition-all flex-[2] shadow-lg flex items-center justify-center gap-2 text-sm"
+                        :class="isCompleted ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:shadow-2xl hover:shadow-emerald-600/40 hover:scale-105' : 'bg-white border-2 border-gray-200 text-gray-400 hover:bg-gray-50'">
                     <span x-text="isCompleted ? 'Selanjutnya' : 'Lewati'"></span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                 </button>
