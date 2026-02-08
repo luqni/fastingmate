@@ -20,6 +20,10 @@ php artisan migrate --force
 echo ">>> Seeding Quran Source..."
 php artisan db:seed --class=QuranSourceSeeder --force
 
+# Populate Quran Pages
+echo ">>> Populating Quran Pages..."
+php artisan db:seed --class=PopulateQuranPages --force
+
 echo ">>> Starting Supervisor..."
 # -n supaya supervisor jadi PID 1 di container (bukan background)
 exec supervisord -n -c /etc/supervisor/supervisord.conf

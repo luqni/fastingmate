@@ -13,10 +13,10 @@ class PopulateQuranPages extends Seeder
      */
     public function run(): void
     {
-        $jsonPath = storage_path('app/quran_meta.json');
+        $jsonPath = database_path('seeders/data/quran_meta.json');
         
         if (!File::exists($jsonPath)) {
-            $this->command->error("File quran_meta.json not found in storage/app!");
+            $this->command->error("File quran_meta.json not found in database/seeders/data/!");
             return;
         }
 

@@ -49,15 +49,19 @@
                                 </div>
                              </div>
 
+
                              <!-- Arabic -->
-                             <div class="text-center mb-6 px-2">
-                                <p class="text-2xl md:text-3xl font-amiri leading-loose text-gray-900" dir="rtl" x-text="item.arabic"></p>
+                             <div class="text-justify mb-6 px-4 bg-[#fffcf2] py-6 rounded-2xl border border-[#e5e0d0]">
+                                <p class="text-3xl md:text-4xl font-mushaf leading-[2.6] text-gray-900" 
+                                   dir="rtl" 
+                                   style="font-feature-settings: 'cv01', 'cv02'; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;"
+                                   x-text="item.arabic"></p>
                              </div>
 
                              <!-- Latin & Translation -->
                              <div class="space-y-3 pb-4">
                                 <p class="text-sm font-medium text-primary-600 italic leading-relaxed" x-text="item.latin"></p>
-                                <p class="text-sm text-gray-500 leading-relaxed" x-text="item.translation"></p>
+                                <p class="text-sm text-gray-600 leading-relaxed" x-text="item.translation"></p>
                                 
                                 <!-- Dalil / Info -->
                                 <div class="mt-4 p-3 bg-gray-50 rounded-xl border border-gray-100 flex gap-3 items-start">
