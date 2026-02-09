@@ -21,6 +21,14 @@
                                 <div class="h-full w-full bg-gradient-to-br from-indigo-900 to-purple-900 opacity-80"></div>
                             @endif
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+                            
+                            @if($featuredPost->is_locked)
+                                <div class="absolute inset-0 bg-black/60 flex items-center justify-center z-10 backdrop-blur-[2px]">
+                                    <div class="bg-white/20 backdrop-blur-md border border-white/30 p-4 rounded-full shadow-lg shadow-black/20">
+                                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                         
                         <!-- Content -->
@@ -78,6 +86,13 @@
                         <a href="{{ route('posts.show', $post) }}" class="snap-center shrink-0 w-[280px] sm:w-[320px] group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                            <!-- Thumbnail -->
                            <div class="aspect-[16/10] w-full bg-gray-100 relative overflow-hidden">
+                                @if($post->is_locked)
+                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center z-20 backdrop-blur-[2px]">
+                                        <div class="bg-white/20 backdrop-blur-md border border-white/30 p-2.5 rounded-full shadow-lg">
+                                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                        </div>
+                                    </div>
+                                @endif
                                 @if($post->thumbnail)
                                     <img src="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                                 @else
