@@ -46,20 +46,20 @@ class SendDailyTadabbur extends Command
     {
         $this->info('Sending daily tadabbur ayah...');
 
-        // Get a random Quran Source
-        // Ideally this should be rotated daily or scheduled, but random is fine for now
-        $quranSource = QuranSource::inRandomOrder()->first();
-
-        if (!$quranSource) {
-            $this->error('No Quran Source found. Please seed the database.');
-            return;
-        }
+        $tadabburService = app(\App\Services\TadabburService::class);
 
         // Notify all users
-        User::chunk(100, function ($users) use ($quranSource) {
+        User::chunk(100, function ($users) use ($tadabburService) {
             foreach ($users as $user) {
                 try {
-                    $user->notify(new DailyTadabburNotification($quranSource));
+                    // Get or create the personalized tadabbur for today
+                    $dailyTadabbur = $tadabburService->getTodayTadabbur($user);
+                    
+                    if ($dailyTadabbur && $dailyTadabbur->quranSource) {
+                        $user->notify(new DailyTadabburNotification($dailyTadabbur->quranSource));
+                    } else {
+                        Log::warning("Could not generate daily tadabbur for user {$user->id}");
+                    }
                 } catch (\Exception $e) {
                     Log::error("Failed to send tadabbur to user {$user->id}: " . $e->getMessage());
                 }
