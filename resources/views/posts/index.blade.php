@@ -74,16 +74,67 @@
 
                 <!-- Trending Carousel -->
                 @if(isset($trendingPosts) && $trendingPosts->count() > 0)
-                <div class="mb-14">
+                <div class="mb-14" x-data="{
+                    scrollInterval: null,
+                    autoPlayDelay: 3000,
+                    
+                    init() {
+                        this.startAutoPlay();
+                    },
+                    
+                    startAutoPlay() {
+                        this.scrollInterval = setInterval(() => {
+                            this.scrollRight();
+                        }, this.autoPlayDelay);
+                    },
+                    
+                    stopAutoPlay() {
+                        if (this.scrollInterval) {
+                            clearInterval(this.scrollInterval);
+                            this.scrollInterval = null;
+                        }
+                    },
+                    
+                    scrollLeft() {
+                        const slider = this.$refs.slider;
+                        // If at start, scroll to end (loop)
+                        if (slider.scrollLeft <= 0) {
+                            slider.scrollTo({ left: slider.scrollWidth, behavior: 'smooth' });
+                        } else {
+                            slider.scrollBy({ left: -320, behavior: 'smooth' });
+                        }
+                    },
+                    
+                    scrollRight() {
+                        const slider = this.$refs.slider;
+                        // If at end, scroll to start (loop)
+                        // Allow small buffer of 10px for rounding errors
+                        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 10) {
+                            slider.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            slider.scrollBy({ left: 320, behavior: 'smooth' });
+                        }
+                    }
+                }" @mouseenter="stopAutoPlay()" @mouseleave="startAutoPlay()">
                     <div class="flex items-center justify-between mb-6 px-1">
                         <h3 class="text-2xl font-extrabold text-gray-900 flex items-center gap-2">
                             <span class="text-2xl animate-pulse">⚡</span> Sedang Hangat
                         </h3>
+                        
+                        <!-- Slider Controls -->
+                        <div class="flex items-center gap-2">
+                            <button @click="scrollLeft()" class="p-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 shadow-sm transition-all active:scale-95" aria-label="Previous Slide">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <button @click="scrollRight()" class="p-2 rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 shadow-sm transition-all active:scale-95" aria-label="Next Slide">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="flex overflow-x-auto gap-5 pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x hide-scrollbar scroll-smooth">
+                    <div x-ref="slider" class="flex overflow-x-auto gap-5 pb-8 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x hide-scrollbar scroll-smooth" style="-webkit-overflow-scrolling: touch;">
                         @foreach($trendingPosts as $index => $post)
-                        <a href="{{ route('posts.show', $post) }}" class="snap-center shrink-0 w-[280px] sm:w-[320px] group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                        <a href="{{ route('posts.show', $post) }}" class="snap-start shrink-0 w-[280px] sm:w-[320px] group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 transform">
                            <!-- Thumbnail -->
                            <div class="aspect-[16/10] w-full bg-gray-100 relative overflow-hidden">
                                 @if($post->is_locked)
@@ -127,106 +178,82 @@
                 @endif
             @endif
 
-            <!-- Search Bar & List Header -->
-            <div class="mb-8" id="latest-articles">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-1">
-                            @if(request('search'))
-                                Hasil Pencarian
-                            @else
-                                Artikel Terbaru
-                            @endif
-                        </h3>
-                        <p class="text-gray-500 text-sm">Temukan wawasan islami bermanfaat untukmu</p>
-                    </div>
+            <!-- Blog Grid (Infinite Scroll) -->
+            <div x-data="{
+                nextPageUrl: '{{ $posts->nextPageUrl() }}',
+                isLoading: false,
+                isFinished: {{ $posts->hasMorePages() ? 'false' : 'true' }},
+                
+                init() {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && !this.isLoading && !this.isFinished) {
+                                this.loadMore();
+                            }
+                        });
+                    }, { rootMargin: '100px' });
                     
-                    <form method="GET" action="{{ route('posts.index') }}" class="relative w-full md:w-96">
-                         <!-- Maintain anchor to latest articles when searching or clearing -->
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                            </div>
-                            <input 
-                                type="text" 
-                                name="search" 
-                                value="{{ request('search') }}" 
-                                placeholder="Cari artikel..." 
-                                class="w-full pl-11 pr-24 py-3 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm"
-                            >
-                            <div class="absolute inset-y-0 right-0 flex items-center gap-1 pr-1.5">
-                                @if(request('search'))
-                                    <a href="{{ route('posts.index') }}" class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                    </a>
-                                @endif
-                                <button type="submit" class="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
-                                    Cari
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    if (this.$refs.infiniteScrollSentinel) {
+                        observer.observe(this.$refs.infiniteScrollSentinel);
+                    }
+                },
+                
+                async loadMore() {
+                    if (!this.nextPageUrl || this.isLoading) return;
+                    
+                    this.isLoading = true;
+                    
+                    try {
+                        const response = await fetch(this.nextPageUrl, {
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            
+                            // Append new posts to the grid
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = data.html;
+                            
+                            // We need to append strictly to the grid container, not this wrapper logic if possible
+                            // But here we are inside x-data.
+                            // Best approach for blade + alpine mixed is to use a target ref
+                            this.$refs.postsGrid.insertAdjacentHTML('beforeend', data.html);
+                            
+                            this.nextPageUrl = data.next_page_url;
+                            if (!this.nextPageUrl) {
+                                this.isFinished = true;
+                            }
+                        } else {
+                            this.isFinished = true;
+                        }
+                    } catch (error) {
+                        console.error('Error loading more posts:', error);
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            }">
+                <div x-ref="postsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach($posts as $post)
+                        @include('posts.partials.post-card')
+                    @endforeach
                 </div>
-
-                <!-- Search Results Info (Only if searching) -->
-                @if(request('search'))
-                    <div class="bg-indigo-50 rounded-xl p-4 border border-indigo-100 flex items-center justify-between">
-                        <span class="text-sm text-indigo-800">
-                            Ditemukan <span class="font-bold">{{ $posts->total() }}</span> artikel untuk "<span class="font-bold">{{ request('search') }}</span>"
-                        </span>
-                        <a href="{{ route('posts.index') }}" class="text-xs font-bold text-indigo-600 hover:underline">Reset Pencarian</a>
+                
+                <!-- Loading State / Sentinel -->
+                <div x-ref="infiniteScrollSentinel" class="mt-8 py-8 flex justify-center">
+                    <div x-show="isLoading" class="flex items-center gap-2 text-indigo-600 font-bold animate-pulse">
+                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Memuat artikel lainnya...
                     </div>
-                @endif
-            </div>
-
-            <!-- Blog Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($posts as $post)
-                <a href="{{ route('posts.show', $post) }}" class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
-                    <div class="aspect-video w-full bg-gray-100 relative overflow-hidden">
-                        @if($post->is_locked)
-                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center z-10 backdrop-blur-[2px]">
-                                <div class="bg-white/20 backdrop-blur-md border border-white/30 p-3 rounded-full">
-                                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                </div>
-                            </div>
-                        @endif
-                        @if($post->thumbnail)
-                            <img src="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">
-                                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            </div>
-                        @endif
+                     <div x-show="isFinished && !isLoading && '{{ $posts->count() }}' > 0" class="text-gray-400 text-sm font-medium">
+                        <!-- End of content message (optional) -->
+                        <span>Sudah menampilkan semua artikel.</span>
                     </div>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="flex items-center gap-2 mb-3 flex-wrap">
-                            <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">Article</span>
-                            <span class="text-xs text-gray-400">{{ $post->published_at->format('d M Y') }}</span>
-                            <span class="flex items-center gap-1 text-xs text-gray-400">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                {{ $post->reading_time }}
-                            </span>
-                            <span class="flex items-center gap-1 text-xs text-gray-400">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
-                                {{ number_format($post->views_count) }}
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
-                            {{ $post->title }}
-                        </h3>
-                        <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">
-                            {{ Str::limit(strip_tags($post->content), 120) }}
-                        </p>
-                        <div class="flex items-center text-sm font-medium text-indigo-600 group-hover:translate-x-1 transition-transform">
-                            Baca Selengkapnya
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </div>
-                    </div>
-                </a>
-                @endforeach
+                </div>
             </div>
 
             <!-- Empty State -->
@@ -245,42 +272,7 @@
                 </div>
             @endif
 
-            <!-- Pagination -->
-            @if($posts->hasPages())
-            <div class="mt-8">
-                <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-lg shadow-sm">
-                    <div class="flex flex-1 justify-between sm:hidden">
-                        @if ($posts->onFirstPage())
-                            <span class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400">Previous</span>
-                        @else
-                            <a href="{{ $posts->previousPageUrl() }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
-                        @endif
-
-                        @if ($posts->hasMorePages())
-                            <a href="{{ $posts->nextPageUrl() }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
-                        @else
-                            <span class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400">Next</span>
-                        @endif
-                    </div>
-                    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Menampilkan
-                                <span class="font-medium">{{ $posts->firstItem() }}</span>
-                                sampai
-                                <span class="font-medium">{{ $posts->lastItem() }}</span>
-                                dari
-                                <span class="font-medium">{{ $posts->total() }}</span>
-                                artikel
-                            </p>
-                        </div>
-                        <div>
-                            {{ $posts->links() }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
+            <!-- Pagination (Removed for Infinite Scroll) -->
         </div>
     </div>
 </x-app-layout>

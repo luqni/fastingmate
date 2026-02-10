@@ -53,6 +53,17 @@ class PostController extends Controller
         $posts = $postsQuery->latest('published_at')
             ->paginate(9)
             ->withQueryString();
+
+        if ($request->ajax()) {
+            $view = '';
+            foreach ($posts as $post) {
+                $view .= view('posts.partials.post-card', compact('post'))->render();
+            }
+            return response()->json([
+                'html' => $view,
+                'next_page_url' => $posts->nextPageUrl()
+            ]);
+        }
             
         return view('posts.index', compact('posts', 'featuredPost', 'trendingPosts'));
     }

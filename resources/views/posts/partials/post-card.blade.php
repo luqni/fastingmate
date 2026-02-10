@@ -1,0 +1,42 @@
+<a href="{{ route('posts.show', $post) }}" class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
+    <div class="aspect-video w-full bg-gray-100 relative overflow-hidden">
+        @if($post->is_locked)
+            <div class="absolute inset-0 bg-black/50 flex items-center justify-center z-10 backdrop-blur-[2px]">
+                <div class="bg-white/20 backdrop-blur-md border border-white/30 p-3 rounded-full">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+            </div>
+        @endif
+        @if($post->thumbnail)
+            <img src="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        @else
+            <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-50">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+        @endif
+    </div>
+    <div class="p-5 flex flex-col flex-grow">
+        <div class="flex items-center gap-2 mb-3 flex-wrap">
+            <span class="text-xs font-medium text-indigo-600 bg-indigo-50 px-2 py-1 rounded-full">Article</span>
+            <span class="text-xs text-gray-400">{{ $post->published_at->format('d M Y') }}</span>
+            <span class="flex items-center gap-1 text-xs text-gray-400">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                {{ $post->reading_time }}
+            </span>
+            <span class="flex items-center gap-1 text-xs text-gray-400">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                {{ number_format($post->views_count) }}
+            </span>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+            {{ $post->title }}
+        </h3>
+        <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-grow">
+            {{ Str::limit(strip_tags($post->content), 120) }}
+        </p>
+        <div class="flex items-center text-sm font-medium text-indigo-600 group-hover:translate-x-1 transition-transform">
+            Baca Selengkapnya
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </div>
+    </div>
+</a>

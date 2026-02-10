@@ -188,10 +188,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Smart Qadha Tracker -->
+                    <!-- Smart Qadha Tracker -->
                  <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-emerald-50/50 transition-all duration-300 border border-transparent hover:border-emerald-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-emerald-600 border border-gray-100">
-                        �
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Pencatat Hutang Puasa</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
@@ -202,7 +202,7 @@
                 <!-- Auto Scheduler -->
                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-teal-50/50 transition-all duration-300 border border-transparent hover:border-teal-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-teal-600 border border-gray-100">
-                        🗓️
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Penjadwalan Otomatis</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
@@ -213,7 +213,7 @@
                 <!-- Menstrual Tracker -->
                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-rose-50/50 transition-all duration-300 border border-transparent hover:border-rose-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-rose-500 border border-gray-100">
-                        🌸
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Integrasi Siklus Haid</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
@@ -224,7 +224,7 @@
                 <!-- Fidyah -->
                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-orange-50/50 transition-all duration-300 border border-transparent hover:border-orange-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-orange-500 border border-gray-100">
-                        🍚
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Kalkulator Fidyah</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
@@ -232,10 +232,32 @@
                     </p>
                 </div>
 
+                <!-- Dzikir Pagi & Petang -->
+                <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-cyan-50/50 transition-all duration-300 border border-transparent hover:border-cyan-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-cyan-600 border border-gray-100">
+                         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 17h.01M9 17h.01M5 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Dzikir Pagi & Petang</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Tasbih digital interaktif dengan target hitungan dan getaran haptic yang nyaman. Menemani dzikir pagi dan petangmu lebih khusyuk.
+                    </p>
+                </div>
+                
+                 <!-- Al-Quran Digital -->
+                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-emerald-50/50 transition-all duration-300 border border-transparent hover:border-emerald-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-emerald-600 border border-gray-100">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Al-Quran Digital</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Baca Al-Quran kapan saja dengan nyaman. Dilengkapi fitur bookmark otomatis "Lanjutkan Membaca" dan navigasi surah yang mudah.
+                    </p>
+                </div>
+
                 <!-- Tadabbur -->
                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-indigo-50/50 transition-all duration-300 border border-transparent hover:border-indigo-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-indigo-600 border border-gray-100">
-                        ✨
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Tadabbur Harian & Notifikasi</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
@@ -246,7 +268,7 @@
                  <!-- Wawasan -->
                  <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-purple-50/50 transition-all duration-300 border border-transparent hover:border-purple-100 flex flex-col items-center text-center">
                     <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-purple-600 border border-gray-100">
-                        �
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-3">Wawasan & Artikel Islami</h3>
                     <p class="text-sm text-gray-500 leading-relaxed">
