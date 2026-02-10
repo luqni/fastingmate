@@ -191,6 +191,9 @@ function displayPrayerTimes(data) {
     // Display date
     if (data.date) {
         const hijri = data.date.hijri;
+        console.log("cek");
+        console.log(hijri);
+        console.log("----");
         const gregorian = data.date.gregorian;
         document.getElementById('date-display').textContent = 
             `${hijri.day} ${hijri.month.en} ${hijri.year} H • ${gregorian.day} ${gregorian.month.en} ${gregorian.year}`;
