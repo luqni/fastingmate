@@ -14,9 +14,9 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git unzip curl libzip-dev zip zlib1g-dev \
     libpng-dev libjpeg-dev libfreetype6-dev \
-    libpq-dev supervisor cron \
+    libpq-dev supervisor cron libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip pdo_pgsql gd pcntl bcmath
+    && docker-php-ext-install zip pdo_pgsql gd pcntl bcmath intl
 
 RUN pecl install redis \
     && docker-php-ext-enable redis
