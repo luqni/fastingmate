@@ -29,7 +29,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const minLoadTime = 1200; // Increased to 1.2s for better visibility
+        const minLoadTime = 100; // Increased to 1.2s for better visibility
         const startTime = Date.now();
 
         const fadeOutPreloader = () => {
@@ -58,7 +58,7 @@
             const preloader = document.getElementById('global-preloader');
             if (preloader && preloader.style.opacity !== '0') {
                  preloader.style.opacity = '0';
-                 setTimeout(() => preloader.remove(), 500);
+                 setTimeout(() => preloader.remove(), 100);
             }
         }, 5000);
     });

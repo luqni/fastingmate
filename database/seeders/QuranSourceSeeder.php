@@ -12,6 +12,11 @@ class QuranSourceSeeder extends Seeder
      */
     public function run(): void
     {
+        if (\App\Models\QuranSource::exists()) {
+            $this->command->info('Quran data already exists. Skipping seeder.');
+            return;
+        }
+
         $this->command->info('Truncating quran_sources table...');
         \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
         \App\Models\QuranSource::truncate();

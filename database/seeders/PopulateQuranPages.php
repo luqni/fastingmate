@@ -20,6 +20,12 @@ class PopulateQuranPages extends Seeder
             return;
         }
 
+        // Check if pages are already populated
+        if (DB::table('quran_sources')->whereNotNull('page')->exists()) {
+            $this->command->info('Quran pages already populated. Skipping seeder.');
+            return;
+        }
+
         $data = json_decode(File::get($jsonPath), true);
         $surahs = $data['data']['surahs'];
         

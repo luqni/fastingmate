@@ -170,15 +170,26 @@ function urlBase64ToUint8Array(base64String) {
 }
 
 window.enableNotifications = async () => {
-    // a. Check browser support
+    // a. Check if context is secure (HTTPS or localhost)
+    if (!window.isSecureContext) {
+        Swal.fire('Error', 'Push Notification requires HTTPS or localhost. Please use a secure connection.', 'error');
+        return;
+    }
+
+    // b. Check browser support
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
         Swal.fire('Error', 'Push messaging is not supported in this browser.', 'error');
         return;
     }
 
     try {
-        // b. Wait for Service Worker Ready (no loops needed with navigator.serviceWorker.ready)
-        const registration = await navigator.serviceWorker.ready;
+        // b. Wait for Service Worker Ready (with timeout)
+        const registration = await Promise.race([
+            navigator.serviceWorker.ready,
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Service Worker timeout. Try reloading the page.')), 10000)
+            )
+        ]);
 
         // c. Request Permission
         const permission = await Notification.requestPermission();
