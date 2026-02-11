@@ -11,6 +11,7 @@
     <link rel="manifest" href="/build/manifest.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="/pwa-192x192.png">
+    {{ $meta ?? '' }}
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -5,6 +5,19 @@
         </h2>
     </x-slot>
 
+    <x-slot name="meta">
+        <meta property="og:title" content="{{ $post->title }} - FastingMate" />
+        <meta property="og:description" content="{{ Str::limit(strip_tags($post->content), 150) }}" />
+        <meta property="og:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
+        <meta property="og:url" content="{{ route('posts.show', $post) }}" />
+        <meta property="og:type" content="article" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{ $post->title }} - FastingMate" />
+        <meta name="twitter:description" content="{{ Str::limit(strip_tags($post->content), 150) }}" />
+        <meta name="twitter:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
+    </x-slot>
+
     <div class="bg-gray-50 min-h-screen" x-data="{ 
         fontSize: 100,
         shareOpen: false,

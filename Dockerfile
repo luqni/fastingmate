@@ -5,6 +5,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+
+# Add build argument for VAPID key
+ARG VITE_VAPID_PUBLIC_KEY
+ENV VITE_VAPID_PUBLIC_KEY=$VITE_VAPID_PUBLIC_KEY
+
 RUN npm run build
 
 # Build PHP App
@@ -39,6 +44,8 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Copy frontend assets
 COPY --from=build /app/public/build /var/www/public/build
+COPY --from=build /app/public/sw.js /var/www/public/
+COPY --from=build /app/public/workbox-*.js /var/www/public/
 
 # Laravel permissions
 RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage

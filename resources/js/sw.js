@@ -1,8 +1,75 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate, CacheFirst, NetworkFirst } from 'workbox-strategies';
+import { ExpirationPlugin } from 'workbox-expiration';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
 // 1. Clean up old caches and precache files
 cleanupOutdatedCaches();
 precacheAndRoute(self.__WB_MANIFEST);
+
+// 2. Runtime Caching
+
+// Cache Google Fonts
+registerRoute(
+    ({ url }) => url.origin === 'https://fonts.googleapis.com' || url.origin === 'https://fonts.gstatic.com',
+    new StaleWhileRevalidate({
+        cacheName: 'google-fonts-cache',
+        plugins: [
+            new ExpirationPlugin({ maxEntries: 20 }),
+        ],
+    })
+);
+
+// Cache Quran API/Pages (Offline Support)
+registerRoute(
+    ({ url }) => url.pathname.startsWith('/quran'),
+    new StaleWhileRevalidate({
+        cacheName: 'quran-cache',
+        plugins: [
+            new CacheableResponsePlugin({
+                statuses: [0, 200],
+            }),
+            new ExpirationPlugin({ maxEntries: 200, maxAgeSeconds: 30 * 24 * 60 * 60 }), // 30 Days
+        ],
+    })
+);
+
+// Cache Dzikir Pages (Offline Support)
+registerRoute(
+    ({ url }) => url.pathname.startsWith('/ibadah'),
+    new StaleWhileRevalidate({
+        cacheName: 'ibadah-cache',
+        plugins: [
+            new CacheableResponsePlugin({ statuses: [0, 200] }),
+            new ExpirationPlugin({ maxEntries: 20, maxAgeSeconds: 7 * 24 * 60 * 60 }),
+        ]
+    })
+);
+
+// Cache Prayer Times API (Offline Support)
+registerRoute(
+    ({ url }) => url.pathname.startsWith('/api/prayer-times'),
+    new StaleWhileRevalidate({
+        cacheName: 'prayer-times-cache',
+        plugins: [
+            new CacheableResponsePlugin({ statuses: [0, 200] }),
+            new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 }),
+        ]
+    })
+);
+
+// Cache Blog (Official & Unlocked)
+registerRoute(
+    ({ url }) => url.pathname.startsWith('/blog'),
+    new StaleWhileRevalidate({
+        cacheName: 'blog-cache',
+        plugins: [
+            new CacheableResponsePlugin({ statuses: [0, 200] }),
+            new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 }),
+        ]
+    })
+);
 
 // 2. FORCE ACTIVATION: skipWaiting on install
 self.addEventListener('install', (event) => {
