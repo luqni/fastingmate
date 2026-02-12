@@ -58,6 +58,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     // Fidyah
     Route::get('/fidyah', [FidyahController::class, 'index'])->name('fidyah.index');
     Route::post('/fidyah/update-rate', [FidyahController::class, 'store'])->name('fidyah.update-rate');
+    Route::post('/fidyah/pay', [FidyahController::class, 'pay'])->name('fidyah.pay');
 
     // Daily Tadabbur
     Route::get('/tadabbur-history', [\App\Http\Controllers\TadabburController::class, 'index'])->name('tadabbur.index');

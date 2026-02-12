@@ -50,6 +50,7 @@ class FidyahController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['rate' => str_replace('.', '', $request->rate)]);
         $request->validate(['rate' => 'required|numeric|min:0']);
         
         $user = Auth::user();
@@ -57,5 +58,90 @@ class FidyahController extends Controller
         $user->save(); // This will trigger the mutator to save into preferences
 
         return back()->with('success', 'Biaya Fidyah berhasil disimpan.');
+    }
+
+    public function pay(Request $request)
+    {
+        // Sanitize currency inputs (remove dots)
+        $request->merge([
+            'amount' => str_replace('.', '', $request->amount),
+            'rate' => str_replace('.', '', $request->rate),
+        ]);
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'rate' => 'required|numeric|min:1',
+        ]);
+
+        $user = Auth::user();
+        $amount = $request->amount;
+        $rate = $request->rate;
+        
+        // Calculate total days paid based on rate
+        $daysPaidTotal = floor($amount / $rate);
+        
+        if ($daysPaidTotal < 1) {
+             return back()->with('error', 'Nominal tidak cukup untuk membayar 1 hari fidyah.');
+        }
+
+        // Calculate total unpaid days first
+        $totalUnpaidDays = $user->fastingDebts()->where('is_paid_off', false)->get()->sum(function($debt) {
+            return $debt->total_days - $debt->paid_days;
+        });
+
+        if ($daysPaidTotal > $totalUnpaidDays) {
+            return back()->with('error', "Gagal: Nominal yang dibayarkan setara dengan $daysPaidTotal hari, sedangkan sisa hutang Anda hanya $totalUnpaidDays hari.");
+        }
+
+        // Get unpaid debts ordered by oldest year first
+        $debts = $user->fastingDebts()
+            ->where('is_paid_off', false)
+            ->orderBy('year', 'asc')
+            ->get();
+            
+        $remainingDaysToPay = $daysPaidTotal;
+        $processed = 0;
+
+        foreach ($debts as $debt) {
+            if ($remainingDaysToPay <= 0) break;
+
+            $debtRemaining = $debt->total_days - $debt->paid_days;
+            
+            // How many days we can pay for this specific debt year
+            $payForThisDebt = min($remainingDaysToPay, $debtRemaining);
+            
+            // Update debt progress
+            $newPaidTotal = $debt->paid_days + $payForThisDebt;
+            $debt->update([
+                'paid_days' => $newPaidTotal,
+                'is_paid_off' => $newPaidTotal >= $debt->total_days
+            ]);
+            
+            // Create repayment record
+            // Calculate cost portion for this record: days * rate
+            // Note: We ignore multiplier for *recording* the repayment days count, 
+            // but in real world Fidyah value might differ. 
+            // Here we assume the user pays 'amount' which covers 'days' at 'rate'.
+            // The monetary value recorded in description is proportional.
+            $costForThis = $payForThisDebt * $rate; 
+            
+            $debt->repayments()->create([
+                'paid_days' => $payForThisDebt,
+                'repayment_date' => now(),
+                'description' => "Bayar Fidyah (Rp " . number_format($costForThis, 0, ',', '.') . ")",
+            ]);
+
+            $remainingDaysToPay -= $payForThisDebt;
+            $processed += $payForThisDebt;
+        }
+
+        if ($remainingDaysToPay > 0) {
+            // Overpayment case (User paid for more days than they owe)
+            // We could either store as balance or just notify.
+            // For now, let's just notify.
+            return back()->with('success', "Pembayaran diterima. $processed hari lunas. Ada kelebihan bayar setara $remainingDaysToPay hari.");
+        }
+
+        return back()->with('success', "Alhamdulillah, pembayaran fidyah untuk $processed hari berhasil dicatat.");
     }
 }

@@ -16,11 +16,11 @@
                         <!-- Image & Overlay -->
                         <div class="absolute inset-0">
                             @if($featuredPost->thumbnail)
-                                <img src="{{ Str::startsWith($featuredPost->thumbnail, ['http', 'https']) ? $featuredPost->thumbnail : asset('storage/' . $featuredPost->thumbnail) }}" alt="{{ $featuredPost->title }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50 group-hover:opacity-40">
+                                <img src="{{ Str::startsWith($featuredPost->thumbnail, ['http', 'https']) ? $featuredPost->thumbnail : asset('storage/' . $featuredPost->thumbnail) }}" alt="{{ $featuredPost->title }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-30 group-hover:opacity-20">
                             @else
                                 <div class="h-full w-full bg-gradient-to-br from-indigo-900 to-purple-900 opacity-80"></div>
                             @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent"></div>
                             
                             @if($featuredPost->is_locked)
                                 <div class="absolute inset-0 bg-black/60 flex items-center justify-center z-10 backdrop-blur-[2px]">
