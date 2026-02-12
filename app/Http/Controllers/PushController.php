@@ -20,6 +20,7 @@ class PushController extends Controller
 
         $user = $request->user();
         $user->updatePushSubscription($endpoint, $key, $token);
+        $user->update(['push_enabled_at' => now()]);
 
         return response()->json(['success' => true], 200);
     }

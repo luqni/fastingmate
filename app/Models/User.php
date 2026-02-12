@@ -45,6 +45,7 @@ class User extends Authenticatable
         'prayer_city',
         'prayer_country',
         'prayer_method',
+        'push_enabled_at',
     ];
 
     /**

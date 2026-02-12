@@ -37,7 +37,7 @@
             </button>
         </div>
 
-        <div id="prayer-times-content" class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-6 hidden"></div>
+        <div id="prayer-times-content" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6 hidden"></div>
     </div>
 
     <!-- Dynamic Countdown (Iftar / Sahur) -->
@@ -201,6 +201,7 @@ function displayPrayerTimes(data) {
 
     // Display prayer times with Indonesian names
     const prayers = [
+        { name: 'Imsak', time: data.timings.Imsak, icon: '🌌', englishName: 'Imsak' },
         { name: 'Subuh', time: data.timings.Fajr, icon: '🌅', englishName: 'Fajr' },
         { name: 'Dzuhur', time: data.timings.Dhuhr, icon: '☀️', englishName: 'Dhuhr' },
         { name: 'Ashar', time: data.timings.Asr, icon: '🌤️', englishName: 'Asr' },

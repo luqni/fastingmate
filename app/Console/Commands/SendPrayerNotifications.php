@@ -100,7 +100,7 @@ class SendPrayerNotifications extends Command
             $sahurTime = $imsakTime->copy()->subMinutes(60);
 
             if ($sahurTime->isFuture()) {
-                $user->notify((new PrayerTimeAlert('Sahur', $sahurTime->format('H:i'), 'sahur'))->delay($sahurTime));
+                $user->notify((new PrayerTimeAlert('Sahur', $timings['Imsak'], 'sahur'))->delay($sahurTime));
                 //$this->line("Scheduled Sahur for User {$user->id} at " . $sahurTime->format('H:i'));
             }
         }

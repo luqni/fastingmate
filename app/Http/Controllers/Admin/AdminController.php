@@ -55,9 +55,10 @@ class AdminController extends Controller
         $totalInstalls = \App\Models\User::whereNotNull('installed_at')->count();
         $totalUsers = \App\Models\User::count();
         
+        $totalPushUsers = \App\Models\User::whereNotNull('push_enabled_at')->count();
         $enableRamadanSummary = \App\Models\Setting::where('key', 'enable_ramadan_summary')->value('value');
 
-        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'enableRamadanSummary'));
+        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary'));
     }
 
     public function trackInstall(Request $request)
