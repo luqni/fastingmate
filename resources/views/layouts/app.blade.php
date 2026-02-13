@@ -46,6 +46,7 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased pb-32">
@@ -634,5 +635,8 @@
     @include('components.tour-guide')
     <!-- Notification Reminder -->
     @include('components.notification-reminder')
+    
+    <!-- Healing Island (Hidden by default) -->
+    <x-healing-island :always-visible="false" />
 </body>
 </html>

@@ -14,10 +14,8 @@ Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-    return view('welcome');
+    $emotions = config('emotion_verses');
+    return view('welcome', compact('emotions'));
 });
 
 Route::view('/documentation', 'documentation')->name('documentation');

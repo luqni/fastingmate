@@ -200,6 +200,22 @@
 
     </div>
 
+
+    <!-- Mood Booster / Healing -->
+    <div onclick="window.expandHealingIsland()" class="mt-8 cursor-pointer bg-gradient-to-r from-emerald-50 to-teal-50 rounded-[2rem] p-8 shadow-sm border border-emerald-100 flex items-center justify-between group hover:shadow-md hover:scale-[1.01] transition-all relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
+        <div class="relative z-10">
+             <div class="flex items-center gap-2 mb-2">
+                <span class="px-3 py-1 bg-white/60 backdrop-blur-sm rounded-full text-[10px] font-bold text-emerald-600 uppercase tracking-widest border border-emerald-100/50">Fitur Baru</span>
+             </div>
+             <h3 class="text-2xl font-extrabold text-gray-900 group-hover:text-emerald-700 transition-colors">Sedang Merasa Lelah?</h3>
+             <p class="text-sm font-medium text-gray-600 mt-1 max-w-sm">Temukan ketenangan melalui ayat-ayat Al-Qur'an yang sesuai dengan perasaanmu saat ini.</p>
+        </div>
+         <div class="relative z-10 w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-500 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+        </div>
+    </div>
+
     <!-- Tadabbur History Section -->
     <div class="mt-10">
         <div class="flex items-center justify-between mb-6 px-2">

@@ -7,8 +7,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -74,8 +75,11 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
     </style>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
-<body class="antialiased font-sans text-gray-900 bg-[#FAFAFA] overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900">
+<body class="antialiased font-sans text-gray-900 bg-[#FAFAFA] overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900" x-data="healingIsland(true)">
     
     <!-- Navbar -->
     <nav class="fixed w-full z-50 transition-all duration-300 glass border-b border-gray-100">
@@ -275,6 +279,17 @@
                         Jawaban atas keraguanmu. Akses kumpulan artikel tentang fiqih wanita, kesehatan, dan motivasi ibadah yang terpercaya.
                     </p>
                 </div>
+                
+                 <!-- Mood Booster / Healing -->
+                 <div class="group p-8 rounded-[2rem] bg-gray-50 hover:bg-rose-50/50 transition-all duration-300 border border-transparent hover:border-rose-100 flex flex-col items-center text-center">
+                    <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform text-rose-500 border border-gray-100">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Mood Booster</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        Fitur unik "Healing Corner" yang memberikan ayat-ayat Al-Qur'an pilihan sesuai dengan suasana hatimu.
+                    </p>
+                </div>
 
             </div>
         </div>
@@ -323,5 +338,8 @@
             </div>
         </div>
     </footer>
+    <!-- Dynamic Island Healing Corner -->
+    <x-healing-island :always-visible="true" />
 </body>
 </html>
+

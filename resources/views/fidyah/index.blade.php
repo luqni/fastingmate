@@ -117,18 +117,6 @@
                 </div>
             </div>
 
-            <div class="mt-10 pt-8 border-t border-gray-100">
-                <div class="flex gap-4">
-                    <div class="shrink-0 text-2xl">💡</div>
-                    <div>
-                         <h4 class="font-bold text-gray-900 mb-2">Info Fidyah</h4>
-                        <p class="text-gray-500 text-sm leading-relaxed">
-                            Fidyah wajib dibayarkan oleh orang yang tidak mampu berpuasa secara permanen (sakit tua/menahun) atau bagi wanita hamil/menyusui yang khawatir akan bayinya (menurut sebagian ulama).
-                            Besaran fidyah adalah 1 mud (sekitar 6-7 ons) makanan pokok per hari, atau bisa dikonversi ke nilai uang seharga makanan tersebut.
-                        </p>
-                    </div>
-                </div>
-            </div>
             <!-- Payment Section -->
             <div class="mt-8 pt-8 border-t border-gray-100">
                 <h4 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -170,6 +158,19 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div class="mt-10 pt-8 border-t border-gray-100">
+                <div class="flex gap-4">
+                    <div class="shrink-0 text-2xl">💡</div>
+                    <div>
+                         <h4 class="font-bold text-gray-900 mb-2">Info Fidyah</h4>
+                        <p class="text-gray-500 text-sm leading-relaxed">
+                            Fidyah wajib dibayarkan oleh orang yang tidak mampu berpuasa secara permanen (sakit tua/menahun) atau bagi wanita hamil/menyusui yang khawatir akan bayinya (menurut sebagian ulama).
+                            Besaran fidyah adalah 1 mud (sekitar 6-7 ons) makanan pokok per hari, atau bisa dikonversi ke nilai uang seharga makanan tersebut.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
