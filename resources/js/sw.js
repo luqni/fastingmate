@@ -47,29 +47,9 @@ registerRoute(
     })
 );
 
-// Cache Prayer Times API (Offline Support)
-registerRoute(
-    ({ url }) => url.pathname.startsWith('/api/prayer-times'),
-    new StaleWhileRevalidate({
-        cacheName: 'prayer-times-cache',
-        plugins: [
-            new CacheableResponsePlugin({ statuses: [0, 200] }),
-            new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 }),
-        ]
-    })
-);
 
-// Cache Blog (Official & Unlocked)
-registerRoute(
-    ({ url }) => url.pathname.startsWith('/blog'),
-    new StaleWhileRevalidate({
-        cacheName: 'blog-cache',
-        plugins: [
-            new CacheableResponsePlugin({ statuses: [0, 200] }),
-            new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 7 * 24 * 60 * 60 }),
-        ]
-    })
-);
+
+
 
 // 2. FORCE ACTIVATION: skipWaiting on install
 self.addEventListener('install', (event) => {
