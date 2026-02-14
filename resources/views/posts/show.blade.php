@@ -36,6 +36,20 @@
             const url = window.location.href;
             const text = {{ json_encode($post->title) }};
             
+            // Track share
+            try {
+                await fetch('{{ route('posts.share', $post->slug) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ platform: platform })
+                });
+            } catch (e) {
+                console.error('Failed to track share', e);
+            }
+
             if (platform === 'native') {
                 if (navigator.share) {
                     try {

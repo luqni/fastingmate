@@ -41,6 +41,10 @@
                     <div class="text-gray-900 text-xl font-bold mb-2">Total Article Reads</div>
                     <div class="text-4xl text-orange-600">{{ number_format($totalArticleViews) }}</div>
                 </div>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="text-gray-900 text-xl font-bold mb-2">Total Article Shares</div>
+                    <div class="text-4xl text-pink-600">{{ number_format($totalShares) }}</div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -57,6 +61,11 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">PWA Installs (Last 30 Days)</h3>
                     <canvas id="installsChart" class="w-full h-64"></canvas>
+                </div>
+
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Article Shares (Last 30 Days)</h3>
+                    <canvas id="sharesChart" class="w-full h-64"></canvas>
                 </div>
             </div>
 
@@ -146,6 +155,7 @@
             createChart('visitsChart', 'Daily Visits', @json($visits), 'rgb(79, 70, 229)');
             createChart('usersChart', 'New Users', @json($userGrowth), 'rgb(14, 165, 233)');
             createChart('installsChart', 'New Installs', @json($installGrowth), 'rgb(22, 163, 74)');
+            createChart('sharesChart', 'Daily Shares', @json($shareStats), 'rgb(236, 72, 153)');
         });
     </script>
 </x-app-layout>

@@ -23,6 +23,7 @@ Route::view('/documentation', 'documentation')->name('documentation');
 // Blog (Public)
 Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->name('posts.index');
 Route::get('/blog/{post:slug}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
+Route::post('/blog/{post:slug}/share', [\App\Http\Controllers\PostController::class, 'share'])->name('posts.share');
 
 // Track visits globally or on dashboard
 Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {

@@ -95,6 +95,15 @@
                 </div>
             </div>
 
+            @if(Auth::user()->role === 'admin')
+            <div class="bg-white p-8 rounded-[2rem] shadow-soft border border-gray-100 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-blue-50 rounded-full blur-2xl"></div>
+                <x-dropdown-link :href="route('admin.dashboard')">
+                            {{ __('Admin Dashboard') }}
+                        </x-dropdown-link>
+            </div>
+            @endif
+
             <!-- Logout -->
             <div class="bg-gray-50 p-8 rounded-[2rem] border border-gray-100 text-center">
                  <h2 class="text-lg font-bold text-gray-900 mb-4">Sesi Login</h2>

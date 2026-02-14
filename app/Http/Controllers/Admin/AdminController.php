@@ -65,7 +65,19 @@ class AdminController extends Controller
             ->limit(5)
             ->get();
 
-        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles'));
+        // Share Stats
+        $shareRaw = $dateFormat('created_at');
+        $shareStats = \App\Models\PostShare::selectRaw("$shareRaw as date, COUNT(*) as count")
+            ->groupBy('date')
+            ->orderBy('date', 'desc')
+            ->limit(30)
+            ->get()
+            ->reverse()
+            ->values();
+
+        $totalShares = \App\Models\PostShare::count();
+
+        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles', 'shareStats', 'totalShares'));
     }
 
     public function trackInstall(Request $request)

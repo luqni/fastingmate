@@ -83,4 +83,20 @@ class PostController extends Controller
 
         return view('posts.show', compact('post'));
     }
+
+    public function share(Request $request, Post $post)
+    {
+        $validated = $request->validate([
+            'platform' => 'required|string',
+        ]);
+
+        \App\Models\PostShare::create([
+            'post_id' => $post->id,
+            'user_id' => auth()->id(),
+            'platform' => $validated['platform'],
+            'ip_address' => $request->ip(),
+        ]);
+
+        return response()->json(['status' => 'success']);
+    }
 }
