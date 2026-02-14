@@ -10,15 +10,17 @@ class AppLayout extends Component
     public $noContainer;
     public $hideHeader;
     public $hideBottomNav;
+    public $tadabbur;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($noContainer = false, $hideHeader = false, $hideBottomNav = false)
+    public function __construct($noContainer = false, $hideHeader = false, $hideBottomNav = false, $tadabbur = null)
     {
         $this->noContainer = $noContainer;
         $this->hideHeader = $hideHeader;
         $this->hideBottomNav = $hideBottomNav;
+        $this->tadabbur = $tadabbur;
     }
 
     /**

@@ -1,4 +1,4 @@
-<x-app-layout :no-container="true">
+<x-app-layout :no-container="true" :tadabbur="$tadabbur ?? null">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Artikel & Blog') }}

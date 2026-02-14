@@ -65,7 +65,22 @@ class PostController extends Controller
             ]);
         }
             
-        return view('posts.index', compact('posts', 'featuredPost', 'trendingPosts'));
+        // Get Tadabbur for Dynamic Island
+        $tadabbur = null;
+        if (auth()->check()) {
+            $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur(auth()->user());
+        } else {
+            // specific logic for guest: random quran source
+            $source = \App\Models\QuranSource::inRandomOrder()->first();
+            if ($source) {
+                $tadabbur = new \stdClass();
+                $tadabbur->status = 'guest'; // specific status for view logic
+                $tadabbur->quranSource = $source;
+                $tadabbur->reflection = null;
+            }
+        }
+
+        return view('posts.index', compact('posts', 'featuredPost', 'trendingPosts', 'tadabbur'));
     }
 
     public function show(Post $post)
@@ -81,7 +96,21 @@ class PostController extends Controller
             session()->put($sessionKey, true);
         }
 
-        return view('posts.show', compact('post'));
+        // Get Tadabbur for Dynamic Island
+        $tadabbur = null;
+        if (auth()->check()) {
+            $tadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur(auth()->user());
+        } else {
+             $source = \App\Models\QuranSource::inRandomOrder()->first();
+            if ($source) {
+                $tadabbur = new \stdClass();
+                $tadabbur->status = 'guest';
+                $tadabbur->quranSource = $source;
+                $tadabbur->reflection = null;
+            }
+        }
+
+        return view('posts.show', compact('post', 'tadabbur'));
     }
 
     public function share(Request $request, Post $post)
