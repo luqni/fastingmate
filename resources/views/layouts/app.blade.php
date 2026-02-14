@@ -157,11 +157,8 @@
                         </a>
                         @else
                         <div class="flex items-center gap-2">
-                            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-bold text-gray-700 hover:text-primary-600 transition-colors">
+                            <a href="{{ route('login') }}" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-blue-600/20">
                                 Masuk
-                            </a>
-                            <a href="{{ route('register') }}" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-primary-600/20">
-                                Daftar Gratis
                             </a>
                         </div>
                         @endauth
