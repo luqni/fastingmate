@@ -3,7 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FastingMate - Teman Ibadah Muslimah Modern</title>
+    <title>FastingMate - Aplikasi Qadha Puasa & Teman Ibadah Muslimah</title>
+    
+    <!-- SEO Specific for Landing Page -->
+    @section('seo_override')
+    <meta name="description" content="Lunasi hutang puasa dengan hati tenang. FastingMate adalah aplikasi muslimah untuk mencatat qadha puasa, menghitung fidyah, dan tracking siklus haid secara otomatis.">
+    <meta name="keywords" content="aplikasi qadha puasa, bayar hutang puasa, kalkulator fidyah 2026, jadwal puasa senin kamis, aplikasi haid muslimah, fastingmate, teman ibadah">
+    <link rel="canonical" href="{{ url('/') }}">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url('/') }}">
+    <meta property="og:title" content="FastingMate - Lunasi Hutang Puasa dengan Hati Tenang">
+    <meta property="og:description" content="Aplikasi lengkap untuk muslimah: pelacak hutang puasa otomatis dari siklus haid, kalkulator fidyah akurat, dan jadwal ibadah harian.">
+    <meta property="og:image" content="{{ asset('/og-image.jpg') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="FastingMate - Aplikasi Ibadah Muslimah Modern">
+    <meta property="twitter:description" content="Catat qadha, pantau haid, dan hitung fidyah dalam satu aplikasi. Download FastingMate sekarang untuk ibadah yang lebih teratur.">
+    <meta property="twitter:image" content="{{ asset('/og-image.jpg') }}">
+    @endsection
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -11,6 +11,30 @@
     <link rel="manifest" href="/build/manifest.webmanifest">
     <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="/pwa-192x192.png">
+    <link rel="apple-touch-icon" href="/pwa-192x192.png">
+
+    <!-- SEO Meta Tags -->
+    @unless(View::hasSection('seo_override'))
+    <meta name="description" content="@yield('meta_description', 'FastingMate - Aplikasi pelacak hutang puasa (qadha), kalkulator fidyah, dan jadwal puasa muslimah modern. Integrasi siklus haid otomatis.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'aplikasi puasa, qadha puasa, hutang puasa, kalkulator fidyah, jadwal puasa, tracking haid, muslimah, dzikir pagi petang')">
+    <meta name="author" content="FastingMate Team">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('og_title', config('app.name', 'FastingMate') . ' - Teman Ibadah Muslimah')">
+    <meta property="og:description" content="@yield('og_description', 'Kelola ibadah puasa dan qadha dengan mudah bersama FastingMate. Fitur lengkap: tracking haid, kalkulator fidyah, dan reminder puasa.')">
+    <meta property="og:image" content="@yield('og_image', asset('/og-image.jpg'))">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('twitter_title', config('app.name', 'FastingMate'))">
+    <meta property="twitter:description" content="@yield('twitter_description', 'Aplikasi pelacak hutang puasa dan teman ibadah muslimah modern.')">
+    <meta property="twitter:image" content="@yield('twitter_image', asset('/og-image.jpg'))">
+    @endunless
+    
     {{ $meta ?? '' }}
 
     <!-- Fonts -->

@@ -33,6 +33,46 @@ Route::get('/jadwal-imsakiyah', [\App\Http\Controllers\PrayerTimeController::cla
 Route::get('/api/ramadhan/current', [\App\Http\Controllers\PrayerTimeController::class, 'getRamadhanData'])->name('ramadhan.current');
 Route::get('/api/cities/search', [\App\Http\Controllers\PrayerTimeController::class, 'searchCities'])->name('api.cities.search');
 
+// Sitemap
+Route::get('/sitemap.xml', function () {
+    $c = date('c');
+    $content = '<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <url>
+            <loc>' . url('/') . '</loc>
+            <lastmod>' . $c . '</lastmod>
+            <changefreq>daily</changefreq>
+            <priority>1.0</priority>
+        </url>
+        <url>
+            <loc>' . url('/jadwal-imsakiyah') . '</loc>
+            <lastmod>' . $c . '</lastmod>
+            <changefreq>daily</changefreq>
+            <priority>0.8</priority>
+        </url>
+        <url>
+            <loc>' . url('/documentation') . '</loc>
+            <lastmod>' . $c . '</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.5</priority>
+        </url>
+        <url>
+            <loc>' . url('/login') . '</loc>
+            <lastmod>' . $c . '</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.5</priority>
+        </url>
+         <url>
+            <loc>' . url('/register') . '</loc>
+            <lastmod>' . $c . '</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.5</priority>
+        </url>
+    </urlset>';
+    
+    return response($content, 200)->header('Content-Type', 'text/xml');
+});
+
 // Track visits globally or on dashboard
 Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
