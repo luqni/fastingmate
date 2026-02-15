@@ -25,6 +25,11 @@ Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->nam
 Route::get('/blog/{post:slug}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
 Route::post('/blog/{post:slug}/share', [\App\Http\Controllers\PostController::class, 'share'])->name('posts.share');
 
+// Prayer Times (Public)
+Route::get('/api/prayer-times', [\App\Http\Controllers\PrayerTimeController::class, 'getTimes'])->name('prayer-times.get');
+Route::post('/prayer-times/location', [\App\Http\Controllers\PrayerTimeController::class, 'updateLocation'])->name('prayer-times.update-location');
+Route::get('/api/prayer-times/monthly', [\App\Http\Controllers\PrayerTimeController::class, 'getMonthlySchedule'])->name('prayer-times.monthly');
+
 // Track visits globally or on dashboard
 Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::middleware(['auth', 'verified'])->group(function () {
@@ -91,9 +96,7 @@ Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {
     Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
 
     // Prayer Times
-    Route::get('/api/prayer-times', [\App\Http\Controllers\PrayerTimeController::class, 'getTimes'])->name('prayer-times.get');
-    Route::post('/prayer-times/location', [\App\Http\Controllers\PrayerTimeController::class, 'updateLocation'])->name('prayer-times.update-location');
-    Route::get('/api/prayer-times/monthly', [\App\Http\Controllers\PrayerTimeController::class, 'getMonthlySchedule'])->name('prayer-times.monthly');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

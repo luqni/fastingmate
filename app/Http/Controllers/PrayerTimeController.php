@@ -21,9 +21,16 @@ class PrayerTimeController extends Controller
     {
         $user = $request->user();
         
-        $city = $user->prayer_city;
-        $country = $user->prayer_country;
-        $method = $user->prayer_method ?? 2;
+        if ($user) {
+            $city = $user->prayer_city;
+            $country = $user->prayer_country;
+            $method = $user->prayer_method ?? 2;
+        } else {
+            // Default location for guests (Jakarta, Indonesia)
+            $city = 'Jakarta';
+            $country = 'Indonesia';
+            $method = 2;
+        }
 
         if (!$city || !$country) {
             return response()->json([
