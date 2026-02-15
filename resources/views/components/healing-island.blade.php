@@ -104,10 +104,12 @@
             expand() {
                 console.log('Component expanding...');
                 this.expanded = true;
+                window.dispatchEvent(new CustomEvent('healing-island-expanded', { detail: true }));
             },
 
             collapse() {
                 this.expanded = false;
+                window.dispatchEvent(new CustomEvent('healing-island-expanded', { detail: false }));
                 setTimeout(() => {
                     this.selectedMood = null;
                 }, 300);

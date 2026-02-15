@@ -1,5 +1,11 @@
 <div x-data="ramadhanIsland()" x-init="init()" x-cloak
-     x-show="visible"
+     x-show="visible && !hiddenByOther"
+     x-transition:enter="transition ease-out duration-300"
+     x-transition:enter-start="opacity-0 translate-y-4"
+     x-transition:enter-end="opacity-100 translate-y-0"
+     x-transition:leave="transition ease-in duration-300"
+     x-transition:leave-start="opacity-100 translate-y-0"
+     x-transition:leave-end="opacity-0 translate-y-4"
      class="fixed z-[60] bottom-24 left-4 right-4 md:left-auto md:right-8 md:bottom-24 md:w-auto flex justify-center pointer-events-none transition-all duration-300">
     
     <div class="pointer-events-auto bg-gray-900/90 backdrop-blur-xl border border-white/10 text-white rounded-full pl-1 pr-1 py-1 shadow-2xl shadow-emerald-900/40 flex items-center gap-2 transition-all duration-500 animate-slide-up hover:scale-105 group"
@@ -58,6 +64,7 @@ function ramadhanIsland() {
     return {
         visible: false,
         expanded: false,
+        hiddenByOther: false,
         isUrgent: false,
         data: null,
         timer: 'Loading...',
@@ -71,6 +78,11 @@ function ramadhanIsland() {
             setInterval(() => this.fetchData(), 60000);
             // Update timer every second
             setInterval(() => this.updateTimer(), 1000);
+
+            // Listen for other islands expanding
+            window.addEventListener('healing-island-expanded', (e) => {
+                this.hiddenByOther = e.detail;
+            });
         },
 
         async fetchData() {
