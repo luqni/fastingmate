@@ -35,6 +35,8 @@
     <meta property="twitter:image" content="@yield('twitter_image', asset('/og-image.jpg'))">
     @endunless
     
+    @yield('seo_override')
+
     {{ $meta ?? '' }}
 
     <!-- Fonts -->
