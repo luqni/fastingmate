@@ -29,6 +29,9 @@ Route::post('/blog/{post:slug}/share', [\App\Http\Controllers\PostController::cl
 Route::get('/api/prayer-times', [\App\Http\Controllers\PrayerTimeController::class, 'getTimes'])->name('prayer-times.get');
 Route::post('/prayer-times/location', [\App\Http\Controllers\PrayerTimeController::class, 'updateLocation'])->name('prayer-times.update-location');
 Route::get('/api/prayer-times/monthly', [\App\Http\Controllers\PrayerTimeController::class, 'getMonthlySchedule'])->name('prayer-times.monthly');
+Route::get('/jadwal-imsakiyah', [\App\Http\Controllers\PrayerTimeController::class, 'ramadhanPoster'])->name('ramadhan.poster');
+Route::get('/api/ramadhan/current', [\App\Http\Controllers\PrayerTimeController::class, 'getRamadhanData'])->name('ramadhan.current');
+Route::get('/api/cities/search', [\App\Http\Controllers\PrayerTimeController::class, 'searchCities'])->name('api.cities.search');
 
 // Track visits globally or on dashboard
 Route::middleware(\App\Http\Middleware\TrackVisits::class)->group(function () {

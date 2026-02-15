@@ -92,4 +92,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(FastingPlan::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

@@ -16,6 +16,13 @@
         </div>
         <div id="location-display" class="text-sm text-white font-medium drop-shadow-sm"></div>
         <div id="date-display" class="text-sm text-white mt-1 drop-shadow-sm"></div>
+        <a href="{{ route('ramadhan.poster') }}" class="mt-4 relative group overflow-hidden block w-full py-3 px-4 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 backdrop-blur-md border border-white/20 rounded-xl text-center text-sm font-bold text-white transition-all shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+            <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <span class="relative flex items-center justify-center gap-2">
+                📅 Jadwal Lengkap Imsakiyah 
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+            </span>
+        </a>
     </div>
 
     <!-- Prayer Times List -->

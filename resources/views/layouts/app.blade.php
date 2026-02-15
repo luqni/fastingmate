@@ -197,7 +197,7 @@
         </main>
 
         <!-- Bottom Navigation (Visible on ALL screens) -->
-        @if((!isset($hideBottomNav) || !$hideBottomNav) && (Auth::check() || Request::is('blog*')))
+        @if((!isset($hideBottomNav) || !$hideBottomNav) && (Auth::check() || Request::is('blog*') || Request::is('jadwal-imsakiyah')))
         <nav class="fixed bottom-0 left-0 right-0 glass border-t border-gray-100 z-40 flex justify-center items-center h-24 px-6 shadow-[0_-4px_30px_-4px_rgba(0,0,0,0.1)]">
             <div class="w-full max-w-md md:max-w-4xl flex justify-around items-center">
                  <a href="{{ Auth::check() ? route('dashboard') : route('login') }}" class="flex flex-col items-center justify-center w-full h-full space-y-2 group">

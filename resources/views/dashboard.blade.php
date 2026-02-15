@@ -324,4 +324,6 @@
         </div>
     </div>
 
+    <!-- Ramadhan Island Widget -->
+
 </x-app-layout>

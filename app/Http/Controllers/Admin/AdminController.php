@@ -96,14 +96,21 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'enable_ramadan_summary' => 'nullable|in:on,off,1,0',
+            'ramadhan_schedule_visible' => 'nullable|in:on,off,1,0',
         ]);
 
-        $value = $request->has('enable_ramadan_summary') ? '1' : '0';
-        
-        \App\Models\Setting::updateOrCreate(
-            ['key' => 'enable_ramadan_summary'],
-            ['value' => $value]
-        );
+        $settings = [
+            'enable_ramadan_summary',
+            'ramadhan_schedule_visible',
+        ];
+
+        foreach ($settings as $key) {
+            $value = $request->has($key) ? '1' : '0';
+            \App\Models\Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
 
         return back()->with('success', 'Pengaturan berhasil diperbarui.');
     }

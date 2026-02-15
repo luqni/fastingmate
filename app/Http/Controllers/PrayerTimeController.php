@@ -124,4 +124,101 @@ class PrayerTimeController extends Controller
             ],
         ]);
     }
+
+    /**
+     * Search cities (Indonesia only for now)
+     */
+    public function searchCities(Request $request)
+    {
+        $query = $request->input('q');
+        if (!$query || strlen($query) < 3) {
+            return response()->json([]);
+        }
+
+        $cities = $this->prayerTimeService->searchIndonesianCities($query);
+        return response()->json($cities);
+    }
+
+    /**
+     * Display Ramadhan 1447 H Poster
+     */
+    public function ramadhanPoster(Request $request)
+    {
+        $settings = \App\Models\Setting::where('key', 'ramadhan_schedule_visible')->first();
+        // Default to TRUE if setting is missing, or use the setting value
+        $isVisible = $settings ? filter_var($settings->value, FILTER_VALIDATE_BOOLEAN) : true; 
+
+        // If explicitly hidden and user is not admin
+        if (!$isVisible && !$request->user()?->isAdmin()) {
+            return redirect()->route('dashboard')->with('error', 'Jadwal Ramadhan belum tersedia.');
+        }
+
+        $user = $request->user();
+
+        // Priority: Request Input > User Settings > Default
+        $city = $request->input('city') ?? ($user?->prayer_city ?? 'Jakarta');
+        $country = $request->input('country') ?? ($user?->prayer_country ?? 'Indonesia');
+        $method = $user?->prayer_method ?? 2;
+
+        // Fetch Ramadhan 1447 Data
+        $schedule = $this->prayerTimeService->getRamadhanSchedule($city, $country, 1447, $method);
+
+        return view('prayer-times.ramadhan-poster', compact('schedule', 'city', 'country'));
+    }
+
+    /**
+     * Get Ramadhan Data for Dynamic Island (JSON)
+     */
+    public function getRamadhanData(Request $request)
+    {
+        $settings = \App\Models\Setting::where('key', 'ramadhan_schedule_visible')->first();
+        if ($settings && !filter_var($settings->value, FILTER_VALIDATE_BOOLEAN)) {
+             return response()->json(['active' => false]);
+        }
+        
+        $user = $request->user();
+        $city = $user?->prayer_city ?? 'Jakarta';
+        $country = $user?->prayer_country ?? 'Indonesia';
+        $method = $user?->prayer_method ?? 2;
+        
+        // Start Date: 18 Feb 2026 for Ramadhan 1447H
+        $today = now();
+        $startRamadhan = \Carbon\Carbon::create(2026, 2, 18)->startOfDay();
+        
+        if ($today->lt($startRamadhan)) {
+             $diff = (int)ceil($today->floatDiffInDays($startRamadhan, false));
+             
+             return response()->json([
+                 'active' => true,
+                 'type' => 'countdown_to_ramadhan',
+                 'days_left' => $diff,
+                 'message' => "H-$diff Menuju Ramadhan"
+             ]);
+        }
+        
+        // If in Ramadhan
+        // Get today's prayer times
+        $times = $this->prayerTimeService->getTodayPrayerTimes($city, $country, $method);
+        
+        if (!$times) return response()->json(['active' => false]);
+        
+        $dayOfRamadhan = (int)ceil($startRamadhan->floatDiffInDays($today, false)) + 1;
+        
+        // Ramadhan is usually 29 or 30 days
+        if ($dayOfRamadhan > 30) {
+            return response()->json(['active' => false]); // Ramadhan over
+        }
+
+        // Get countdown state
+        $state = $this->prayerTimeService->getCountdownState($times['timings']);
+        
+        return response()->json([
+            'active' => true,
+            'type' => 'in_ramadhan',
+            'day' => $dayOfRamadhan,
+            'hijri_year' => '1447 H',
+            'timings' => $times['timings'],
+            'countdown' => $state
+        ]);
+    }
 }

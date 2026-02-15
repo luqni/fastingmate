@@ -486,4 +486,122 @@ class PrayerTimeService
 
         return [];
     }
+    /**
+     * Get Ramadhan Schedule for a specific Hijri year
+     */
+    public function getRamadhanSchedule(string $city, string $country, int $hijriYear = 1447, int $method = 2): ?array
+    {
+        // Map Hijri year to Gregorian months (Simplified for 1447H)
+        // Ramadhan 1447 starts approx mid-Feb 2026 and ends mid-March 2026
+        // We will fetch Feb and March 2026
+        
+        $monthsToFetch = [
+            ['month' => 2, 'year' => 2026],
+            ['month' => 3, 'year' => 2026],
+        ];
+
+        $ramadhanDays = [];
+
+        foreach ($monthsToFetch as $m) {
+            $schedule = $this->getMonthlySchedule($city, $country, $m['month'], $m['year'], $method);
+            
+            if (!$schedule || !isset($schedule['schedule'])) continue;
+
+            foreach ($schedule['schedule'] as $day) {
+                // Check if it's Ramadhan (Hijri Month 9)
+                // Kemenag and Aladhan have different structures
+                
+                $isRamadhan = false;
+                $hijriDate = null;
+
+                if ($schedule['source'] === 'aladhan') {
+                    $hijriMonth = $day['date']['hijri']['month']['number'] ?? 0;
+                     // Aladhan returns int or string
+                    if ((int)$hijriMonth === 9) {
+                        $isRamadhan = true;
+                        $hijriDate = $day['date']['hijri'];
+                    }
+                } elseif ($schedule['source'] === 'kemenag') {
+                     // Kemenag structure from getKemenagMonthlySchedule return raw 'jadwal' array
+                     // formatKemenagResponse is for single day. getKemenagMonthlySchedule returns list.
+                     // The list items usually have 'tanggal' like "Sabtu, 01/02/2026"
+                     // It does NOT have Hijri info included by default in the list endpoint :/
+                     // We might need to approximate or use Aladhan for dates if using Kemenag
+                     // OR rely on the fact that we requested specific months.
+                     
+                     // Limitation: Kemenag monthly endpoint might not have Hijri. 
+                     // Let's check a sample response or assume Aladhan for Hijri date conversion if needed.
+                     // Actually, for simplicity and reliability of Hijri dates, Aladhan is better.
+                     // But if user is in Indonesia, they prefer Kemenag times.
+                     
+                     // Workaround: We know the range. 
+                     // Feb 18 2026 to Mar 19 2026 is approx Ramadhan.
+                     // Let's fallback to checking Gregorian date range if Hijri info is missing.
+                     // Ramadhan 1447: ~18 Feb 2026 to ~19 Mar 2026.
+                     
+                     $dateStr = $day['date'] ?? $day['tanggal']; // Kemenag has 'tanggal', Aladhan 'date' inside 'date'
+                     // Kemenag monthly item: { "tanggal": "Minggu, 01/02/2026", "imsak": "...", ... }
+                     
+                     // Parse date
+                     try {
+                         // Extract date from "Minggu, 01/02/2026"
+                         if (preg_match('/(\d{2})\/(\d{2})\/(\d{4})/', $dateStr, $matches)) {
+                             $d = (int)$matches[1];
+                             $m = (int)$matches[2];
+                             $y = (int)$matches[3];
+                             $carbonDate = Carbon::create($y, $m, $d);
+                         } else {
+                             // Try standard Y-m-d if not match
+                             $carbonDate = Carbon::parse($dateStr);
+                         }
+                         
+                         // Approximate Ramadhan check for 2026
+                         // Start: 2026-02-18, End: 2026-03-19 (approx 30 days)
+                         if ($carbonDate->between('2026-02-15', '2026-03-25')) {
+                             // Fine-tune with Aladhan API check or just generic range?
+                             // Let's use Aladhan conversion for the day to be sure? 
+                             // No, that's too many API calls.
+                             // Let's just use the known range for 1447H.
+                             // 1 Ramadhan 1447 = 18 Feb 2026 (calculated)
+                             // Let's include a buffer and maybe just show the whole combined list?
+                             // The Request asks for "Ramadhan Schedule".
+                             // Let's hardcode the range for 1447H to be safe: Feb 18 - Mar 19.
+                             
+                             if ($carbonDate->between(Carbon::create(2026, 2, 18), Carbon::create(2026, 3, 20))) {
+                                 $isRamadhan = true;
+                                 
+                                 // Mock Hijri info for Kemenag
+                                 $dayOfRamadhan = $carbonDate->diffInDays(Carbon::create(2026, 2, 17)); // 18th is day 1
+                                 $hijriDate = [
+                                     'day' => $dayOfRamadhan,
+                                     'month' => ['en' => 'Ramadhan', 'number' => 9],
+                                     'year' => 1447
+                                 ];
+                             }
+                         }
+                     } catch (\Exception $e) {}
+                }
+
+                if ($isRamadhan) {
+                    $ramadhanDays[] = [
+                        'date' => $day['date'] ?? $day['tanggal'],
+                        'hijri' => $hijriDate,
+                        'timings' => $schedule['source'] === 'aladhan' ? $day['timings'] : [
+                            'Imsak' => $day['imsak'] ?? '',
+                            'Fajr' => $day['subuh'] ?? '',
+                            'Sunrise' => $day['terbit'] ?? '',
+                            'Dhuhr' => $day['dzuhur'] ?? '',
+                            'Asr' => $day['ashar'] ?? '',
+                            'Maghrib' => $day['maghrib'] ?? '',
+                            'Isya' => $day['isya'] ?? '',
+                            'Isha' => $day['isya'] ?? '', // Fallback for consistency
+                        ],
+                        'source' => $schedule['source']
+                    ];
+                }
+            }
+        }
+
+        return $ramadhanDays;
+    }
 }

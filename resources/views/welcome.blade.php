@@ -340,6 +340,9 @@
     </footer>
     <!-- Dynamic Island Healing Corner -->
     <x-healing-island :always-visible="true" />
+
+    <!-- Ramadhan Island -->
+    <x-ramadhan-island />
 </body>
 </html>
 

@@ -35,6 +35,23 @@
                             </div>
                         </div>
 
+                        <div class="mb-6 pt-6 border-t border-gray-100">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Fitur Ramadhan</h3>
+                            
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <label for="ramadhan_schedule_visible" class="block text-sm font-medium text-gray-700">Tampilkan Widget & Jadwal Ramadhan</label>
+                                    <p class="text-sm text-gray-500">Aktifkan untuk menampilkan Dynamic Island Ramadhan dan Poster Imsakiyah di Dashboard.</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="ramadhan_schedule_visible" id="ramadhan_schedule_visible" class="sr-only peer" {{ isset($settings['ramadhan_schedule_visible']) && $settings['ramadhan_schedule_visible'] == '1' ? 'checked' : '' }}>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex justify-end">
                             <button type="submit" class="px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 Simpan Pengaturan
