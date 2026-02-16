@@ -1,61 +1,64 @@
+@section('seo_override')
+{{-- SEO Meta Tags --}}
+<meta name="description" content="{{ Str::limit(strip_tags($post->content), 160) }}">
+<meta name="keywords" content="puasa, qadha, fidyah, ramadhan, {{ Str::slug($post->title, ', ') }}">
+<meta name="author" content="Admin FastingMate">
+<link rel="canonical" href="{{ route('posts.show', $post) }}">
+
+{{-- Open Graph --}}
+<meta property="og:title" content="{{ $post->title }} - FastingMate" />
+<meta property="og:description" content="{{ Str::limit(strip_tags($post->content), 200) }}" />
+<meta property="og:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
+<meta property="og:url" content="{{ route('posts.show', $post) }}" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}" />
+<meta property="article:author" content="Admin FastingMate" />
+
+{{-- Twitter --}}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ $post->title }} - FastingMate" />
+<meta name="twitter:description" content="{{ Str::limit(strip_tags($post->content), 200) }}" />
+<meta name="twitter:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
+
+{{-- Schema.org JSON-LD --}}
+@php
+    $schema = [
+        "@context" => "https://schema.org",
+        "@type" => "BlogPosting",
+        "headline" => $post->title,
+        "image" => [
+            Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail)
+        ],
+        "datePublished" => $post->published_at->toIso8601String(),
+        "dateModified" => $post->updated_at->toIso8601String(),
+        "author" => [[
+            "@type" => "Person",
+            "name" => "Admin FastingMate",
+            "url" => route('posts.index')
+        ]],
+        "publisher" => [
+            "@type" => "Organization",
+            "name" => "FastingMate",
+            "logo" => [
+                "@type" => "ImageObject",
+                "url" => asset('/favicon.png')
+            ]
+        ],
+        "description" => Str::limit(strip_tags($post->content), 160),
+        "articleBody" => Str::limit(strip_tags($post->content), 5000)
+    ];
+@endphp
+<script type="application/ld+json">
+{!! json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endsection
+
 <x-app-layout :no-container="true" :tadabbur="$tadabbur ?? null">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Artikel & Blog') }}
         </h2>
     </x-slot>
-
-    @section('seo_override')
-    {{-- SEO Meta Tags --}}
-    <meta name="description" content="{{ Str::limit(strip_tags($post->content), 160) }}">
-    <meta name="keywords" content="puasa, qadha, fidyah, ramadhan, {{ Str::slug($post->title, ', ') }}">
-    <meta name="author" content="Admin FastingMate">
-    <link rel="canonical" href="{{ route('posts.show', $post) }}">
-
-    {{-- Open Graph --}}
-    <meta property="og:title" content="{{ $post->title }} - FastingMate" />
-    <meta property="og:description" content="{{ Str::limit(strip_tags($post->content), 200) }}" />
-    <meta property="og:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
-    <meta property="og:url" content="{{ route('posts.show', $post) }}" />
-    <meta property="og:type" content="article" />
-    <meta property="article:published_time" content="{{ $post->published_at->toIso8601String() }}" />
-    <meta property="article:author" content="Admin FastingMate" />
-    
-    {{-- Twitter --}}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{ $post->title }} - FastingMate" />
-    <meta name="twitter:description" content="{{ Str::limit(strip_tags($post->content), 200) }}" />
-    <meta name="twitter:image" content="{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}" />
-    
-    {{-- Schema.org JSON-LD (For Google, ChatGPT, Gemini) --}}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "headline": "{{ $post->title }}",
-      "image": [
-        "{{ Str::startsWith($post->thumbnail, ['http', 'https']) ? $post->thumbnail : asset('storage/' . $post->thumbnail) }}"
-       ],
-      "datePublished": "{{ $post->published_at->toIso8601String() }}",
-      "dateModified": "{{ $post->updated_at->toIso8601String() }}",
-      "author": [{
-          "@type": "Person",
-          "name": "Admin FastingMate",
-          "url": "{{ route('posts.index') }}"
-        }],
-      "publisher": {
-        "@type": "Organization",
-        "name": "FastingMate",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "{{ asset('/favicon.png') }}"
-        }
-      },
-      "description": "{{ Str::limit(strip_tags($post->content), 160) }}",
-      "articleBody": "{{ Str::limit(strip_tags($post->content), 5000) }}"
-    }
-    </script>
-    @endsection
 
     <div class="bg-gray-50 min-h-screen" x-data="{ 
         fontSize: 100,
