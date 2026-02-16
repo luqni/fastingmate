@@ -77,7 +77,28 @@ class AdminController extends Controller
 
         $totalShares = \App\Models\PostShare::count();
 
-        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles', 'shareStats', 'totalShares'));
+        $totalShares = \App\Models\PostShare::count();
+
+        // Users List with Search and Filter
+        $query = \App\Models\User::query();
+
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if (request('role') && request('role') !== 'all') {
+            $query->where('role', request('role'));
+        }
+
+        $users = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles', 'shareStats', 'totalShares', 'users'));
     }
 
     public function trackInstall(Request $request)
