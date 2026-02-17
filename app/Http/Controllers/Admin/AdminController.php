@@ -21,9 +21,13 @@ class AdminController extends Controller
 
         // Visit Stats - visit_date is already a DATE column, so we can just group by it (or cast to string for safety)
         // For SQLite, grouping by the raw column works if format is YYYY-MM-DD
+        // Visit Stats - Group by Date and User Type
         $visitRaw = $driver === 'sqlite' ? "visit_date" : "DATE(visit_date)";
 
-        $visits = \App\Models\Visit::selectRaw("$visitRaw as date, COUNT(*) as count")
+        $visitsData = \App\Models\Visit::selectRaw("$visitRaw as date, 
+                SUM(CASE WHEN user_id IS NULL THEN 1 ELSE 0 END) as guest_count,
+                SUM(CASE WHEN user_id IS NOT NULL THEN 1 ELSE 0 END) as user_count,
+                COUNT(*) as total_count")
             ->groupBy('date')
             ->orderBy('date', 'desc')
             ->limit(30)
@@ -98,7 +102,7 @@ class AdminController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.dashboard', compact('visits', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles', 'shareStats', 'totalShares', 'users'));
+        return view('admin.dashboard', compact('visitsData', 'userGrowth', 'installGrowth', 'totalInstalls', 'totalUsers', 'totalPushUsers', 'enableRamadanSummary', 'totalArticleViews', 'topArticles', 'shareStats', 'totalShares', 'users'));
     }
 
     public function trackInstall(Request $request)

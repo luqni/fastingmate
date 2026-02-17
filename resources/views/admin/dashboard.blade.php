@@ -206,9 +206,12 @@
         </div>
     </div>
 
+</x-app-layout>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // General Chart Creator for single line charts
             const createChart = (ctxId, label, data, color) => {
                 const ctx = document.getElementById(ctxId).getContext('2d');
                 new Chart(ctx, {
@@ -219,12 +222,17 @@
                             label: label,
                             data: data.map(item => item.count),
                             borderColor: color,
+                            backgroundColor: color.replace('rgb', 'rgba').replace(')', ', 0.1)'),
                             tension: 0.1,
-                            fill: false
+                            fill: true
                         }]
                     },
                     options: {
                         responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
                         scales: {
                             y: {
                                 beginAtZero: true,
@@ -235,7 +243,66 @@
                 });
             };
 
-            createChart('visitsChart', 'Daily Visits', @json($visits), 'rgb(79, 70, 229)');
+            // Specific Chart for Visits (Stacked/Multi-line)
+            const visitsCtx = document.getElementById('visitsChart').getContext('2d');
+            const visitsData = @json($visitsData);
+            
+            new Chart(visitsCtx, {
+                type: 'bar',
+                data: {
+                    labels: visitsData.map(item => item.date),
+                    datasets: [
+                        {
+                            label: 'Tamu (Guest)',
+                            data: visitsData.map(item => item.guest_count),
+                            backgroundColor: 'rgba(107, 114, 128, 0.5)', // Gray
+                            borderColor: 'rgb(107, 114, 128)',
+                            borderWidth: 1,
+                            stack: 'Stack 0',
+                        },
+                        {
+                            label: 'Terdaftar (User)',
+                            data: visitsData.map(item => item.user_count),
+                            backgroundColor: 'rgba(79, 70, 229, 0.5)', // Indigo
+                            borderColor: 'rgb(79, 70, 229)',
+                            borderWidth: 1,
+                            stack: 'Stack 0',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: function(tooltipItems) {
+                                    let total = 0;
+                                    tooltipItems.forEach(function(tooltipItem) {
+                                        total += tooltipItem.parsed.y;
+                                    });
+                                    return 'Total: ' + total;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // createChart('visitsChart', 'Daily Visits', @json($visitsData), 'rgb(79, 70, 229)'); // Replaced by specific chart above
             createChart('usersChart', 'New Users', @json($userGrowth), 'rgb(14, 165, 233)');
             createChart('installsChart', 'New Installs', @json($installGrowth), 'rgb(22, 163, 74)');
             createChart('sharesChart', 'Daily Shares', @json($shareStats), 'rgb(236, 72, 153)');
