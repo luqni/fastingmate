@@ -155,9 +155,24 @@ class PrayerTimeController extends Controller
 
         $user = $request->user();
 
-        // Priority: Request Input > User Settings > Default
-        $city = $request->input('city') ?? ($user?->prayer_city ?? 'Jakarta');
-        $country = $request->input('country') ?? ($user?->prayer_country ?? 'Indonesia');
+        // Create session for guest if city is provided in request
+        if (!$user && $request->filled('city')) {
+             session([
+                 'guest_prayer_city' => $request->input('city'),
+                 'guest_prayer_country' => $request->input('country', 'Indonesia'),
+             ]); 
+        }
+
+        // Priority for Guests: Request Input > Session > Default
+        // Priority for Users: Request Input > User Settings
+        if ($user) {
+            $city = $request->input('city') ?? $user->prayer_city;
+            $country = $request->input('country') ?? $user->prayer_country;
+        } else {
+             $city = $request->input('city') ?? session('guest_prayer_city', 'Jakarta');
+             $country = $request->input('country') ?? session('guest_prayer_country', 'Indonesia');
+        }
+
         $method = $user?->prayer_method ?? 2;
 
         // Fetch Ramadhan 1447 Data
