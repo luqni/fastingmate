@@ -562,16 +562,16 @@ class PrayerTimeService
                              // Let's use Aladhan conversion for the day to be sure? 
                              // No, that's too many API calls.
                              // Let's just use the known range for 1447H.
-                             // 1 Ramadhan 1447 = 18 Feb 2026 (calculated)
+                             // 1 Ramadhan 1447 = 19 Feb 2026 (Sidang Isbat)
                              // Let's include a buffer and maybe just show the whole combined list?
                              // The Request asks for "Ramadhan Schedule".
-                             // Let's hardcode the range for 1447H to be safe: Feb 18 - Mar 19.
+                             // Let's hardcode the range for 1447H to be safe: Feb 19 - Mar 20.
                              
-                             if ($carbonDate->between(Carbon::create(2026, 2, 18), Carbon::create(2026, 3, 20))) {
+                             if ($carbonDate->between(Carbon::create(2026, 2, 19), Carbon::create(2026, 3, 21))) {
                                  $isRamadhan = true;
                                  
                                  // Mock Hijri info for Kemenag
-                                 $dayOfRamadhan = $carbonDate->diffInDays(Carbon::create(2026, 2, 17)); // 18th is day 1
+                                 $dayOfRamadhan = $carbonDate->diffInDays(Carbon::create(2026, 2, 18)); // 19th is day 1
                                  $hijriDate = [
                                      'day' => $dayOfRamadhan,
                                      'month' => ['en' => 'Ramadhan', 'number' => 9],

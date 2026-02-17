@@ -196,9 +196,9 @@ class PrayerTimeController extends Controller
         $country = $user?->prayer_country ?? 'Indonesia';
         $method = $user?->prayer_method ?? 2;
         
-        // Start Date: 18 Feb 2026 for Ramadhan 1447H
+        // Start Date: 19 Feb 2026 for Ramadhan 1447H
         $today = now();
-        $startRamadhan = \Carbon\Carbon::create(2026, 2, 18)->startOfDay();
+        $startRamadhan = \Carbon\Carbon::create(2026, 2, 19)->startOfDay();
         
         if ($today->lt($startRamadhan)) {
              $diff = (int)ceil($today->floatDiffInDays($startRamadhan, false));
