@@ -563,20 +563,26 @@ class PrayerTimeService
                              // No, that's too many API calls.
                              // Let's just use the known range for 1447H.
                              // 1 Ramadhan 1447 = 19 Feb 2026 (Sidang Isbat)
-                             // Let's include a buffer and maybe just show the whole combined list?
-                             // The Request asks for "Ramadhan Schedule".
-                             // Let's hardcode the range for 1447H to be safe: Feb 19 - Mar 20.
+                             // Let's hardcode the range for 1447H to be safe: Feb 19 - Mar 20 (30 Days).
                              
-                             if ($carbonDate->between(Carbon::create(2026, 2, 19), Carbon::create(2026, 3, 21))) {
+                             if ($carbonDate->between(Carbon::create(2026, 2, 19), Carbon::create(2026, 3, 20))) {
                                  $isRamadhan = true;
                                  
-                                 // Mock Hijri info for Kemenag
-                                 $dayOfRamadhan = $carbonDate->diffInDays(Carbon::create(2026, 2, 18)); // 19th is day 1
-                                 $hijriDate = [
-                                     'day' => $dayOfRamadhan,
-                                     'month' => ['en' => 'Ramadhan', 'number' => 9],
-                                     'year' => 1447
-                                 ];
+                                 // Force calculation: Date - StartDate + 1
+                                 $startRamadhan = Carbon::create(2026, 2, 19)->startOfDay();
+                                 $current = $carbonDate->copy()->startOfDay();
+                                 
+                                 $dayOfRamadhan = (int) abs($current->floatDiffInDays($startRamadhan, false)) + 1;
+
+                                 if ($dayOfRamadhan > 30) {
+                                     $isRamadhan = false;
+                                 } else {
+                                     $hijriDate = [
+                                         'day' => $dayOfRamadhan,
+                                         'month' => ['en' => 'Ramadhan', 'number' => 9],
+                                         'year' => 1447
+                                     ];
+                                 }
                              }
                          }
                      } catch (\Exception $e) {}
