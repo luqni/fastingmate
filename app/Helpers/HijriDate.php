@@ -44,6 +44,33 @@ class HijriDate
         $month = floor((24 * $l) / 709);
         $day = $l - floor((709 * $month) / 24);
         $year = 30 * $n + $j - 30;
+        
+        // Manual Adjustment for Ramadhan 1447H (Sidang Isbat)
+        // Standard calc might say Feb 18 is 1 Ramadhan, but we want Feb 19.
+        if ($y == 2026) {
+            // Feb 18 -> 30 Syaban (Month 8)
+            if ($m == 2 && $d == 18) {
+                return ['day' => 30, 'month' => 8, 'year' => 1447];
+            }
+            // Feb 19 - Mar 20 (Ramadhan)
+            // Shift days by -1 relative to standard if standard was +1
+            // Let's just hardcode the shift for this period
+            if (($m == 2 && $d >= 19) || ($m == 3 && $d <= 20)) {
+                 $day--;
+                 if ($day == 0) {
+                     // Check specific boundary, but easier to just use the diff
+                     // Feb 19 is day 1. 2026-02-19
+                 }
+                 // Let's force calculate from Feb 19
+                 $startRamadhan = Carbon::create(2026, 2, 19);
+                 $current = Carbon::create($y, $m, $d);
+                 $diff = $current->diffInDays($startRamadhan); // 0 for Feb 19
+                 
+                 if ($diff >= 0 && $diff < 30) {
+                     return ['day' => $diff + 1, 'month' => 9, 'year' => 1447];
+                 }
+            }
+        }
 
         return ['day' => $day, 'month' => $month, 'year' => $year];
     }

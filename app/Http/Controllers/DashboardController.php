@@ -83,6 +83,14 @@ class DashboardController extends Controller
         // If current month is Ramadan (9) or later, use next hijri year
         $targetHijriYear = $hijriNow['month'] < 9 ? $hijriNow['year'] : $hijriNow['year'] + 1;
         
+        // Override for 1447H based on Sidang Isbat
+        if ($targetHijriYear == 1447) {
+             return [
+                'date' => \Carbon\Carbon::create(2026, 2, 19)->startOfDay(),
+                'hijri_year' => 1447
+            ];
+        }
+        
         // Rough estimation: 1 Hijri year = 354 days
         // We want Month 9, Day 1
         // Calculate months difference roughly
