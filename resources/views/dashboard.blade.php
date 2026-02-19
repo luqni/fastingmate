@@ -190,7 +190,7 @@
                  <p class="text-sm font-bold text-gray-600 uppercase tracking-widest mb-1">Status Haid</p>
                  <h3 class="text-3xl font-extrabold text-gray-900">{{ $activeCycle ? 'Haid' : 'Suci' }}</h3>
                  @if($activeCycle)
-                    <p class="text-sm font-medium text-gray-600 mt-1">Hari ke-{{ $activeCycle->start_date->diffInDays(now()) + 1 }}</p>
+                    <p class="text-sm font-medium text-gray-600 mt-1 dark:text-gray-400">Hari ke-{{ (int) $activeCycle->start_date->diffInDays(now()) + 1 }}</p>
                  @else
                     <p class="text-sm font-medium text-gray-600 mt-1">Tidak ada siklus aktif</p>
                  @endif

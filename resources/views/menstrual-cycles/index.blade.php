@@ -112,7 +112,7 @@
                                     @if($cycle->end_date)
                                         {{ $cycle->start_date->format('d') }} - {{ $cycle->end_date->format('d M') }} 
                                         <span class="text-gray-300 mx-1">•</span> 
-                                        <span class="text-pink-600 font-bold">{{ $cycle->start_date->diffInDays($cycle->end_date) + 1 }} Hari</span>
+                                        <span class="text-pink-600 font-bold dark:text-pink-400">{{ (int) $cycle->start_date->diffInDays($cycle->end_date) + 1 }} Hari</span>
                                     @else
                                         Sedang Berlangsung...
                                     @endif
