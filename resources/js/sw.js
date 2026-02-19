@@ -24,7 +24,7 @@ registerRoute(
 // Cache Quran API/Pages (Offline Support)
 registerRoute(
     ({ url }) => url.pathname.startsWith('/quran'),
-    new StaleWhileRevalidate({
+    new NetworkFirst({
         cacheName: 'quran-cache',
         plugins: [
             new CacheableResponsePlugin({
@@ -32,18 +32,20 @@ registerRoute(
             }),
             new ExpirationPlugin({ maxEntries: 200, maxAgeSeconds: 30 * 24 * 60 * 60 }), // 30 Days
         ],
+        networkTimeoutSeconds: 3, // Fallback to cache if network is slow
     })
 );
 
 // Cache Dzikir Pages (Offline Support)
 registerRoute(
     ({ url }) => url.pathname.startsWith('/ibadah'),
-    new StaleWhileRevalidate({
+    new NetworkFirst({
         cacheName: 'ibadah-cache',
         plugins: [
             new CacheableResponsePlugin({ statuses: [0, 200] }),
             new ExpirationPlugin({ maxEntries: 20, maxAgeSeconds: 7 * 24 * 60 * 60 }),
-        ]
+        ],
+        networkTimeoutSeconds: 3,
     })
 );
 

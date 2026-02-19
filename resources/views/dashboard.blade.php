@@ -34,7 +34,7 @@
             <div class="relative z-10 flex justify-between items-start">
                 <div>
                     @if($isInRamadhan)
-                        <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Ramadhan {{ $nextRamadan['hijri_year'] }}</p>
+                        <p class="text-emerald-100 font-bold text-sm tracking-wide uppercase mb-1">Ramadhan {{ $hijriNow['year'] }}</p>
                         <h3 class="text-4xl font-extrabold tracking-tight">
                             Hari ke-<span class="text-5xl">{{ $ramadhanDay }}</span>
                         </h3>
@@ -58,8 +58,13 @@
 
             <div class="relative z-10 mt-4">
                <p class="text-emerald-100 font-medium text-sm flex items-center gap-2">
-                    <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    Estimasi: {{ $nextRamadan['date']->translatedFormat('d F Y') }}
+                    @if(!$isInRamadhan)
+                        <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Estimasi: {{ $nextRamadan['date']->translatedFormat('d F Y') }}
+                    @else
+                        <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                        Selamat Menjalankan Ibadah Puasa
+                    @endif
                </p>
             </div>
         </div>

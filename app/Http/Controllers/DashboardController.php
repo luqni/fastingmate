@@ -70,7 +70,7 @@ class DashboardController extends Controller
 
         $todayTadabbur = app(\App\Services\TadabburService::class)->getTodayTadabbur($user);
 
-        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'isInRamadhan', 'ramadhanDay', 'todayTadabbur', 'tadabbur'));
+        return view('dashboard', compact('remainingDebt', 'progressPercentage', 'nextFasting', 'schedules', 'activeCycle', 'nextRamadan', 'daysToRamadan', 'isInRamadhan', 'ramadhanDay', 'todayTadabbur', 'tadabbur', 'hijriNow'));
     }
 
     private function getNextRamadanDate()

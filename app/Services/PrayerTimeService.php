@@ -111,36 +111,18 @@ class PrayerTimeService
         
         // Create Hijri date from current date (approximate)
         $now = now();
-        $hijriYear = $now->year - 579; // Approximate conversion
-        
-        // Create Hijri date using IntlDateFormatter
-        $hijriDate = 'Unknown';
-        $hijriDay = $now->day;
-        $hijriMonthName = $now->format('F');
-        $hijriYearVal = $hijriYear;
-
+        // Use HijriDate helper to ensure manual adjustments (e.g. Sidang Isbat) are respected
         try {
-            $fmt = \IntlDateFormatter::create(
-                'id_ID@calendar=islamic',
-                \IntlDateFormatter::FULL,
-                \IntlDateFormatter::FULL,
-                'Asia/Jakarta',
-                \IntlDateFormatter::TRADITIONAL,
-                'd MMMM y'
-            );
-            $hijriString = $fmt->format($now->timestamp); // e.g., "20 Syakban 1447"
-            
-            // Parse the string to get parts or just use the string
-            // For consistency with existing structure, let's try to parse it roughly
-            // Expected: "dd Month yyyy"
-            $parts = explode(' ', $hijriString);
-            if (count($parts) >= 3) {
-                $hijriDay = $parts[0];
-                $hijriMonthName = $parts[1]; // e.g. Syakban
-                $hijriYearVal = $parts[2];
-            }
+            $hijri = \App\Helpers\HijriDate::gregorianToHijri($now->day, $now->month, $now->year);
+            $hijriDay = $hijri['day'];
+            $hijriMonthName = \App\Helpers\HijriDate::getMonthName($hijri['month']);
+            $hijriYearVal = $hijri['year'];
         } catch (\Throwable $e) {
-            \Log::warning('Hijri Date Format Error: ' . $e->getMessage());
+            \Log::warning('Hijri Date Helper Error: ' . $e->getMessage());
+            // Fallback to approximate
+            $hijriDay = $now->day;
+            $hijriMonthName = $now->format('F'); 
+            $hijriYearVal = $now->year - 579;
         }
 
         return [

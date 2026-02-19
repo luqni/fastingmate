@@ -23,6 +23,17 @@ class HijriDate
         return $res['day'] . ' ' . $months[$res['month']] . ' ' . $res['year'];
     }
 
+    public static function getMonthName($month)
+    {
+        $months = [
+            1 => 'Muharram', 2 => 'Safar', 3 => 'Rabiul Awal', 4 => 'Rabiul Akhir',
+            5 => 'Jumadil Awal', 6 => 'Jumadil Akhir', 7 => 'Rajab', 8 => 'Syaban',
+            9 => 'Ramadhan', 10 => 'Syawal', 11 => 'Dzulkaidah', 12 => 'Dzulhijjah'
+        ];
+
+        return $months[$month] ?? '';
+    }
+
     public static function gregorianToHijri($d, $m, $y)
     {
         if (($y > 1582) || (($y == 1582) && ($m > 10)) || (($y == 1582) && ($m == 10) && ($d > 14))) {
