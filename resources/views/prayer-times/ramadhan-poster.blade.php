@@ -47,32 +47,42 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse($schedule as $day)
-                            <tr class="hover:bg-emerald-50/50 transition-colors {{ $loop->even ? 'bg-gray-50/30' : '' }}">
-                                <td class="px-4 py-3 text-center font-bold text-emerald-700">
+                            @php
+                                $dateToParse = $day['date']['gregorian']['date'] ?? (is_array($day['date']) ? ($day['date']['readable'] ?? null) : $day['date']);
+                                $isToday = $dateToParse ? \Carbon\Carbon::parse($dateToParse)->isToday() : false;
+                            @endphp
+                            <tr class="transition-all duration-300 {{ $isToday ? 'bg-emerald-100/80 border-2 border-emerald-500 shadow-md relative z-10 scale-[1.01]' : ($loop->even ? 'bg-gray-50/30 hover:bg-emerald-50/50' : 'hover:bg-emerald-50/50') }}"
+                                @if($isToday) id="today-row" @endif>
+                                <td class="px-4 py-3 text-center font-bold {{ $isToday ? 'text-emerald-800 text-lg' : 'text-emerald-700' }} relative">
+                                    @if($isToday)
+                                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+                                            HARI INI
+                                        </div>
+                                    @endif
                                     {{ $day['hijri']['day'] ?? $loop->iteration }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-600">
+                                <td class="px-4 py-3 text-center {{ $isToday ? 'text-emerald-900 font-bold' : 'text-gray-600' }}">
                                     {{ \Carbon\Carbon::parse($day['date']['gregorian']['date'] ?? $day['date'])->locale('id')->isoFormat('D MMMM Y') }}
                                 </td>
-                                <td class="px-4 py-3 text-center font-bold text-emerald-700 bg-emerald-50/20 border-r border-gray-100">
+                                <td class="px-4 py-3 text-center font-bold {{ $isToday ? 'text-emerald-900 bg-emerald-200/50' : 'text-emerald-700 bg-emerald-50/20' }} border-r border-gray-100">
                                     {{ $day['timings']['Imsak'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center font-bold text-gray-700">
+                                <td class="px-4 py-3 text-center font-bold {{ $isToday ? 'text-emerald-900' : 'text-gray-700' }}">
                                     {{ $day['timings']['Fajr'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-500 hidden md:table-cell print:table-cell">
+                                <td class="px-4 py-3 text-center {{ $isToday ? 'text-emerald-800' : 'text-gray-500' }} hidden md:table-cell print:table-cell">
                                     {{ $day['timings']['Sunrise'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-700">
+                                <td class="px-4 py-3 text-center {{ $isToday ? 'text-emerald-900 font-bold' : 'text-gray-700' }}">
                                     {{ $day['timings']['Dhuhr'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-700">
+                                <td class="px-4 py-3 text-center {{ $isToday ? 'text-emerald-900 font-bold' : 'text-gray-700' }}">
                                     {{ $day['timings']['Asr'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center font-bold text-emerald-700 bg-emerald-50/20 border-l border-gray-100">
+                                <td class="px-4 py-3 text-center font-bold {{ $isToday ? 'text-emerald-900 bg-emerald-200/50' : 'text-emerald-700 bg-emerald-50/20' }} border-l border-gray-100">
                                     {{ $day['timings']['Maghrib'] }}
                                 </td>
-                                <td class="px-4 py-3 text-center text-gray-700">
+                                <td class="px-4 py-3 text-center {{ $isToday ? 'text-emerald-900 font-bold' : 'text-gray-700' }}">
                                     {{ $day['timings']['Isya'] ?? $day['timings']['Isha'] }}
                                 </td>
                             </tr>
