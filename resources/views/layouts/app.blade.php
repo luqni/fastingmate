@@ -282,7 +282,7 @@
     @if(isset($tadabbur) && $tadabbur)
     <div id="di-container" 
          class="fixed z-50 flex flex-col items-center transition-all duration-300 ease-out w-auto touch-none"
-         style="bottom: 8rem; right: 1.5rem;">
+         style="bottom: 11.5rem; right: 1.5rem;">
         
         <!-- Island Container -->
         <div id="di-wrapper" 
@@ -557,7 +557,7 @@
                         container.style.left = 'auto';
                         container.style.top = 'auto';
                         container.style.right = '1.5rem';
-                        container.style.bottom = '8rem';
+                        container.style.bottom = '11.5rem';
                     } else {
                         container.style.left = lastPosition.left;
                         container.style.top = lastPosition.top;
@@ -682,5 +682,8 @@
     
     <!-- Healing Island (Hidden by default) -->
     <x-healing-island :always-visible="false" />
+    
+    <!-- Blog / Wawasan Islami Island -->
+    <x-blog-island />
 </body>
 </html>
