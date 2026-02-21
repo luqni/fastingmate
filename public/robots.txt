@@ -5,4 +5,4 @@ Disallow: /profile*
 Disallow: /admin*
 Disallow: /api*
 
-Sitemap: /sitemap.xml
+Sitemap: https://fastingmate.my.id/sitemap.xml
