@@ -495,6 +495,9 @@
             function expandIsland() {
                 if (isDragging || isExpanded) return;
                 isExpanded = true;
+                
+                // Dispatch event to hide other elements (like Blog Island)
+                window.dispatchEvent(new CustomEvent('tadabbur-expanded'));
 
                 // Save current position before animating
                 lastPosition.left = container.style.left;
@@ -533,6 +536,9 @@
                 if(e) e.stopPropagation();
                 if (!isExpanded) return;
                 isExpanded = false;
+
+                // Dispatch event to show other elements
+                window.dispatchEvent(new CustomEvent('tadabbur-collapsed'));
 
                 // 1. Hide Content
                 expanded.classList.add('opacity-0', 'translate-y-4');
