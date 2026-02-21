@@ -110,7 +110,15 @@ class PostController extends Controller
             }
         }
 
-        return view('posts.show', compact('post', 'tadabbur'));
+        // Get Related Posts
+        $relatedPosts = Post::where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('id', '!=', $post->id)
+            ->latest('published_at')
+            ->limit(3)
+            ->get();
+
+        return view('posts.show', compact('post', 'tadabbur', 'relatedPosts'));
     }
 
     public function share(Request $request, Post $post)

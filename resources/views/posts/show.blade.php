@@ -322,13 +322,18 @@
                 </aside>
             </div>
             
-             <!-- Related Articles (Placeholder) -->
+             <!-- Related Articles -->
              <div class="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                  <h3 class="text-xl font-bold text-gray-900 mb-6">Artikel Lainnya</h3>
-                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                     <!-- This could be dynamic later -->
-                     <div class="text-gray-500 text-sm italic">Fitur rekomendasi artikel akan segera hadir.</div>
-                 </div>
+                 @if($relatedPosts->isNotEmpty())
+                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                         @foreach($relatedPosts as $relatedPost)
+                            @include('posts.partials.post-card', ['post' => $relatedPost])
+                         @endforeach
+                     </div>
+                 @else
+                     <p class="text-gray-500 italic text-center py-4 text-sm">Belum ada artikel lainnya saat ini.</p>
+                 @endif
              </div>
         </div>
     </div>
