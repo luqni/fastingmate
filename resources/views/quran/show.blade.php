@@ -205,6 +205,7 @@
                 showBookmarkTooltip: false,
                 bookmarkTooltipText: '',
                 bookmarkedPage: {{ $bookmarkedPage ?? 'null' }},
+                wakeLock: null,
                 get hasBookmark() {
                     return this.bookmarkedPage == this.pageNumbers[this.currentPage];
                 },
@@ -285,6 +286,35 @@
                     } catch (error) {
                         console.error('Failed to toggle bookmark', error);
                     }
+                },
+                
+                async requestWakeLock() {
+                    if ('wakeLock' in navigator) {
+                        try {
+                            this.wakeLock = await navigator.wakeLock.request('screen');
+                            
+                            this.wakeLock.addEventListener('release', () => {
+                                console.log('Screen Wake Lock was released');
+                            });
+                            console.log('Screen Wake Lock is active');
+                        } catch (err) {
+                            console.error(`Wake Lock error: ${err.name}, ${err.message}`);
+                        }
+                    } else {
+                        console.log('Wake Lock API not supported contextly.');
+                    }
+                },
+                
+                init() {
+                    // Pre-request wake lock
+                    this.requestWakeLock();
+                    
+                    // Re-request if visibility changes
+                    document.addEventListener('visibilitychange', async () => {
+                        if (this.wakeLock !== null && document.visibilityState === 'visible') {
+                            this.requestWakeLock();
+                        }
+                    });
                 }
             }));
         });
