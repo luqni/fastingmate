@@ -39,7 +39,7 @@
                     <svg x-show="!hasBookmark" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
                     <!-- Filled icon (when bookmark exists) -->
                     <svg x-show="hasBookmark" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7a2 2 0 00-2 2v16l7-3.5L19 21V5a2 2 0 00-2-2z"></path></svg>
-                    <span x-show="showBookmarkTooltip" x-transition class="absolute top-full right-0 mt-2 bg-emerald-600 text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap z-50">Tersimpan!</span>
+                    <span x-show="showBookmarkTooltip" x-transition class="absolute top-full right-0 mt-2 bg-emerald-600 text-white text-[10px] px-2 py-1 rounded shadow-lg whitespace-nowrap z-50" x-text="bookmarkTooltipText"></span>
                 </button>
                 <button @click="showSettings = !showSettings" class="p-2 -mr-2 rounded-full hover:bg-gray-100/50 text-gray-600 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -203,7 +203,11 @@
                 fontSize: 2, // Default Smaller
                 mode: 'mushaf', // Default to Mushaf view
                 showBookmarkTooltip: false,
-                hasBookmark: {{ $hasBookmark ? 'true' : 'false' }}, // Bookmark status
+                bookmarkTooltipText: '',
+                bookmarkedPage: {{ $bookmarkedPage ?? 'null' }},
+                get hasBookmark() {
+                    return this.bookmarkedPage == this.pageNumbers[this.currentPage];
+                },
                 touchStartX: 0,
                 touchEndX: 0,
                 nextSurahUrl: config.nextSurahUrl,
@@ -268,12 +272,18 @@
                         });
                         
                         if (response.ok) {
-                            this.hasBookmark = true; // Update bookmark status to show filled icon
+                            const data = await response.json();
+                            if (data.action === 'saved') {
+                                this.bookmarkedPage = realPageNumber;
+                            } else {
+                                this.bookmarkedPage = null;
+                            }
+                            this.bookmarkTooltipText = data.action === 'saved' ? 'Tersimpan!' : 'Dihapus!';
                             this.showBookmarkTooltip = true;
                             setTimeout(() => this.showBookmarkTooltip = false, 2000);
                         }
                     } catch (error) {
-                        console.error('Failed to save bookmark', error);
+                        console.error('Failed to toggle bookmark', error);
                     }
                 }
             }));
@@ -281,8 +291,18 @@
     </script>
 
     <style>
+        @font-face {
+            font-family: 'LPMQ IsepMisbah';
+            src: url('https://cdn.jsdelivr.net/gh/lpmq-isepmisbah/lpmq-isepmisbah-webfont@master/fonts/lpmq.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         .font-mushaf {
-            font-family: 'Scheherazade New', 'Amiri', serif;
+            font-family: 'LPMQ IsepMisbah', 'Amiri', serif;
+            line-height: 2.8; /* slightly larger line height for LPMQ readability */
+            font-feature-settings: 'cv01', 'cv02', 'cv03', 'cv04', 'cv05', 'cv06', 'ss01', 'ss02', 'ss03', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08';
         }
     </style>
 </x-app-layout>

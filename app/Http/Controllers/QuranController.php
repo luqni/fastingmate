@@ -81,12 +81,13 @@ class QuranController extends Controller
         $pageKeys = $pages->keys();
         $verses = $quran; // For list/translation mode
         
-        // Check if user has bookmark for this surah
-        $hasBookmark = auth()->check() && \App\Models\QuranProgress::where('user_id', auth()->id())
+        // Check if user has bookmark for this surah to get the bookmarked page
+        $bookmark = auth()->check() ? \App\Models\QuranProgress::where('user_id', auth()->id())
             ->where('surah_name', $title)
-            ->exists();
+            ->first() : null;
+        $bookmarkedPage = $bookmark ? $bookmark->page : null;
 
-        return view('quran.show', compact('quran', 'pages', 'title', 'prevSurah', 'nextSurah', 'totalPages', 'pageKeys', 'verses', 'hasBookmark'));
+        return view('quran.show', compact('quran', 'pages', 'title', 'prevSurah', 'nextSurah', 'totalPages', 'pageKeys', 'verses', 'bookmarkedPage'));
     }
 
     public function saveBookmark(Request $request)
@@ -97,17 +98,35 @@ class QuranController extends Controller
             'page' => 'required'
         ]);
 
-        \App\Models\QuranProgress::updateOrCreate(
-            ['user_id' => auth()->id()],
-            [
+        $bookmark = \App\Models\QuranProgress::where('user_id', auth()->id())
+            ->where('surah_name', $request->surah_name)
+            ->first();
+
+        if ($bookmark) {
+            if ($bookmark->page == $request->page) {
+                // Unbookmark if it exists on the same page
+                $bookmark->delete();
+                return response()->json(['message' => 'Penanda dihapus', 'action' => 'removed']);
+            } else {
+                // Move bookmark to this new page
+                $bookmark->update([
+                    'ayah_number' => $request->ayah_number,
+                    'page' => $request->page,
+                    'updated_at' => now()
+                ]);
+                return response()->json(['message' => 'Penanda disimpan', 'action' => 'saved']);
+            }
+        } else {
+            // Bookmark if it doesn't exist
+            \App\Models\QuranProgress::create([
+                'user_id' => auth()->id(),
                 'surah_name' => $request->surah_name,
                 'ayah_number' => $request->ayah_number,
                 'page' => $request->page,
                 'updated_at' => now()
-            ]
-        );
-
-        return response()->json(['message' => 'Penanda disimpan']);
+            ]);
+            return response()->json(['message' => 'Penanda disimpan', 'action' => 'saved']);
+        }
     }
 
     public function continueReading()
