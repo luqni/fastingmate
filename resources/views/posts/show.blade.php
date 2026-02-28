@@ -63,6 +63,8 @@
     <div class="bg-gray-50 min-h-screen" x-data="{ 
         fontSize: 100,
         shareOpen: false,
+        likesCount: {{ $likesCount }},
+        hasLiked: {{ $hasLiked ? 'true' : 'false' }},
         
         increaseFont() {
             if (this.fontSize < 150) this.fontSize += 10;
@@ -72,6 +74,26 @@
         },
         resetFont() {
             this.fontSize = 100;
+        },
+
+        async toggleLike() {
+            try {
+                const response = await fetch('{{ route('posts.like', $post->slug) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    this.hasLiked = data.liked;
+                    this.likesCount = data.likes_count;
+                }
+            } catch (e) {
+                console.error('Failed to toggle like', e);
+            }
         },
         
         async share(platform) {
@@ -248,10 +270,16 @@
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                 </button>
                             </div>
-                            <button @click="share('native')" class="text-sm font-medium text-indigo-600 flex items-center gap-1 active:text-indigo-800 transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                                Share
-                            </button>
+                            <div class="flex items-center gap-4">
+                                <button @click="toggleLike()" class="flex items-center gap-1 transition-colors" :class="hasLiked ? 'text-red-500' : 'text-gray-400 hover:text-red-500'">
+                                    <svg class="w-5 h-5" :fill="hasLiked ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    <span class="text-xs font-bold" :class="hasLiked ? 'text-red-500' : 'text-gray-500'" x-text="likesCount"></span>
+                                </button>
+                                <button @click="share('native')" class="text-sm font-medium text-indigo-600 flex items-center gap-1 active:text-indigo-800 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                    Share
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Content with Dynamic Font Size -->
@@ -289,6 +317,14 @@
                 <!-- Sidebar Controls (Desktop) -->
                 <aside class="hidden lg:block w-16 sticky top-24">
                     <div class="flex flex-col gap-4">
+                        <!-- Like Controls -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 flex flex-col items-center gap-2">
+                            <button @click="toggleLike()" class="p-2 transition-all rounded-xl" :class="hasLiked ? 'text-red-500 bg-red-50 hover:bg-red-100' : 'text-gray-400 hover:text-red-500 hover:bg-red-50'" title="Suka Artikel Ini">
+                                <svg class="w-6 h-6" :fill="hasLiked ? 'currentColor' : 'none'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            </button>
+                            <span class="text-xs font-bold text-gray-500" x-text="likesCount"></span>
+                        </div>
+
                         <!-- Font Controls -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-2 flex flex-col items-center gap-2">
                             <button @click="increaseFont()" class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all" title="Perbesar Ukuran Font">
@@ -322,8 +358,76 @@
                 </aside>
             </div>
             
+            <!-- Comments Section -->
+            <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    Komentar ({{ $post->comments->count() }})
+                </h3>
+
+                @auth
+                    <form action="{{ route('posts.comment', $post->slug) }}" method="POST" class="mb-8 relative">
+                        @csrf
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ Str::startsWith(auth()->user()->avatar, ['http', 'https']) ? auth()->user()->avatar : asset('storage/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                                @else
+                                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
+                                        {{ substr(auth()->user()->name, 0, 1) }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1">
+                                <textarea name="content" rows="3" class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm resize-none @error('content') border-red-500 @enderror" placeholder="Tulis komentar Anda..." required maxlength="1000">{{ old('content') }}</textarea>
+                                @error('content')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                                <div class="mt-2 flex justify-end">
+                                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                        Kirim Komentar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                @else
+                    <div class="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-200 text-center relative z-10">
+                        <p class="text-gray-600 mb-4">Silakan login terlebih dahulu untuk menulis komentar.</p>
+                        <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:text-gray-500 hover:bg-gray-50 focus:outline-none focus:border-indigo-300 focus:ring ring-indigo-200 active:text-gray-800 active:bg-gray-50 transition ease-in-out duration-150">
+                            Login untuk Komentar
+                        </a>
+                    </div>
+                @endauth
+
+                <div class="space-y-6">
+                    @forelse($post->comments as $comment)
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0">
+                                @if($comment->user->avatar)
+                                    <img src="{{ Str::startsWith($comment->user->avatar, ['http', 'https']) ? $comment->user->avatar : asset('storage/' . $comment->user->avatar) }}" alt="{{ $comment->user->name }}" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                                @else
+                                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold border border-indigo-200">
+                                        {{ substr($comment->user->name, 0, 1) }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 bg-gray-50 p-4 rounded-2xl rounded-tl-none border border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="text-sm font-bold text-gray-900">{{ $comment->user->name }}</h4>
+                                    <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $comment->content }}</p>
+                            </div>
+                        </div>
+                    @empty
+                        <p class="text-gray-500 italic text-center text-sm py-4 border-t border-gray-100 mt-4">Belum ada komentar. Jadilah yang pertama!</p>
+                    @endforelse
+                </div>
+            </div>
+
              <!-- Related Articles -->
-             <div class="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+             <div class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                  <h3 class="text-xl font-bold text-gray-900 mb-6">Artikel Lainnya</h3>
                  @if($relatedPosts->isNotEmpty())
                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

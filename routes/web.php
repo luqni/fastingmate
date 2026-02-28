@@ -24,6 +24,8 @@ Route::view('/documentation', 'documentation')->name('documentation');
 Route::get('/blog', [\App\Http\Controllers\PostController::class, 'index'])->name('posts.index');
 Route::get('/blog/{post:slug}', [\App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
 Route::post('/blog/{post:slug}/share', [\App\Http\Controllers\PostController::class, 'share'])->name('posts.share');
+Route::post('/blog/{post:slug}/like', [\App\Http\Controllers\PostController::class, 'like'])->name('posts.like');
+Route::post('/blog/{post:slug}/comment', [\App\Http\Controllers\PostController::class, 'comment'])->name('posts.comment')->middleware('auth');
 
 // Prayer Times (Public)
 Route::get('/api/prayer-times', [\App\Http\Controllers\PrayerTimeController::class, 'getTimes'])->name('prayer-times.get');

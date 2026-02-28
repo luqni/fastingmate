@@ -60,4 +60,14 @@ class Post extends Model
             return '< 1 detik baca';
         }
     }
+
+    public function likes()
+    {
+        return $this->hasMany(PostLike::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(PostComment::class);
+    }
 }

@@ -118,7 +118,16 @@ class PostController extends Controller
             ->limit(3)
             ->get();
 
-        return view('posts.show', compact('post', 'tadabbur', 'relatedPosts'));
+        $post->load(['comments.user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }, 'comments' => function ($query) {
+            $query->latest();
+        }]);
+
+        $likesCount = $post->likes()->count();
+        $hasLiked = $post->likes()->where('session_id', session()->getId())->exists();
+
+        return view('posts.show', compact('post', 'tadabbur', 'relatedPosts', 'likesCount', 'hasLiked'));
     }
 
     public function share(Request $request, Post $post)
@@ -135,5 +144,45 @@ class PostController extends Controller
         ]);
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function like(Request $request, Post $post)
+    {
+        $sessionId = session()->getId();
+        $ipAddress = $request->ip();
+
+        $existingLike = $post->likes()->where('session_id', $sessionId)->first();
+
+        if ($existingLike) {
+            $existingLike->delete();
+            $liked = false;
+        } else {
+            $post->likes()->create([
+                'session_id' => $sessionId,
+                'ip_address' => $ipAddress,
+            ]);
+            $liked = true;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'liked' => $liked,
+            'likes_count' => $post->likes()->count()
+        ]);
+    }
+
+    public function comment(Request $request, Post $post)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string|max:1000'
+        ]);
+
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            // Sanitize content by stripping tags completely
+            'content' => strip_tags($validated['content'])
+        ]);
+
+        return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 }
