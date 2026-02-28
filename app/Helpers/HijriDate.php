@@ -114,11 +114,11 @@ class HijriDate
         // Ashura (10 Muharram)
         if ($hijriMonth == 1 && $hijriDay == 10) return 'ashura';
 
-        // Ayyamul Bidh (13, 14, 15 except in Tasyrik)
-        if (in_array($hijriDay, [13, 14, 15])) return 'ayyamul_bidh';
-
         // Ramadhan
         if ($hijriMonth == 9) return 'ramadhan';
+
+        // Ayyamul Bidh (13, 14, 15 except in Tasyrik)
+        if (in_array($hijriDay, [13, 14, 15])) return 'ayyamul_bidh';
         
         // Senin
         if ($date->dayOfWeek == Carbon::MONDAY) return 'senin';
