@@ -5,8 +5,21 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full">
+        <!-- Sticky Search Form -->
+        <div class="sticky top-[80px] z-40 bg-gray-50/90 sm:bg-gray-50/80 backdrop-blur-md py-4 sm:py-6 w-full border-b border-gray-100 sm:border-none shadow-sm sm:shadow-none">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <form action="{{ route('posts.index') }}" method="GET" class="relative max-w-3xl mx-auto w-full group">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari artikel, panduan ibadah..." class="w-full pl-12 pr-4 py-3 sm:py-3.5 border border-gray-200 rounded-full focus:ring-primary-500 focus:border-primary-500 bg-white shadow-sm group-hover:shadow-md transition-all text-sm sm:text-base outline-none">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400 group-focus-within:text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="py-6 sm:py-12 max-w-7xl mx-auto sm:px-6 lg:px-8 relative pt-4">
+
             <!-- Featured & Trending Section (Only visible when not searching) -->
             @if(!request('search'))
                 <!-- Featured Hero Section -->

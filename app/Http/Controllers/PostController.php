@@ -46,8 +46,11 @@ class PostController extends Controller
         // Search functionality
         if ($request->filled('search')) {
             $search = strtolower($request->search);
-            // Use whereRaw for reliable case-inequality across all DB drivers
-            $postsQuery->whereRaw('LOWER(title) LIKE ?', ["%{$search}%"]);
+            $postsQuery->where(function($q) use ($search) {
+                // Use whereRaw for reliable case-inequality across all DB drivers
+                $q->whereRaw('LOWER(title) LIKE ?', ["%{$search}%"])
+                  ->orWhereRaw('LOWER(content) LIKE ?', ["%{$search}%"]);
+            });
         }
 
         $posts = $postsQuery->latest('published_at')

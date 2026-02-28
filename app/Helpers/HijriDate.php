@@ -68,14 +68,13 @@ class HijriDate
             // Let's just hardcode the shift for this period
             if (($m == 2 && $d >= 19) || ($m == 3 && $d <= 20)) {
                  $day--;
-                 if ($day == 0) {
-                     // Check specific boundary, but easier to just use the diff
-                     // Feb 19 is day 1. 2026-02-19
-                 }
+                 
                  // Let's force calculate from Feb 19
-                 $startRamadhan = Carbon::create(2026, 2, 19);
-                 $current = Carbon::create($y, $m, $d);
-                 $diff = $current->diffInDays($startRamadhan); // 0 for Feb 19
+                 $startRamadhan = Carbon::create(2026, 2, 19, 0, 0, 0);
+                 $current = Carbon::create($y, $m, $d, 0, 0, 0);
+                 
+                 // Get absolute difference in days
+                 $diff = $startRamadhan->diffInDays($current); 
                  
                  if ($diff >= 0 && $diff < 30) {
                      return ['day' => $diff + 1, 'month' => 9, 'year' => 1447];
