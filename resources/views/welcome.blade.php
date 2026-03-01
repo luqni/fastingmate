@@ -102,27 +102,71 @@
 <body class="antialiased font-sans text-gray-900 bg-[#FAFAFA] overflow-x-hidden selection:bg-emerald-100 selection:text-emerald-900" x-data="healingIsland(true)">
     
     <!-- Navbar -->
-    <nav class="fixed w-full z-50 transition-all duration-300 glass border-b border-gray-100">
+    <nav class="fixed w-full z-50 transition-all duration-300 glass border-b border-gray-100" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 z-50">
                     <div class="w-10 h-10 bg-gradient-to-br from-emerald-400 to-teal-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-emerald-500/20 transform hover:scale-110 transition-transform">
                         FM
                     </div>
                     <span class="font-bold text-xl tracking-tight text-gray-800">FastingMate</span>
                 </div>
-                <div class="flex items-center gap-4">
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="{{ route('posts.index') }}" class="text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-colors">Artikel & Blog</a>
                     <a href="{{ route('documentation') }}" class="text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-colors">Panduan</a>
-                    @if (Route::has('login'))
+                </div>
+
+                <div class="flex items-center gap-3 z-50">
+                    <div class="hidden md:block">
+                        @if (Route::has('login'))
+                            @auth
+                                <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-full bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm border border-gray-200 shadow-sm hover:shadow-md inline-block">Dashboard</a>
+                            @else
+                                <a href="{{ url('/login') }}" class="px-6 py-2.5 rounded-full bg-gray-900 hover:bg-black text-white font-medium transition-all shadow-lg shadow-gray-900/20 text-sm hover:-translate-y-0.5 transform inline-block">
+                                    Masuk
+                                </a>
+                            @endauth
+                        @endif
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 -mr-2 rounded-lg text-gray-600 hover:bg-gray-100 focus:outline-none transition-colors" aria-label="Toggle menu">
+                        <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        <svg x-show="mobileMenuOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div x-show="mobileMenuOpen" 
+             x-cloak 
+             x-transition:enter="transition ease-out duration-200" 
+             x-transition:enter-start="opacity-0 -translate-y-2" 
+             x-transition:enter-end="opacity-100 translate-y-0" 
+             x-transition:leave="transition ease-in duration-150" 
+             x-transition:leave-start="opacity-100 translate-y-0" 
+             x-transition:leave-end="opacity-0 -translate-y-2" 
+             class="md:hidden absolute top-20 left-0 w-full bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-xl overflow-hidden">
+            <div class="px-4 py-6 flex flex-col gap-4">
+                <a href="{{ route('posts.index') }}" class="text-base font-bold text-gray-800 hover:text-emerald-600 transition-colors block py-2 border-b border-gray-100">Artikel & Blog</a>
+                <a href="{{ route('documentation') }}" class="text-base font-bold text-gray-800 hover:text-emerald-600 transition-colors block py-2 border-b border-gray-100">Panduan</a>
+                
+                @if (Route::has('login'))
+                    <div class="pt-2">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="px-6 py-2.5 rounded-full bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm border border-gray-200 shadow-sm hover:shadow-md">Dashboard</a>
+                            <a href="{{ url('/dashboard') }}" class="w-full flex justify-center items-center px-6 py-3.5 rounded-xl bg-emerald-50 text-emerald-700 font-bold hover:bg-emerald-100 transition-all text-sm border border-emerald-100">
+                                Ke Dashboard
+                            </a>
                         @else
-                            <a href="{{ url('/login') }}" class="px-6 py-2.5 rounded-full bg-gray-900 hover:bg-black text-white font-medium transition-all shadow-lg shadow-gray-900/20 text-sm hover:-translate-y-0.5 transform">
-                                Masuk
+                            <a href="{{ url('/login') }}" class="w-full flex justify-center items-center px-6 py-3.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold transition-all text-sm shadow-md">
+                                Masuk Akun
                             </a>
                         @endauth
-                    @endif
-                </div>
+                    </div>
+                @endif
             </div>
         </div>
     </nav>
