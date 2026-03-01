@@ -58,7 +58,7 @@ class DashboardController extends Controller
 
 
         $nextRamadan = $this->getNextRamadanDate();
-        $daysToRamadan = ceil(Carbon::now()->floatDiffInDays($nextRamadan['date'], false));
+        $daysToRamadan = now()->startOfDay()->diffInDays(Carbon::parse($nextRamadan['date'])->startOfDay());
         
         // Check if currently in Ramadhan
         $now = Carbon::now();

@@ -135,9 +135,11 @@ function ramadhanIsland() {
                 
                 // Find next event
                 // Imsak, Maghrib
-                const todayStr = new Date().toISOString().split('T')[0];
-                const imsakTime = new Date(`${todayStr}T${times.Imsak}:00`);
-                const maghribTime = new Date(`${todayStr}T${times.Maghrib}:00`);
+                const imsakParts = times.Imsak.split(':');
+                const imsakTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(imsakParts[0]), parseInt(imsakParts[1]), 0);
+                
+                const maghribParts = times.Maghrib.split(':');
+                const maghribTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(maghribParts[0]), parseInt(maghribParts[1]), 0);
                 
                 let target, label;
                 

@@ -554,7 +554,7 @@ class PrayerTimeService
                                  $startRamadhan = Carbon::create(2026, 2, 19)->startOfDay();
                                  $current = $carbonDate->copy()->startOfDay();
                                  
-                                 $dayOfRamadhan = (int) abs($current->floatDiffInDays($startRamadhan, false)) + 1;
+                                 $dayOfRamadhan = $startRamadhan->diffInDays($current) + 1;
 
                                  if ($dayOfRamadhan > 30) {
                                      $isRamadhan = false;

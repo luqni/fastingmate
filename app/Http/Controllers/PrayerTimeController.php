@@ -217,7 +217,7 @@ class PrayerTimeController extends Controller
         
         if (!$times) return response()->json(['active' => false]);
         
-        $dayOfRamadhan = (int)ceil($startRamadhan->floatDiffInDays($today, false)) + 1;
+        $dayOfRamadhan = $startRamadhan->diffInDays($today->copy()->startOfDay()) + 1;
         
         // Ramadhan is usually 29 or 30 days
         if ($dayOfRamadhan > 30) {
