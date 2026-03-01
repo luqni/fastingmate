@@ -6,8 +6,8 @@
     </x-slot>
 
     <div class="w-full">
-        <!-- Sticky Search Form -->
-        <div class="sticky top-[80px] z-40 bg-gray-50/90 sm:bg-gray-50/80 backdrop-blur-md py-4 sm:py-6 w-full border-b border-gray-100 sm:border-none shadow-sm sm:shadow-none">
+        <!-- Search Form -->
+        <div class="py-4 sm:py-6 w-full">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
                 <form action="{{ route('posts.index') }}" method="GET" class="relative max-w-3xl mx-auto w-full group">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari artikel, panduan ibadah..." class="w-full pl-12 pr-4 py-3 sm:py-3.5 border border-gray-200 rounded-full focus:ring-primary-500 focus:border-primary-500 bg-white shadow-sm group-hover:shadow-md transition-all text-sm sm:text-base outline-none">
