@@ -31,12 +31,16 @@ class SendPrayerNotifications extends Command
     {
         $this->info('Starting prayer notification scheduling...');
 
+        $today = Carbon::today();
+        $sunnahType = \App\Helpers\HijriDate::getSunnahType($today);
+        $isFastingDay = $sunnahType && $sunnahType !== 'haram';
+
         User::whereNotNull('prayer_city')
             ->whereNotNull('prayer_country')
-            ->chunk(100, function ($users) use ($service) {
+            ->chunk(100, function ($users) use ($service, $isFastingDay) {
                 foreach ($users as $user) {
                     try {
-                        $this->scheduleForUser($user, $service);
+                        $this->scheduleForUser($user, $service, $isFastingDay);
                     } catch (\Exception $e) {
                         $this->error("Failed to schedule for user {$user->id}: " . $e->getMessage());
                     }
@@ -46,7 +50,7 @@ class SendPrayerNotifications extends Command
         $this->info('Prayer notifications scheduling completed.');
     }
 
-    protected function scheduleForUser(User $user, PrayerTimeService $service)
+    protected function scheduleForUser(User $user, PrayerTimeService $service, $isFastingDay = false)
     {
         $times = $service->getTodayPrayerTimes($user->prayer_city, $user->prayer_country, $user->prayer_method ?? 2);
         
@@ -80,7 +84,7 @@ class SendPrayerNotifications extends Command
             $displayName = $prayer;
 
             if ($prayer === 'Maghrib') {
-                $type = 'iftar';
+                $type = $isFastingDay ? 'iftar' : 'prayer';
                 $displayName = 'Maghrib';
             } elseif ($prayer === 'Fajr') {
                 $type = 'prayer'; // Subuh
@@ -95,7 +99,7 @@ class SendPrayerNotifications extends Command
         }
 
         // Schedule SAHUR (1 hour before Imsak)
-        if (isset($timings['Imsak'])) {
+        if ($isFastingDay && isset($timings['Imsak'])) {
             $imsakTime = Carbon::createFromFormat('H:i', $timings['Imsak']);
             $sahurTime = $imsakTime->copy()->subMinutes(60);
 

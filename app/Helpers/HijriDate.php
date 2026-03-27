@@ -36,14 +36,10 @@ class HijriDate
 
     public static function gregorianToHijri($d, $m, $y)
     {
-        if (($y > 1582) || (($y == 1582) && ($m > 10)) || (($y == 1582) && ($m == 10) && ($d > 14))) {
-            $jd = floor((1461 * ($y + 4800 + floor(($m - 14) / 12))) / 4) +
-                  floor((367 * ($m - 2 - 12 * (floor(($m - 14) / 12)))) / 12) -
-                  floor((3 * floor(($y + 4900 + floor(($m - 14) / 12)) / 100)) / 4) +
-                  $d - 32075;
+        if (function_exists('gregoriantojd')) {
+            $jd = gregoriantojd($m, $d, $y);
         } else {
-            $jd = 367 * $y - floor((7 * ($y + 5001 + floor(($m - 9) / 7))) / 4) +
-                  floor((275 * $m) / 9) + $d + 1729777;
+            $jd = (int)(\Carbon\Carbon::create($y, $m, $d, 12, 0, 0)->getTimestamp() / 86400) + 2440588;
         }
 
         $l = $jd - 1948440 + 10632;
@@ -55,32 +51,6 @@ class HijriDate
         $month = floor((24 * $l) / 709);
         $day = $l - floor((709 * $month) / 24);
         $year = 30 * $n + $j - 30;
-        
-        // Manual Adjustment for Ramadhan 1447H (Sidang Isbat)
-        // Standard calc might say Feb 18 is 1 Ramadhan, but we want Feb 19.
-        if ($y == 2026) {
-            // Feb 18 -> 30 Syaban (Month 8)
-            if ($m == 2 && $d == 18) {
-                return ['day' => 30, 'month' => 8, 'year' => 1447];
-            }
-            // Feb 19 - Mar 20 (Ramadhan)
-            // Shift days by -1 relative to standard if standard was +1
-            // Let's just hardcode the shift for this period
-            if (($m == 2 && $d >= 19) || ($m == 3 && $d <= 20)) {
-                 $day--;
-                 
-                 // Let's force calculate from Feb 19
-                 $startRamadhan = Carbon::create(2026, 2, 19, 0, 0, 0);
-                 $current = Carbon::create($y, $m, $d, 0, 0, 0);
-                 
-                 // Get absolute difference in days
-                 $diff = $startRamadhan->diffInDays($current); 
-                 
-                 if ($diff >= 0 && $diff < 30) {
-                     return ['day' => $diff + 1, 'month' => 9, 'year' => 1447];
-                 }
-            }
-        }
 
         return ['day' => $day, 'month' => $month, 'year' => $year];
     }
